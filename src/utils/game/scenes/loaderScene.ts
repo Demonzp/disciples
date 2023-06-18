@@ -21,7 +21,8 @@ export default class LoaderScene extends Scene{
     graphics.fillRect(0,0,0,20);
 
     this.load.image('emp-castle', './assets/imgs/castle-empire.png');
-
+    this.load.image('origin-field', './assets/imgs/origin-field.jpg');
+    this.load.image('map-grid', './assets/imgs/map-grid.jpg');
   }
 
   create(){
