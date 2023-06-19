@@ -14,7 +14,7 @@ export type TBodyRect = {
   y:number
 };
 
-export type TGameObjectNames = 'Sprite'|'Container'|'Text';
+export type TGameObjectNames = 'Sprite'|'Container'|'Text'|'VirtualRectangle';
 export type TParetGameObject = Scene | Container;
 
 export default class GameObject{
@@ -36,7 +36,8 @@ export default class GameObject{
   initWidth = 0;
   initHeight = 0;
   private _interactiveBodyRect: TBodyRect;
-  angle: number;
+  private _angle = 0;
+  //angle: number;
   isMouseOver = false;
   isMouseEvent = false;
   private _parent: TParetGameObject;
@@ -159,6 +160,14 @@ export default class GameObject{
     }else{
       this._alpha = value;
     }
+  }
+
+  set angle(value:number){
+    this._angle = value;
+  }
+
+  get angle():number{
+    return this._angle;
   }
 
   setZindex(val:number){

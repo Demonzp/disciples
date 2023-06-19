@@ -5,6 +5,7 @@ import { TPointer } from './InputEvent';
 import Scene from './Scene';
 import Sprite from './Sprite';
 import Text from './Text';
+import VirtualRectangle from './VirtualRectangle';
 
 export default class Manager{
   scene: Scene;
@@ -31,6 +32,10 @@ export default class Manager{
 
   container(x?:number, y?:number, width?:number, height?:number): Container{
     return new Container(this.scene, x, y, width, height);
+  }
+
+  virtualRect(width:number, height:number, x?:number, y?:number): VirtualRectangle{
+    return new VirtualRectangle(this.scene, width, height, x, y);
   }
 
   remove(data: GameObject|Graphics|(GameObject|Graphics)[]){
