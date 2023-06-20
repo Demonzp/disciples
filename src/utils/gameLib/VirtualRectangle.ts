@@ -39,14 +39,44 @@ export default class VirtualRectangle extends GameObject{
 
     set scaleX(value: number){
         this._scaleX = value;
-        this.y0 = ((this.y0-this.y)*value)+this.y;
-        this.y1 = ((this.y1-this.y)*value)+this.y;
-        this.y2 = ((this.y2-this.y)*value)+this.y;
-        this.y3 = ((this.y3-this.y)*value)+this.y;
+        this.calcAfterScale();
     }
 
     get scaleX():number{
         return this._scaleX;
+    }
+
+    set scaleY(value: number){
+        this._scaleY = value;
+        this.calcAfterScale();
+    }
+
+    get scaleY():number{
+        return this._scaleY;
+    }
+
+    moveX(value: number){
+        this.x = value;
+        this.calcRect();
+        this.calcAfterScale();
+    }
+
+    moveY(value: number){
+        this.y = value;
+        this.calcRect();
+        this.calcAfterScale();
+    }
+
+    private calcAfterScale(){
+        this.y0 = ((this.y0-this.y)*this._scaleX)+this.y;
+        this.y1 = ((this.y1-this.y)*this._scaleX)+this.y;
+        this.y2 = ((this.y2-this.y)*this._scaleX)+this.y;
+        this.y3 = ((this.y3-this.y)*this._scaleX)+this.y;
+
+        this.x0 = ((this.x0-this.x)*this.scaleY)+this.x;
+        this.x1 = ((this.x1-this.x)*this.scaleY)+this.x;
+        this.x2 = ((this.x2-this.x)*this.scaleY)+this.x;
+        this.x3 = ((this.x3-this.x)*this.scaleY)+this.x;
     }
 
     private calcRect(){

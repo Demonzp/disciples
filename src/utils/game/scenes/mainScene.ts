@@ -4,14 +4,21 @@ import Sprite from "utils/gameLib/Sprite";
 
 export default class MainScane extends Scene{
     empCastle:Sprite|null = null;
+    isCameraLeft = false;
+    isCameraRight = false;
+    isCameraUp = false;
+    isCameraDown = false;
     constructor(){
         super('MainScene');
     }
 
     create(): void {
-        const fon = this.add.sprite('map-grid');
-        fon.x = fon.x+fon.halfWidth;
-        fon.y = fon.y+100;
+        //for (let i = 0; i < 200; i++) {
+            // const fon = this.add.sprite('map-grid');
+            // fon.x = fon.x+fon.halfWidth;
+            // fon.y = fon.y+100;   
+        //}
+        
         //const graphics = this.add.graphics();
         //graphics.lineWidth(1);
         let startX = 40;
@@ -27,74 +34,50 @@ export default class MainScane extends Scene{
         // const grass2 = this.add.sprite('grass-water',100-48/2,100-48/2);
         // grass2.setFrame(12);
         console.log('mainScene');
-        const rectangle = this.add.virtualRect(48,48,100,100);
+        const sizeField = 48;
+        const rectangle = this.add.virtualRect(44*sizeField,44*sizeField,195,212);
         rectangle.rotate = 45;
-        const graphicsRect = this.add.graphics();
-        graphicsRect.fillStyle('#e61010');
-        graphicsRect.beginPath();
-          
-        graphicsRect.moveTo(rectangle.x0, rectangle.y0);
-        graphicsRect.lineTo(rectangle.x1, rectangle.y1);
-        graphicsRect.lineTo(rectangle.x2, rectangle.y2);
-        //graphicsRect.lineTo(rectangle.x3, rectangle.y3);
-        //graphicsRect.lineTo(rectangle.x0, rectangle.y0);
+        rectangle.scaleX = 0.5;
+        const width = rectangle.x1-rectangle.x3;
+        const height = rectangle.y2-rectangle.y0;
+        rectangle.moveX(width/2);
+        rectangle.moveY(height/2);
 
-        graphicsRect.stroke();
-
-        const rectangle2 = this.add.virtualRect(48,48,100,100);
-        rectangle2.rotate = 0;
-        const graphicsRect2 = this.add.graphics();
-        graphicsRect2.fillStyle('#e61010');
-        graphicsRect2.beginPath();
-          
-        graphicsRect2.moveTo(rectangle2.x0, rectangle2.y0);
-        graphicsRect2.lineTo(rectangle2.x1, rectangle2.y1);
-        graphicsRect2.lineTo(rectangle2.x2, rectangle2.y2);
-        graphicsRect2.lineTo(rectangle2.x3, rectangle2.y3);
-        graphicsRect2.lineTo(rectangle2.x0, rectangle2.y0);
-
-        graphicsRect2.stroke();
-
-        const rectangle3 = this.add.virtualRect(44*6,44*6,195,212);
-        rectangle3.rotate = 45;
-        rectangle3.scaleX = 0.5;
-        const width = rectangle3.x1-rectangle3.x3;
-        const height = rectangle3.y2-rectangle3.y0;
         console.log(width,'||',height);
         const graphicsRect3 = this.add.graphics();
         graphicsRect3.fillStyle('#e61010');
         graphicsRect3.beginPath();
           
-        graphicsRect3.moveTo(rectangle3.x0, rectangle3.y0);
-        graphicsRect3.lineTo(rectangle3.x1, rectangle3.y1);
-        graphicsRect3.lineTo(rectangle3.x2, rectangle3.y2);
-        graphicsRect3.lineTo(rectangle3.x3, rectangle3.y3);
-        graphicsRect3.lineTo(rectangle3.x0, rectangle3.y0);
+        graphicsRect3.moveTo(rectangle.x0, rectangle.y0);
+        graphicsRect3.lineTo(rectangle.x1, rectangle.y1);
+        graphicsRect3.lineTo(rectangle.x2, rectangle.y2);
+        graphicsRect3.lineTo(rectangle.x3, rectangle.y3);
+        graphicsRect3.lineTo(rectangle.x0, rectangle.y0);
 
         graphicsRect3.stroke();
 
-        for (let i = 1; i < 6; i++) {
-            const t = (1/6)*i;
+        for (let i = 1; i < sizeField; i++) {
+            const t = (1/sizeField)*i;
             const startPoint = this.findPointOnLinearCurve(
                 {
-                    x:rectangle3.x3,
-                    y:rectangle3.y3,
+                    x:rectangle.x3,
+                    y:rectangle.y3,
                 },
                 {
-                    x:rectangle3.x0,
-                    y:rectangle3.y0,
+                    x:rectangle.x0,
+                    y:rectangle.y0,
                 },
                 t
             );
 
             const endPoint = this.findPointOnLinearCurve(
                 {
-                    x:rectangle3.x2,
-                    y:rectangle3.y2,
+                    x:rectangle.x2,
+                    y:rectangle.y2,
                 },
                 {
-                    x:rectangle3.x1,
-                    y:rectangle3.y1,
+                    x:rectangle.x1,
+                    y:rectangle.y1,
                 },
                 t
             );
@@ -107,28 +90,28 @@ export default class MainScane extends Scene{
             graphics.stroke();
         }
 
-        for (let i = 1; i < 6; i++) {
-            const t = (1/6)*i;
+        for (let i = 1; i < sizeField; i++) {
+            const t = (1/sizeField)*i;
             const startPoint = this.findPointOnLinearCurve(
                 {
-                    x:rectangle3.x3,
-                    y:rectangle3.y3,
+                    x:rectangle.x3,
+                    y:rectangle.y3,
                 },
                 {
-                    x:rectangle3.x2,
-                    y:rectangle3.y2,
+                    x:rectangle.x2,
+                    y:rectangle.y2,
                 },
                 t
             );
 
             const endPoint = this.findPointOnLinearCurve(
                 {
-                    x:rectangle3.x0,
-                    y:rectangle3.y0,
+                    x:rectangle.x0,
+                    y:rectangle.y0,
                 },
                 {
-                    x:rectangle3.x1,
-                    y:rectangle3.y1,
+                    x:rectangle.x1,
+                    y:rectangle.y1,
                 },
                 t
             );
@@ -140,6 +123,56 @@ export default class MainScane extends Scene{
             graphics.lineTo(endPoint.x, endPoint.y);
             graphics.stroke();
         }
+        document.addEventListener('keydown',(e)=>{
+            switch(e.code) {
+                case 'ArrowLeft':
+                    //console.log('Press a key');
+                    this.isCameraLeft = true;
+                    break;
+                case 'ArrowRight':
+                    //console.log('Press a key');
+                    this.isCameraRight = true;
+                    break;
+            }
+
+            switch(e.code) {
+                case 'ArrowUp':
+                    //console.log('Press a key');
+                    this.isCameraUp = true;
+                    break;
+                case 'ArrowDown':
+                    //console.log('Press a key');
+                    this.isCameraDown = true;
+                    break;
+            }
+        });
+
+        document.addEventListener('keyup',(e)=>{
+            switch(e.code) {
+                case 'ArrowLeft':
+                    //console.log('Press a key');
+                    this.isCameraLeft = false;
+                    break;
+                case 'ArrowRight':
+                    //console.log('Press a key');
+                    this.isCameraRight = false;
+                    break;
+            }
+
+            switch(e.code) {
+                case 'ArrowUp':
+                    //console.log('Press a key');
+                    this.isCameraUp = false;
+                    break;
+                case 'ArrowDown':
+                    //console.log('Press a key');
+                    this.isCameraDown = false;
+                    break;
+            }
+        });
+        //const cameraPoint = this.game.camera.cameraPoint();
+        this.game.camera.scrollX(-width/2+this.halfWidth);
+        this.game.camera.scrollY(-height/2+this.halfHeight);
         // this.empCastle = this.add.sprite('emp-castle');
         // this.empCastle.x = this.empCastle.halfWidth;
         // this.empCastle.y = this.empCastle.halfHeight;
@@ -152,7 +185,30 @@ export default class MainScane extends Scene{
     }
 
     update(_: number): void {
-        const cameraPoint = this.game.camera.cameraPoint();
-        this.game.camera.scrollX(cameraPoint.x+1);
+        const camera = this.game.camera;
+
+        if(this.isCameraDown){
+            this.game.camera.scrollY(camera.cameraPoint().y-4);
+            
+            
+        }else if(this.isCameraUp){
+            this.game.camera.scrollY(camera.cameraPoint().y+4);
+            if(camera.cameraPoint().y>60){
+                this.game.camera.scrollY(60);
+            }
+        }
+
+        if(this.isCameraLeft){
+            this.game.camera.scrollX(camera.cameraPoint().x+4);
+            if(camera.cameraPoint().x>60){
+                this.game.camera.scrollX(60);
+            }
+        }else if(this.isCameraRight){
+            this.game.camera.scrollX(camera.cameraPoint().x-4);
+            
+        }
+
+        // const cameraPoint = this.game.camera.cameraPoint();
+        // this.game.camera.scrollX(cameraPoint.x+1);
     }
 }

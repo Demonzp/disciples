@@ -80,8 +80,14 @@ export default class ScenesManager{
   update(delta: number):void{
     this.scenes.forEach(scene=>{
       if(scene.isActive){
+        //const t0 = Date.now();
         scene.update(delta);
+        //const t1 = Date.now()-t0;
+        //console.log('logicTime = ',  t1/1000);
+        //const t2 = Date.now();
         scene.render(delta);
+        //const t3 = Date.now()-t2;
+        //console.log('renderTime = ',  t3/1000);
       }
     });
   }

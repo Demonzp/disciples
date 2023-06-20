@@ -6,7 +6,7 @@ export default class Camera {
     constructor(private game: Game) { };
 
     scrollX(value: number) {
-        console.log('value = ', value);
+        //console.log('value = ', value);
         this._x = value;
     }
 

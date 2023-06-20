@@ -247,7 +247,7 @@ export default class Sprite extends GameObject{
       this._playS();
       this.scene.ctx?.save();
       const cameraPoint = this.scene.game.camera.cameraPoint();
-      this.scene.ctx?.translate(this.x+cameraPoint.x, this.y+this.cameraY);
+      this.scene.ctx?.translate(this.x+cameraPoint.x, this.y+cameraPoint.y);
       this.scene.ctx?.rotate(this.pi*this.angle);
       this.scene.ctx?.translate(-(this.x+cameraPoint.x), -(this.y+cameraPoint.y));
       this.scene.ctx!.globalAlpha = this.alpha;
