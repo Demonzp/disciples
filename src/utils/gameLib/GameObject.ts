@@ -37,6 +37,8 @@ export default class GameObject{
   initHeight = 0;
   private _interactiveBodyRect: TBodyRect;
   private _angle = 0;
+  cameraX = 0;
+  cameraY = 0;
   //angle: number;
   isMouseOver = false;
   isMouseEvent = false;

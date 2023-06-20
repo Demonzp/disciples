@@ -246,10 +246,10 @@ export default class Sprite extends GameObject{
       this._play();
       this._playS();
       this.scene.ctx?.save();
-      
-      this.scene.ctx?.translate(this.x, this.y);
+      const cameraPoint = this.scene.game.camera.cameraPoint();
+      this.scene.ctx?.translate(this.x+cameraPoint.x, this.y+this.cameraY);
       this.scene.ctx?.rotate(this.pi*this.angle);
-      this.scene.ctx?.translate(-(this.x), -(this.y));
+      this.scene.ctx?.translate(-(this.x+cameraPoint.x), -(this.y+cameraPoint.y));
       this.scene.ctx!.globalAlpha = this.alpha;
 
       if(this.mask){
@@ -264,11 +264,11 @@ export default class Sprite extends GameObject{
         vCtx.globalCompositeOperation = 'source-in';
         vCtx.drawImage(this.image, 0, 0, this.image.width, this.image.height, 0, 0, this.mask.width, this.mask.height);
     
-        this.scene.ctx?.drawImage(vCanvas, 0, 0, vCanvas.width, vCanvas.height, this.center.x, this.center.y, this.width, this.height);
+        this.scene.ctx?.drawImage(vCanvas, 0, 0, vCanvas.width, vCanvas.height, this.center.x+cameraPoint.x, this.center.y+cameraPoint.y, this.width, this.height);
 
         vCtx.restore();
       }else{
-        this.scene.ctx?.drawImage(this.image, this.sx, this.sy, this.sWidth, this.sHeight, this.center.x, this.center.y, this.width, this.height);
+        this.scene.ctx?.drawImage(this.image, this.sx, this.sy, this.sWidth, this.sHeight, this.center.x+cameraPoint.x, this.center.y+cameraPoint.y, this.width, this.height);
       }
       
       this.scene.ctx?.restore();

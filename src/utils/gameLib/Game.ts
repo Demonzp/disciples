@@ -1,3 +1,4 @@
+import Camera from './Camera';
 import InputEvent from './InputEvent';
 import Loader from './Loader';
 import GameMath from './Math';
@@ -39,6 +40,7 @@ export default class Game {
   timerFrames = 0;
   prevTime = 0;
   isAutoAnim = true;
+  camera = new Camera(this);
   Math = new GameMath(this);
 
   constructor({ canvas, width = 300, height = 200, isAutoAnim = true, scenes }: TGameInit) {

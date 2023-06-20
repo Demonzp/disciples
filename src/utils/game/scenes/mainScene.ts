@@ -9,9 +9,9 @@ export default class MainScane extends Scene{
     }
 
     create(): void {
-        // const fon = this.add.sprite('map-grid');
-        // fon.x = fon.x+fon.halfWidth;
-        // fon.y = fon.y+100;
+        const fon = this.add.sprite('map-grid');
+        fon.x = fon.x+fon.halfWidth;
+        fon.y = fon.y+100;
         //const graphics = this.add.graphics();
         //graphics.lineWidth(1);
         let startX = 40;
@@ -152,5 +152,7 @@ export default class MainScane extends Scene{
     }
 
     update(_: number): void {
+        const cameraPoint = this.game.camera.cameraPoint();
+        this.game.camera.scrollX(cameraPoint.x+1);
     }
 }

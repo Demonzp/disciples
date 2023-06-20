@@ -159,6 +159,9 @@ export default class Graphics{
 
   render(){
     //console.log('render grapfics!!!');
+    const cameraPoint = this.scene.game.camera.cameraPoint();
+    let x=0;
+    let y=0;
     this.arr.forEach(comand=>{
       //console.log('render grapfics!!!', comand.key);
       switch (comand.key) {
@@ -176,8 +179,8 @@ export default class Graphics{
           //console.log('render fillRect!!!');
           this.scene.ctx!.save();
           this.scene.ctx!.globalAlpha = this.alpha;
-          let x = comand.val.x+this.x;
-          let y = comand.val.y+this.y;
+          x = comand.val.x+this.x+cameraPoint.x;
+          y = comand.val.y+this.y+cameraPoint.y;
           this.scene.ctx!.translate(x, y);
           this.scene.ctx!.rotate(this.pi*this.angle);
           this.scene.ctx!.translate(-(x), -(y));
@@ -189,11 +192,12 @@ export default class Graphics{
           //this.scene.ctx!.lineWidth = 3;
           //console.log(this.scene.ctx!.l);
           this.scene.ctx!.beginPath();
-          
-          this.scene.ctx!.moveTo(comand.val.x, comand.val.y);
-          this.scene.ctx!.lineTo(comand.val.x + comand.val.width, comand.val.y);
-          this.scene.ctx!.lineTo(comand.val.x + comand.val.width, comand.val.y+comand.val.height);
-          this.scene.ctx!.lineTo(comand.val.x, comand.val.y+comand.val.height);
+          x = comand.val.x+cameraPoint.x;
+          y = comand.val.y+cameraPoint.y;
+          this.scene.ctx!.moveTo(x, y);
+          this.scene.ctx!.lineTo(x + comand.val.width, y);
+          this.scene.ctx!.lineTo(x + comand.val.width, y+comand.val.height);
+          this.scene.ctx!.lineTo(x, y+comand.val.height);
           this.scene.ctx!.closePath();
           this.scene.ctx!.stroke();
           //this.scene.ctx!.strokeRect(comand.val.x, comand.val.y, comand.val.width, comand.val.height);
@@ -209,11 +213,11 @@ export default class Graphics{
           break;
         case 'moveTo':
           //console.log('render fillRect!!!');
-          this.scene.ctx!.moveTo(comand.val.x,comand.val.y);
+          this.scene.ctx!.moveTo(comand.val.x+cameraPoint.x,comand.val.y+cameraPoint.y);
           break;
         case 'lineTo':
           //console.log('render fillRect!!!');
-          this.scene.ctx!.lineTo(comand.val.x,comand.val.y);
+          this.scene.ctx!.lineTo(comand.val.x+cameraPoint.x,comand.val.y+cameraPoint.y);
           break;
         case 'stroke':
           //console.log('render fillRect!!!');
