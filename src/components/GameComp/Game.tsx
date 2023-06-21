@@ -3,6 +3,8 @@ import LoaderScene from "utils/game/scenes/loaderScene";
 import MainScane from "utils/game/scenes/mainScene";
 import Game from "utils/gameLib/Game";
 
+import classes from "./game.module.css";
+
 const GameComp = ()=>{
     const refCont = useRef<HTMLCanvasElement>(null);
     const [game, setGame] = useState<Game|undefined>();
@@ -36,7 +38,7 @@ const GameComp = ()=>{
     };
 
     return(
-        <div>
+        <div className={classes.gameCont}>
             <canvas ref={refCont}/>
         </div>
     );

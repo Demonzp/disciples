@@ -10,6 +10,10 @@ export default class MainScane extends Scene{
     isCameraDown = false;
     cameraSpeed = 8;
     vMatrix:(TPoint[])[] = [];
+    widthField = 0;
+    heightField = 0;
+    cameraMaxX = 0;
+    cameraMaxY = 0;
     constructor(){
         super('MainScene');
     }
@@ -42,15 +46,15 @@ export default class MainScane extends Scene{
         const halfHeightCell = heightCell/2;
         console.log(widthCell, '||',heightCell);
 
-
-
         const rectangle = this.add.virtualRect(44*sizeField,44*sizeField);
         rectangle.rotate = 45;
         rectangle.scaleX = 0.5;
-        const width = rectangle.x1-rectangle.x3;
-        const height = rectangle.y2-rectangle.y0;
-        rectangle.moveX(width/2);
-        rectangle.moveY(height/2);
+        this.widthField = rectangle.x1-rectangle.x3;
+        this.heightField = rectangle.y2-rectangle.y0;
+        this.cameraMaxX = this.widthField-this.width+60;
+        this.cameraMaxY = this.heightField-this.height+60;
+        rectangle.moveX(this.widthField/2);
+        rectangle.moveY(this.heightField/2);
 
         let startX = rectangle.x0;
         let startY = rectangle.y0+halfHeightCell
@@ -74,10 +78,10 @@ export default class MainScane extends Scene{
         graphicsDot.fillRect(0,0,10,10);
 
         this.input.on('pointermove', (point)=>{
-            console.log('point = ', point);
+            //console.log('point = ', point);
             const scrollX = point.x-this.game.camera.cameraPoint().x;
             const scrollY = point.y-this.game.camera.cameraPoint().y;
-            console.log('scroll = ', scrollX, '||', scrollY);
+            //console.log('scroll = ', scrollX, '||', scrollY);
             for (let i = 0; i < this.vMatrix.length; i++) {
                 const row = this.vMatrix[i];
                 for (let j = 0; j < row.length; j++) {
@@ -92,11 +96,6 @@ export default class MainScane extends Scene{
             }
         });
 
-        //console.log('vMatrix = ', this.vMatrix);
-
-        
-
-        console.log(width,'||',height);
         const graphicsRect3 = this.add.graphics();
         graphicsRect3.strokeStyle('#02b331');
         graphicsRect3.beginPath();
@@ -224,8 +223,8 @@ export default class MainScane extends Scene{
             }
         });
         //const cameraPoint = this.game.camera.cameraPoint();
-        this.game.camera.scrollX(-width/2+this.halfWidth);
-        this.game.camera.scrollY(-height/2+this.halfHeight);
+        this.game.camera.scrollX(-this.widthField/2+this.halfWidth);
+        this.game.camera.scrollY(-this.heightField/2+this.halfHeight);
         // this.empCastle = this.add.sprite('emp-castle');
         // this.empCastle.x = this.empCastle.halfWidth;
         // this.empCastle.y = this.empCastle.halfHeight;
@@ -242,7 +241,9 @@ export default class MainScane extends Scene{
 
         if(this.isCameraDown){
             this.game.camera.scrollY(camera.cameraPoint().y-this.cameraSpeed);
-            
+            if(camera.cameraPoint().y<-this.cameraMaxY){
+                this.game.camera.scrollY(-this.cameraMaxY);
+            }
             
         }else if(this.isCameraUp){
             this.game.camera.scrollY(camera.cameraPoint().y+this.cameraSpeed);
@@ -258,7 +259,10 @@ export default class MainScane extends Scene{
             }
         }else if(this.isCameraRight){
             this.game.camera.scrollX(camera.cameraPoint().x-this.cameraSpeed);
-            
+            //console.log('cameraPointX = ', camera.cameraPoint().x);
+            if(camera.cameraPoint().x<-this.cameraMaxX){
+                this.game.camera.scrollX(-this.cameraMaxX);
+            }
         }
 
         // const cameraPoint = this.game.camera.cameraPoint();
