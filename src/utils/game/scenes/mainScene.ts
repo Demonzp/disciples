@@ -8,6 +8,8 @@ export default class MainScane extends Scene{
     isCameraRight = false;
     isCameraUp = false;
     isCameraDown = false;
+    cameraSpeed = 8;
+    vMatrix:(TPoint[])[] = [];
     constructor(){
         super('MainScene');
     }
@@ -21,11 +23,6 @@ export default class MainScane extends Scene{
         
         //const graphics = this.add.graphics();
         //graphics.lineWidth(1);
-        let startX = 40;
-        let startY = 0;
-        const step = 40;
-        //graphics.beginPath();
-        const rad = -60 * Math.PI/180;
 
         // const grass = this.add.sprite('grass-water',100,100);
         // //grass.x += grass.halfWidth;
@@ -35,7 +32,19 @@ export default class MainScane extends Scene{
         // grass2.setFrame(12);
         console.log('mainScene');
         const sizeField = 48;
-        const rectangle = this.add.virtualRect(44*sizeField,44*sizeField,195,212);
+
+        const rectCell = this.add.virtualRect(44,44);
+        rectCell.rotate = 45;
+        rectCell.scaleX = 0.5;
+        const widthCell = rectCell.x1-rectCell.x3;
+        const heightCell = rectCell.y2-rectCell.y0;
+        const halfWidthCell = widthCell/2;
+        const halfHeightCell = heightCell/2;
+        console.log(widthCell, '||',heightCell);
+
+
+
+        const rectangle = this.add.virtualRect(44*sizeField,44*sizeField);
         rectangle.rotate = 45;
         rectangle.scaleX = 0.5;
         const width = rectangle.x1-rectangle.x3;
@@ -43,9 +52,53 @@ export default class MainScane extends Scene{
         rectangle.moveX(width/2);
         rectangle.moveY(height/2);
 
+        let startX = rectangle.x0;
+        let startY = rectangle.y0+halfHeightCell
+        let row = [];
+        for (let i = 1; i < sizeField+1; i++) {
+            for (let j = 0; j < sizeField; j++) {
+                const x = startX;
+                const y = startY;
+                row.push({x,y});
+                startX-=halfWidthCell;
+                startY+=halfHeightCell;
+            }
+            this.vMatrix.push(row);
+            row = [];
+            startX = rectangle.x0+halfWidthCell*i;
+            startY = rectangle.y0+halfHeightCell*(i+1);
+        }
+
+        const graphicsDot = this.add.graphics();
+        graphicsDot.fillStyle('red');
+        graphicsDot.fillRect(0,0,10,10);
+
+        this.input.on('pointermove', (point)=>{
+            console.log('point = ', point);
+            const scrollX = point.x-this.game.camera.cameraPoint().x;
+            const scrollY = point.y-this.game.camera.cameraPoint().y;
+            console.log('scroll = ', scrollX, '||', scrollY);
+            for (let i = 0; i < this.vMatrix.length; i++) {
+                const row = this.vMatrix[i];
+                for (let j = 0; j < row.length; j++) {
+                    const cell = row[j];
+                    if((scrollX>=cell.x-20&&scrollX<=cell.x+20)
+                        && (scrollY>=cell.y-halfHeightCell&&scrollY<=cell.y+halfHeightCell)
+                    ){
+                        graphicsDot.fillRect(cell.x-5,cell.y-5,10,10);
+                    }
+                }
+                
+            }
+        });
+
+        //console.log('vMatrix = ', this.vMatrix);
+
+        
+
         console.log(width,'||',height);
         const graphicsRect3 = this.add.graphics();
-        graphicsRect3.fillStyle('#e61010');
+        graphicsRect3.strokeStyle('#02b331');
         graphicsRect3.beginPath();
           
         graphicsRect3.moveTo(rectangle.x0, rectangle.y0);
@@ -188,23 +241,23 @@ export default class MainScane extends Scene{
         const camera = this.game.camera;
 
         if(this.isCameraDown){
-            this.game.camera.scrollY(camera.cameraPoint().y-4);
+            this.game.camera.scrollY(camera.cameraPoint().y-this.cameraSpeed);
             
             
         }else if(this.isCameraUp){
-            this.game.camera.scrollY(camera.cameraPoint().y+4);
+            this.game.camera.scrollY(camera.cameraPoint().y+this.cameraSpeed);
             if(camera.cameraPoint().y>60){
                 this.game.camera.scrollY(60);
             }
         }
 
         if(this.isCameraLeft){
-            this.game.camera.scrollX(camera.cameraPoint().x+4);
+            this.game.camera.scrollX(camera.cameraPoint().x+this.cameraSpeed);
             if(camera.cameraPoint().x>60){
                 this.game.camera.scrollX(60);
             }
         }else if(this.isCameraRight){
-            this.game.camera.scrollX(camera.cameraPoint().x-4);
+            this.game.camera.scrollX(camera.cameraPoint().x-this.cameraSpeed);
             
         }
 
