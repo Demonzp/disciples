@@ -8,6 +8,13 @@ const App = () => {
             <div className={styles.content}>
                 <h2>Disciples: annals of Nevendaar</h2>
                 <GameComp />
+                <div>
+                    <p>
+                        To move Camera use keyboard arrows;
+                        <br/>
+                        To move Casle click on them and move mouse cursor;
+                    </p>
+                </div>
             </div>
         </div>
     );

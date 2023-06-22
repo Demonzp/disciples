@@ -1,11 +1,14 @@
+import { setPointerMatrix } from "store/slices/sliceGame";
+import store from "store/store";
 import { TPoint } from "utils/gameLib/Game";
 import Scene from "utils/gameLib/Scene";
 import Sprite from "utils/gameLib/Sprite";
+import CapitalCity from "../objects/CapitalCity";
 
 export type TPointMatrix = [number,number];
 
 export default class MainScane extends Scene{
-    empCastle:Sprite|null = null;
+    empCastle:CapitalCity|null = null;
     isCameraLeft = false;
     isCameraRight = false;
     isCameraUp = false;
@@ -18,7 +21,8 @@ export default class MainScane extends Scene{
     cameraMaxX = 0;
     cameraMaxY = 0;
     isSelectCasle = false;
-    pointerMatrix: TPointMatrix = [0,0];
+    sizeField = 20;
+    //pointerMatrix: TPointMatrix = [0,0];
     constructor(){
         super('MainScene');
     }
@@ -40,7 +44,7 @@ export default class MainScane extends Scene{
         // const grass2 = this.add.sprite('grass-water',100-48/2,100-48/2);
         // grass2.setFrame(12);
         console.log('mainScene');
-        const sizeField = 48;
+        //const sizeField = 20;
 
         const rectCell = this.add.virtualRect(44,44);
         rectCell.rotate = 45;
@@ -51,7 +55,7 @@ export default class MainScane extends Scene{
         const halfHeightCell = heightCell/2;
         console.log(widthCell, '||',heightCell);
 
-        const rectangle = this.add.virtualRect(44*sizeField,44*sizeField);
+        const rectangle = this.add.virtualRect(44*this.sizeField,44*this.sizeField);
         rectangle.rotate = 45;
         rectangle.scaleX = 0.5;
         this.widthField = rectangle.x1-rectangle.x3;
@@ -64,8 +68,8 @@ export default class MainScane extends Scene{
         let startX = rectangle.x0;
         let startY = rectangle.y0+halfHeightCell
         let row = [];
-        for (let i = 1; i < sizeField+1; i++) {
-            for (let j = 0; j < sizeField; j++) {
+        for (let i = 1; i < this.sizeField+1; i++) {
+            for (let j = 0; j < this.sizeField; j++) {
                 const x = startX;
                 const y = startY;
                 row.push({x,y});
@@ -82,17 +86,19 @@ export default class MainScane extends Scene{
         graphicsDot.fillStyle('red');
         graphicsDot.fillRect(0,0,10,10);
 
-        this.empCastle = this.add.sprite('emp-castle');
+        this.empCastle = new CapitalCity(this, [1,1], 'empire');
 
-        this.empCastle.x = this.vMatrix[3][3].x;
-        this.empCastle.y = this.vMatrix[3][3].y-35;
+        // this.empCastle = this.add.sprite('emp-castle');
+
+        // this.empCastle.x = this.vMatrix[3][3].x;
+        // this.empCastle.y = this.vMatrix[3][3].y-35;
 
         console.log('5,5 = ', this.vMatrix[5][5]);
 
-        this.empCastle.on('pointerup', ()=>{
-            console.log('pointerup');
-            this.isSelectCasle = true;
-        });
+        // this.empCastle.on('pointerup', ()=>{
+        //     console.log('pointerup');
+        //     this.isSelectCasle = true;
+        // });
 
         this.input.on('pointermove', (point)=>{
             //console.log('point = ', point);
@@ -106,12 +112,13 @@ export default class MainScane extends Scene{
                     if((scrollX>=cell.x-20&&scrollX<=cell.x+20)
                         && (scrollY>=cell.y-halfHeightCell&&scrollY<=cell.y+halfHeightCell)
                     ){
-                        this.pointerMatrix = [i,j];
+                        store.dispatch(setPointerMatrix([i,j]));
+                        //this.pointerMatrix = [i,j];
                         graphicsDot.fillRect(cell.x-5,cell.y-5,10,10);
-                        if(this.isSelectCasle&&i>Math.floor(this.capitalMatrix/2)&&i<sizeField-Math.floor(this.capitalMatrix/2)-1&&j>Math.floor(this.capitalMatrix/2)&&j<sizeField-Math.floor(this.capitalMatrix/2)-1){
-                            this.empCastle.x = cell.x;
-                            this.empCastle.y = cell.y-35;
-                        }
+                        // if(this.isSelectCasle&&i>Math.floor(this.capitalMatrix/2)&&i<this.sizeField-Math.floor(this.capitalMatrix/2)-1&&j>Math.floor(this.capitalMatrix/2)&&j<this.sizeField-Math.floor(this.capitalMatrix/2)-1){
+                        //     this.empCastle.x = cell.x;
+                        //     this.empCastle.y = cell.y-35;
+                        // }
                     }
                 }
             }
@@ -129,8 +136,8 @@ export default class MainScane extends Scene{
 
         graphicsRect3.stroke();
 
-        for (let i = 1; i < sizeField; i++) {
-            const t = (1/sizeField)*i;
+        for (let i = 1; i < this.sizeField; i++) {
+            const t = (1/this.sizeField)*i;
             const startPoint = this.findPointOnLinearCurve(
                 {
                     x:rectangle.x3,
@@ -163,8 +170,8 @@ export default class MainScane extends Scene{
             graphics.stroke();
         }
 
-        for (let i = 1; i < sizeField; i++) {
-            const t = (1/sizeField)*i;
+        for (let i = 1; i < this.sizeField; i++) {
+            const t = (1/this.sizeField)*i;
             const startPoint = this.findPointOnLinearCurve(
                 {
                     x:rectangle.x3,
@@ -249,9 +256,11 @@ export default class MainScane extends Scene{
         
 
 
-        const graphicsDot2 = this.add.graphics();
-        graphicsDot2.fillStyle('blue');
-        graphicsDot2.fillRect(this.vMatrix[5][5].x-5,this.vMatrix[5][5].y-5,10,10);
+        // const graphicsDot2 = this.add.graphics();
+        // graphicsDot2.fillStyle('blue');
+        // graphicsDot2.fillRect(this.vMatrix[5][5].x-5,this.vMatrix[5][5].y-5,10,10);
+
+        graphicsDot.setZindex(2);
     }
 
     findPointOnLinearCurve(startPoint:TPoint, endPoint:TPoint, t:number):TPoint {
