@@ -2,6 +2,8 @@ import { TPoint } from "utils/gameLib/Game";
 import Scene from "utils/gameLib/Scene";
 import Sprite from "utils/gameLib/Sprite";
 
+export type TPointMatrix = [number,number];
+
 export default class MainScane extends Scene{
     empCastle:Sprite|null = null;
     isCameraLeft = false;
@@ -10,10 +12,13 @@ export default class MainScane extends Scene{
     isCameraDown = false;
     cameraSpeed = 8;
     vMatrix:(TPoint[])[] = [];
+    capitalMatrix = 5;
     widthField = 0;
     heightField = 0;
     cameraMaxX = 0;
     cameraMaxY = 0;
+    isSelectCasle = false;
+    pointerMatrix: TPointMatrix = [0,0];
     constructor(){
         super('MainScene');
     }
@@ -51,8 +56,8 @@ export default class MainScane extends Scene{
         rectangle.scaleX = 0.5;
         this.widthField = rectangle.x1-rectangle.x3;
         this.heightField = rectangle.y2-rectangle.y0;
-        this.cameraMaxX = this.widthField-this.width+60;
-        this.cameraMaxY = this.heightField-this.height+60;
+        this.cameraMaxX = this.widthField-this.width+80;
+        this.cameraMaxY = this.heightField-this.height+80;
         rectangle.moveX(this.widthField/2);
         rectangle.moveY(this.heightField/2);
 
@@ -77,6 +82,18 @@ export default class MainScane extends Scene{
         graphicsDot.fillStyle('red');
         graphicsDot.fillRect(0,0,10,10);
 
+        this.empCastle = this.add.sprite('emp-castle');
+
+        this.empCastle.x = this.vMatrix[3][3].x;
+        this.empCastle.y = this.vMatrix[3][3].y-35;
+
+        console.log('5,5 = ', this.vMatrix[5][5]);
+
+        this.empCastle.on('pointerup', ()=>{
+            console.log('pointerup');
+            this.isSelectCasle = true;
+        });
+
         this.input.on('pointermove', (point)=>{
             //console.log('point = ', point);
             const scrollX = point.x-this.game.camera.cameraPoint().x;
@@ -89,10 +106,14 @@ export default class MainScane extends Scene{
                     if((scrollX>=cell.x-20&&scrollX<=cell.x+20)
                         && (scrollY>=cell.y-halfHeightCell&&scrollY<=cell.y+halfHeightCell)
                     ){
+                        this.pointerMatrix = [i,j];
                         graphicsDot.fillRect(cell.x-5,cell.y-5,10,10);
+                        if(this.isSelectCasle&&i>Math.floor(this.capitalMatrix/2)&&i<sizeField-Math.floor(this.capitalMatrix/2)-1&&j>Math.floor(this.capitalMatrix/2)&&j<sizeField-Math.floor(this.capitalMatrix/2)-1){
+                            this.empCastle.x = cell.x;
+                            this.empCastle.y = cell.y-35;
+                        }
                     }
                 }
-                
             }
         });
 
@@ -225,9 +246,12 @@ export default class MainScane extends Scene{
         //const cameraPoint = this.game.camera.cameraPoint();
         this.game.camera.scrollX(-this.widthField/2+this.halfWidth);
         this.game.camera.scrollY(-this.heightField/2+this.halfHeight);
-        // this.empCastle = this.add.sprite('emp-castle');
-        // this.empCastle.x = this.empCastle.halfWidth;
-        // this.empCastle.y = this.empCastle.halfHeight;
+        
+
+
+        const graphicsDot2 = this.add.graphics();
+        graphicsDot2.fillStyle('blue');
+        graphicsDot2.fillRect(this.vMatrix[5][5].x-5,this.vMatrix[5][5].y-5,10,10);
     }
 
     findPointOnLinearCurve(startPoint:TPoint, endPoint:TPoint, t:number):TPoint {
@@ -240,24 +264,48 @@ export default class MainScane extends Scene{
         const camera = this.game.camera;
 
         if(this.isCameraDown){
+            // if(this.isSelectCasle){
+            //     this.empCastle.y += 1;
+            //     console.log('5,5 = ', this.vMatrix[5][5]);
+            //     console.log(this.empCastle.x,'|',this.empCastle.y);
+            //     return;
+            // }
             this.game.camera.scrollY(camera.cameraPoint().y-this.cameraSpeed);
             if(camera.cameraPoint().y<-this.cameraMaxY){
                 this.game.camera.scrollY(-this.cameraMaxY);
             }
             
         }else if(this.isCameraUp){
+            // if(this.isSelectCasle){
+            //     this.empCastle.y -= 1;
+            //     console.log('5,5 = ', this.vMatrix[5][5]);
+            //     console.log(this.empCastle.x,'|',this.empCastle.y);
+            //     return;
+            // }
             this.game.camera.scrollY(camera.cameraPoint().y+this.cameraSpeed);
-            if(camera.cameraPoint().y>60){
-                this.game.camera.scrollY(60);
+            if(camera.cameraPoint().y>80){
+                this.game.camera.scrollY(80);
             }
         }
 
         if(this.isCameraLeft){
+            // if(this.isSelectCasle){
+            //     this.empCastle.x -= 1;
+            //     console.log('5,5 = ', this.vMatrix[5][5]);
+            //     console.log(this.empCastle.x,'|',this.empCastle.y);
+            //     return;
+            // }
             this.game.camera.scrollX(camera.cameraPoint().x+this.cameraSpeed);
-            if(camera.cameraPoint().x>60){
-                this.game.camera.scrollX(60);
+            if(camera.cameraPoint().x>80){
+                this.game.camera.scrollX(80);
             }
         }else if(this.isCameraRight){
+            // if(this.isSelectCasle){
+            //     this.empCastle.x += 1;
+            //     console.log('5,5 = ', this.vMatrix[5][5]);
+            //     console.log(this.empCastle.x,'|',this.empCastle.y);
+            //     return;
+            // }
             this.game.camera.scrollX(camera.cameraPoint().x-this.cameraSpeed);
             //console.log('cameraPointX = ', camera.cameraPoint().x);
             if(camera.cameraPoint().x<-this.cameraMaxX){

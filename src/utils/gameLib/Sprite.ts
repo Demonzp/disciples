@@ -143,9 +143,10 @@ export default class Sprite extends GameObject{
 
   on(event:TEventsSprite|TGameObjectEvents , handler: ()=>void, context?: any):string{
     if(event==='pointerdown'||event==='pointermove'||event==='pointerup'||event==='pointerout'||event==='pointerover'){
+      //console.log('register TEventsSprite');
       return super._on(event, handler, context);
     }else{
-      //console.log('register TEventsSprite');
+      
       const id = Game.createId();
       this.callbacks.push({
         id,

@@ -285,7 +285,10 @@ export default class GameObject{
     }
 
     //console.log('isOnPointer');
-    
+    const worldPointer = {
+      x: pointer.x-this.scene.game.camera.cameraPoint().x,
+      y: pointer.y-this.scene.game.camera.cameraPoint().y
+    }
     if(this._parent instanceof Container){
       const globalPos = this.getGlobalPos();
       const x0 = globalPos.x - this._interactiveBodyRect.halfWidth;
@@ -293,7 +296,7 @@ export default class GameObject{
       const x1 = globalPos.x + this._interactiveBodyRect.halfWidth;
       const y1 = globalPos.y + this._interactiveBodyRect.halfHeight;
 
-      if((pointer.x>=x0&&pointer.x<=x1)&&(pointer.y>=y0&&pointer.y<=y1)){
+      if((worldPointer.x>=x0&&worldPointer.x<=x1)&&(worldPointer.y>=y0&&worldPointer.y<=y1)){
         //console.log('isOnPointerDown');
         return this;
       }
@@ -319,22 +322,22 @@ export default class GameObject{
       //console.log(x1,'||', y1);
       let dx = x2 - x1;
       let dy = y2 - y1;
-      const d1 = (x2-x1)*(pointer.y-y1)-(y2-y1)*(pointer.x-x1);
+      const d1 = (x2-x1)*(worldPointer.y-y1)-(y2-y1)*(worldPointer.x-x1);
       //const d1 = ((y1-pointer.y)*dx+(pointer.x-x1)*dx)/(dy*dy+dx*dx);
 
       dx = x3 - x2;
       dy = y3 - y2;
-      const d2 = dx*(pointer.y-y2)-dy*(pointer.x-x2);
+      const d2 = dx*(worldPointer.y-y2)-dy*(worldPointer.x-x2);
       //const d2 = ((y2-pointer.y)*dx+(pointer.x-x2)*dx)/(dy*dy+dx*dx);
 
       dx = x4 - x3;
       dy = y4 - y3;
-      const d3 = dx*(pointer.y-y3)-dy*(pointer.x-x3);
+      const d3 = dx*(worldPointer.y-y3)-dy*(worldPointer.x-x3);
       //const d3 = ((y3-pointer.y)*dx+(pointer.x-x3)*dx)/(dy*dy+dx*dx);
 
       dx = x1 - x4;
       dy = y1 - y4;
-      const d4 = dx*(pointer.y-y4)-dy*(pointer.x-x4);
+      const d4 = dx*(worldPointer.y-y4)-dy*(worldPointer.x-x4);
       //const d4 = ((y4-pointer.y)*dx+(pointer.x-x4)*dx)/(dy*dy+dx*dx);
       //console.log('calculate');
       if(d1<0&&d2<0&&d3<0&&d4<0){
