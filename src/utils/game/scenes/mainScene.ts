@@ -1,10 +1,11 @@
-import { addCapitalCity, setPointerMatrix } from "store/slices/sliceGame";
+import { TFieldMatrix, addCapitalCity, setFieldMatrix, setPointerMatrix } from "store/slices/sliceGame";
 import store from "store/store";
 import Game, { TPoint } from "utils/gameLib/Game";
 import Scene from "utils/gameLib/Scene";
 import Sprite from "utils/gameLib/Sprite";
 import CapitalCity from "../objects/CapitalCity";
 import BaseObject from "../objects/BaseObject";
+import { actionPointerMove } from "store/actions/actionsGame";
 
 export type TPointMatrix = [number,number];
 
@@ -70,6 +71,7 @@ export default class MainScene extends Scene{
         let startX = rectangle.x0;
         let startY = rectangle.y0+halfHeightCell
         let row = [];
+        //const matrix:TFieldMatrix = [];
         for (let i = 1; i < this.sizeField+1; i++) {
             for (let j = 0; j < this.sizeField; j++) {
                 const x = startX;
@@ -87,9 +89,11 @@ export default class MainScene extends Scene{
         const graphicsDot = this.add.graphics();
         graphicsDot.fillStyle('red');
         graphicsDot.fillRect(0,0,10,10);
+        store.dispatch(setFieldMatrix(this.vMatrix));
 
         store.dispatch(addCapitalCity({
             matrixPoint: [3,3],
+            matrix:[5,5],
             id: Game.createId(),
             race: "empire",
             squadOut: [],
@@ -113,6 +117,7 @@ export default class MainScene extends Scene{
             //console.log('point = ', point);
             const scrollX = point.x-this.game.camera.cameraPoint().x;
             const scrollY = point.y-this.game.camera.cameraPoint().y;
+            //store.dispatch(actionPointerMove({x:scrollX,y:scrollY}));
             //console.log('scroll = ', scrollX, '||', scrollY);
             for (let i = 0; i < this.vMatrix.length; i++) {
                 const row = this.vMatrix[i];
@@ -122,11 +127,12 @@ export default class MainScene extends Scene{
                         && (scrollY>=cell.y-halfHeightCell&&scrollY<=cell.y+halfHeightCell)
                     ){
                         store.dispatch(setPointerMatrix([i,j]));
+                        //store.dispatch(actionPointerMove({x:scrollX,y:scrollY}));
                         //this.pointerMatrix = [i,j];
                         graphicsDot.fillRect(cell.x-5,cell.y-5,10,10);
-                        if(this.selectObj){
-                            this.selectObj.moveTo([i,j]);
-                        }
+                        // if(this.selectObj){
+                        //     this.selectObj.moveTo([i,j]);
+                        // }
                         // if(this.isSelectCasle&&i>Math.floor(this.capitalMatrix/2)&&i<this.sizeField-Math.floor(this.capitalMatrix/2)-1&&j>Math.floor(this.capitalMatrix/2)&&j<this.sizeField-Math.floor(this.capitalMatrix/2)-1){
                         //     this.empCastle.x = cell.x;
                         //     this.empCastle.y = cell.y-35;
@@ -298,6 +304,13 @@ export default class MainScene extends Scene{
                 this.capitalCities.push(capitalCity);
             }
         });
+    }
+
+    updatePointer(){
+        const point = store.getState().game.pointerMatrix;
+        if(this.selectObj){
+            this.selectObj.moveTo(point);
+        }
     }
 
     update(_: number): void {

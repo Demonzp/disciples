@@ -1,7 +1,7 @@
 import Sprite from "utils/gameLib/Sprite";
 import MainScane, { TPointMatrix } from "../scenes/mainScene";
 import BaseObject from "./BaseObject";
-import { TCapitalCitie } from "store/slices/sliceGame";
+import { ICapitalCity } from "store/slices/sliceGame";
 
 export type TCapitalRace = 'empire'|'legions'|'clans'|'elves'|'undead';
 
@@ -32,14 +32,14 @@ export default class CapitalCity extends BaseObject{
     }
 
     moveTo(pointerMatrix:TPointMatrix){
-
+        console.log('pointerMatrix = ', pointerMatrix);
     }
 
     get sprite(){
         return this._sprite!;
     }
 
-    update(data:TCapitalCitie){
+    update(data:ICapitalCity){
 
     }
 }

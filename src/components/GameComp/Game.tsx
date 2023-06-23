@@ -47,6 +47,16 @@ const GameComp = () => {
         }
     }, [capitalCities, game]);
 
+    useEffect(()=>{
+        if(game){
+            const scene = game.scene.getScene<MainScene>('MainScene');
+            //console.log('update state updatePointer = ', scene);
+            if(scene){
+                scene.updatePointer();
+            }
+        }
+    }, [pointerMatrix, game]);
+
     const onContext = (e: MouseEvent) => {
         e.preventDefault();
     };
