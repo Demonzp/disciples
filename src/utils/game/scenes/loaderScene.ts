@@ -24,7 +24,6 @@ export default class LoaderScene extends Scene{
     this.load.image('origin-field', './assets/imgs/origin-field.jpg');
     this.load.image('map-grid', './assets/imgs/map-grid.jpg');
     this.load.spritesheet('grass-water', './assets/imgs/isometric-grass-and-water-64x64.png',{ frameWidth: 64, frameHeight: 64, endFrame: 24 });
-    
   }
 
   create(){

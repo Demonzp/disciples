@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import LoaderScene from "utils/game/scenes/loaderScene";
-import MainScane from "utils/game/scenes/mainScene";
+import MainScene from "utils/game/scenes/mainScene";
 import Game from "utils/gameLib/Game";
 
 import classes from "./game.module.css";
@@ -9,7 +9,7 @@ import { useAppSelector } from "store/hooks";
 const GameComp = () => {
     const refCont = useRef<HTMLCanvasElement>(null);
     const [game, setGame] = useState<Game | undefined>();
-    const { pointerMatrix } = useAppSelector(state => state.game);
+    const { pointerMatrix, capitalCities } = useAppSelector(state => state.game);
 
     useEffect(() => {
         if (refCont.current && !game) {
@@ -21,7 +21,7 @@ const GameComp = () => {
                 // height: 360,
                 width: 854,
                 height: 480,
-                scenes: [LoaderScene, MainScane]
+                scenes: [LoaderScene, MainScene]
             });
 
             setGame(g);
@@ -36,6 +36,16 @@ const GameComp = () => {
             }
         };
     }, []);
+
+    useEffect(()=>{
+        if(game){
+            const scene = game.scene.getScene<MainScene>('MainScene');
+            console.log('update state capitalCities = ', scene);
+            if(scene){
+                scene.updateCapitals();
+            }
+        }
+    }, [capitalCities, game]);
 
     const onContext = (e: MouseEvent) => {
         e.preventDefault();

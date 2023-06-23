@@ -1,14 +1,15 @@
-import { setPointerMatrix } from "store/slices/sliceGame";
+import { addCapitalCity, setPointerMatrix } from "store/slices/sliceGame";
 import store from "store/store";
-import { TPoint } from "utils/gameLib/Game";
+import Game, { TPoint } from "utils/gameLib/Game";
 import Scene from "utils/gameLib/Scene";
 import Sprite from "utils/gameLib/Sprite";
 import CapitalCity from "../objects/CapitalCity";
+import BaseObject from "../objects/BaseObject";
 
 export type TPointMatrix = [number,number];
 
-export default class MainScane extends Scene{
-    empCastle:CapitalCity|null = null;
+export default class MainScene extends Scene{
+    capitalCities:CapitalCity[] = [];
     isCameraLeft = false;
     isCameraRight = false;
     isCameraUp = false;
@@ -22,6 +23,7 @@ export default class MainScane extends Scene{
     cameraMaxY = 0;
     isSelectCasle = false;
     sizeField = 20;
+    selectObj:BaseObject|null;
     //pointerMatrix: TPointMatrix = [0,0];
     constructor(){
         super('MainScene');
@@ -86,7 +88,14 @@ export default class MainScane extends Scene{
         graphicsDot.fillStyle('red');
         graphicsDot.fillRect(0,0,10,10);
 
-        this.empCastle = new CapitalCity(this, [1,1], 'empire');
+        store.dispatch(addCapitalCity({
+            matrixPoint: [3,3],
+            id: Game.createId(),
+            race: "empire",
+            squadOut: [],
+            squadIn: []
+        }));
+        //this.empCastle = new CapitalCity(this, [1,1], 'empire');
 
         // this.empCastle = this.add.sprite('emp-castle');
 
@@ -115,6 +124,9 @@ export default class MainScane extends Scene{
                         store.dispatch(setPointerMatrix([i,j]));
                         //this.pointerMatrix = [i,j];
                         graphicsDot.fillRect(cell.x-5,cell.y-5,10,10);
+                        if(this.selectObj){
+                            this.selectObj.moveTo([i,j]);
+                        }
                         // if(this.isSelectCasle&&i>Math.floor(this.capitalMatrix/2)&&i<this.sizeField-Math.floor(this.capitalMatrix/2)-1&&j>Math.floor(this.capitalMatrix/2)&&j<this.sizeField-Math.floor(this.capitalMatrix/2)-1){
                         //     this.empCastle.x = cell.x;
                         //     this.empCastle.y = cell.y-35;
@@ -267,6 +279,25 @@ export default class MainScane extends Scene{
         const x = startPoint.x + (endPoint.x - startPoint.x) * t;
         const y = startPoint.y + (endPoint.y - startPoint.y) * t;
         return { x, y };
+    }
+
+    updateCapitals(){
+        const capitals = store.getState().game.capitalCities;
+        capitals.forEach(c=>{
+            const castle = this.capitalCities.find(c2=>c2.id===c.id);
+            if(castle){
+                castle.update(c);
+            }else{
+                console.log('add to render new CapitalCity');
+                const capitalCity = new CapitalCity(
+                    this,
+                    c.id,
+                    c.matrixPoint,
+                    c.race
+                );
+                this.capitalCities.push(capitalCity);
+            }
+        });
     }
 
     update(_: number): void {
