@@ -87,11 +87,10 @@ const sliceGame = createSlice({
             if (payload.isCanPut && !payload.isUp) {
                 for (let i = payload.matrixPoint[0]; i < payload.matrixPoint[0] + payload.matrix[0]; i++) {
                     for (let j = payload.matrixPoint[1]; j < payload.matrixPoint[1] + payload.matrix[1]; j++) {
-                        //let terrain = state.fieldMatrix[i][j].terrain;
                         state.fieldMatrix[i][j] = {
                             ...state.fieldMatrix[i][j],
                             objId: payload.id,
-                            //terrain
+                            isBuild: true
                         }
                     }
                 }

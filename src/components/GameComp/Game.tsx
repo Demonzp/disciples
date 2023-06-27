@@ -5,6 +5,7 @@ import Game from "utils/gameLib/Game";
 
 import classes from "./game.module.css";
 import { useAppSelector } from "store/hooks";
+import MapEditor from "components/MapEditor";
 
 const GameComp = () => {
     const refCont = useRef<HTMLCanvasElement>(null);
@@ -70,8 +71,9 @@ const GameComp = () => {
             <div>
                 <h4>[{ pointerMatrix[0] }, { pointerMatrix[1] }]</h4>
             </div>
-            <div className={classes.gameCont}>
+            <div className={`${classes.gameCont} row`}>
                 <canvas ref={refCont} />
+                <MapEditor />
             </div>
         </>
 

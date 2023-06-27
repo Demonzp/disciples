@@ -17,6 +17,7 @@ export default class CapitalCity extends BaseObject{
 
     create(){
         this._sprite = this.scene.add.sprite(`${this.race}-castle`);
+        this._sprite.setZindex(200);
         this.move();
         // const i = this.matrixPoint[0]+2;
         // const j = this.matrixPoint[1]+2;
@@ -52,9 +53,11 @@ export default class CapitalCity extends BaseObject{
         if(!this.isCanPut){
             if(!this.fundament){
                 this.fundament = this.scene.add.sprite('fundament5x5');
+                this.fundament.setZindex(this.sprite.zIndex+1);
             }
             this.fundament.x = cell.x;
             this.fundament.y = cell.y-35;
+            this.fundament.setZindex(this.sprite.zIndex+1);
         }else{
             if(this.fundament){
                 this.scene.add.remove(this.fundament);
@@ -72,6 +75,11 @@ export default class CapitalCity extends BaseObject{
         this.matrixPoint = data.matrixPoint;
         this.isCanPut = data.isCanPut;
         this.move();
+        if(data.isUp){
+            this.sprite.setZindex(1000);
+        }else{
+            this.sprite.setZindex(200+(data.matrixPoint[0]+data.matrixPoint[1]-4));
+        }
     }
 
     update(){

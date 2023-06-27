@@ -111,9 +111,9 @@ export default class MainScene extends Scene{
         //graphicsDot.fillRect(0,0,10,10);
         store.dispatch(setFieldMatrix(this.vMatrix));
         setTimeout(()=>{
-            store.dispatch(actionAddCapitalCity([2,1]));
+            store.dispatch(actionAddCapitalCity([4,4]));
             setTimeout(()=>{
-                store.dispatch(actionAddCapitalCity([4,5]));
+                store.dispatch(actionAddCapitalCity([10,8]));
             },1000);
         },1000);
         // setTimeout(()=>{

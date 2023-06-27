@@ -131,11 +131,11 @@ export const actionAddCapitalCity = createAsyncThunk<ICapitalCity, TPointMatrix,
 
       const fieldMatrix = getState().game.fieldMatrix;
       //const sizeMatrix = fieldMatrix.length - 1;
-
-      const isCanPut = isCanPutBuild(fieldMatrix, point, [5, 5]);
+      let iX = point[0]-2;
+      let jY = point[1]-2;
+      const isCanPut = isCanPutBuild(fieldMatrix, [iX,jY], [5, 5]);
       //let isCanPut = true;
-      let iX = point[0];
-      let jY = point[1];
+      
       // do {
       //   isCanPut = true;
       //   if (iX < 1) {
