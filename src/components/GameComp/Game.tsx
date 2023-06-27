@@ -9,7 +9,7 @@ import { useAppSelector } from "store/hooks";
 const GameComp = () => {
     const refCont = useRef<HTMLCanvasElement>(null);
     const [game, setGame] = useState<Game | undefined>();
-    const { pointerMatrix, capitalCities } = useAppSelector(state => state.game);
+    const { pointerMatrix, capitalCities, fieldMatrix } = useAppSelector(state => state.game);
 
     useEffect(() => {
         if (refCont.current && !game) {
@@ -40,12 +40,16 @@ const GameComp = () => {
     useEffect(()=>{
         if(game){
             const scene = game.scene.getScene<MainScene>('MainScene');
-            console.log('update state capitalCities = ', scene);
+            //console.log('update state capitalCities = ', scene);
             if(scene){
                 scene.updateCapitals();
             }
         }
     }, [capitalCities, game]);
+
+    useEffect(()=>{
+        //console.log('fieldMatrix = ', fieldMatrix);
+    },[fieldMatrix]);
 
     useEffect(()=>{
         if(game){

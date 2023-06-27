@@ -23,6 +23,7 @@ export default class LoaderScene extends Scene{
     this.load.image('empire-castle', './assets/imgs/castle-empire.png');
     this.load.image('origin-field', './assets/imgs/origin-field.jpg');
     this.load.image('map-grid', './assets/imgs/map-grid.jpg');
+    this.load.image('fundament5x5', './assets/imgs/fundament5x5.png');
     this.load.spritesheet('grass-water', './assets/imgs/isometric-grass-and-water-64x64.png',{ frameWidth: 64, frameHeight: 64, endFrame: 24 });
   }
 

@@ -1,11 +1,12 @@
-import { TFieldMatrix, addCapitalCity, setFieldMatrix, setPointerMatrix } from "store/slices/sliceGame";
+import { TCell, TFieldMatrix, addCapitalCity, setFieldMatrix, setPointerMatrix } from "store/slices/sliceGame";
 import store from "store/store";
 import Game, { TPoint } from "utils/gameLib/Game";
 import Scene from "utils/gameLib/Scene";
 import Sprite from "utils/gameLib/Sprite";
 import CapitalCity from "../objects/CapitalCity";
 import BaseObject from "../objects/BaseObject";
-import { actionPointerMove } from "store/actions/actionsGame";
+import { actionPointerMove, actionPointerUp, actionAddCapitalCity } from "store/actions/actionsGame";
+import Graphics from "utils/gameLib/Graphics";
 
 export type TPointMatrix = [number,number];
 
@@ -16,7 +17,7 @@ export default class MainScene extends Scene{
     isCameraUp = false;
     isCameraDown = false;
     cameraSpeed = 8;
-    vMatrix:(TPoint[])[] = [];
+    vMatrix:(TCell[])[] = [];
     capitalMatrix = 5;
     widthField = 0;
     heightField = 0;
@@ -24,7 +25,18 @@ export default class MainScene extends Scene{
     cameraMaxY = 0;
     isSelectCasle = false;
     sizeField = 20;
+    timeHoldDown = 0;
+    timerHoldDown = 200;
+    isPointerDown = false;
+    isPointerMove = false;
     selectObj:BaseObject|null;
+    widthCell = 0;
+    heightCell = 0;
+    halfWidthCell = 0;
+    halfHeightCell = 0;
+
+    pointerDot:Graphics|null;
+
     //pointerMatrix: TPointMatrix = [0,0];
     constructor(){
         super('MainScene');
@@ -52,11 +64,11 @@ export default class MainScene extends Scene{
         const rectCell = this.add.virtualRect(44,44);
         rectCell.rotate = 45;
         rectCell.scaleX = 0.5;
-        const widthCell = rectCell.x1-rectCell.x3;
-        const heightCell = rectCell.y2-rectCell.y0;
-        const halfWidthCell = widthCell/2;
-        const halfHeightCell = heightCell/2;
-        console.log(widthCell, '||',heightCell);
+        this.widthCell = rectCell.x1-rectCell.x3;
+        this.heightCell = rectCell.y2-rectCell.y0;
+        this.halfWidthCell = this.widthCell/2;
+        this.halfHeightCell = this.heightCell/2;
+        //console.log(widthCell, '||',heightCell);
 
         const rectangle = this.add.virtualRect(44*this.sizeField,44*this.sizeField);
         rectangle.rotate = 45;
@@ -69,36 +81,58 @@ export default class MainScene extends Scene{
         rectangle.moveY(this.heightField/2);
 
         let startX = rectangle.x0;
-        let startY = rectangle.y0+halfHeightCell
-        let row = [];
+        let startY = rectangle.y0+this.halfHeightCell
+        let row:TCell[] = [];
         //const matrix:TFieldMatrix = [];
         for (let i = 1; i < this.sizeField+1; i++) {
             for (let j = 0; j < this.sizeField; j++) {
                 const x = startX;
                 const y = startY;
-                row.push({x,y});
-                startX-=halfWidthCell;
-                startY+=halfHeightCell;
+
+                row.push({
+                    x,
+                    y,
+                    objId: null,
+                    terrain: 'neutral',
+                    isBuild: false
+                });
+
+                startX-=this.halfWidthCell;
+                startY+=this.halfHeightCell;
             }
             this.vMatrix.push(row);
             row = [];
-            startX = rectangle.x0+halfWidthCell*i;
-            startY = rectangle.y0+halfHeightCell*(i+1);
+            startX = rectangle.x0+this.halfWidthCell*i;
+            startY = rectangle.y0+this.halfHeightCell*(i+1);
         }
 
-        const graphicsDot = this.add.graphics();
-        graphicsDot.fillStyle('red');
-        graphicsDot.fillRect(0,0,10,10);
+        this.pointerDot = this.add.graphics();
+        this.pointerDot.fillStyle('red');
+        //graphicsDot.fillRect(0,0,10,10);
         store.dispatch(setFieldMatrix(this.vMatrix));
-
-        store.dispatch(addCapitalCity({
-            matrixPoint: [3,3],
-            matrix:[5,5],
-            id: Game.createId(),
-            race: "empire",
-            squadOut: [],
-            squadIn: []
-        }));
+        setTimeout(()=>{
+            store.dispatch(actionAddCapitalCity([2,1]));
+            setTimeout(()=>{
+                store.dispatch(actionAddCapitalCity([4,5]));
+            },1000);
+        },1000);
+        // setTimeout(()=>{
+        //     console.log('add first');
+        //     store.dispatch(actionAddCapitalCity([1,4]));
+        //     setTimeout(()=>{
+        //         console.log('add second');
+        //         store.dispatch(actionAddCapitalCity([1,1]));
+        //         setTimeout(()=>{
+        //             console.log('add second');
+        //             store.dispatch(actionAddCapitalCity([1,1]));
+        //             setTimeout(()=>{
+        //                 console.log('add second');
+        //                 store.dispatch(actionAddCapitalCity([1,1]));
+        //             }, 1000);
+        //         }, 1000);
+                
+        //     }, 1000);
+        // }, 1000);
         //this.empCastle = new CapitalCity(this, [1,1], 'empire');
 
         // this.empCastle = this.add.sprite('emp-castle');
@@ -106,40 +140,52 @@ export default class MainScene extends Scene{
         // this.empCastle.x = this.vMatrix[3][3].x;
         // this.empCastle.y = this.vMatrix[3][3].y-35;
 
-        console.log('5,5 = ', this.vMatrix[5][5]);
+        //console.log('5,5 = ', this.vMatrix[5][5]);
 
         // this.empCastle.on('pointerup', ()=>{
         //     console.log('pointerup');
         //     this.isSelectCasle = true;
         // });
 
-        this.input.on('pointermove', (point)=>{
-            //console.log('point = ', point);
-            const scrollX = point.x-this.game.camera.cameraPoint().x;
-            const scrollY = point.y-this.game.camera.cameraPoint().y;
-            //store.dispatch(actionPointerMove({x:scrollX,y:scrollY}));
-            //console.log('scroll = ', scrollX, '||', scrollY);
-            for (let i = 0; i < this.vMatrix.length; i++) {
-                const row = this.vMatrix[i];
-                for (let j = 0; j < row.length; j++) {
-                    const cell = row[j];
-                    if((scrollX>=cell.x-20&&scrollX<=cell.x+20)
-                        && (scrollY>=cell.y-halfHeightCell&&scrollY<=cell.y+halfHeightCell)
-                    ){
-                        store.dispatch(setPointerMatrix([i,j]));
-                        //store.dispatch(actionPointerMove({x:scrollX,y:scrollY}));
-                        //this.pointerMatrix = [i,j];
-                        graphicsDot.fillRect(cell.x-5,cell.y-5,10,10);
-                        // if(this.selectObj){
-                        //     this.selectObj.moveTo([i,j]);
-                        // }
-                        // if(this.isSelectCasle&&i>Math.floor(this.capitalMatrix/2)&&i<this.sizeField-Math.floor(this.capitalMatrix/2)-1&&j>Math.floor(this.capitalMatrix/2)&&j<this.sizeField-Math.floor(this.capitalMatrix/2)-1){
-                        //     this.empCastle.x = cell.x;
-                        //     this.empCastle.y = cell.y-35;
-                        // }
-                    }
+        this.input.on('pointerdown', ()=>{
+            this.isPointerDown = true;
+            this.timeHoldDown = Date.now();
+        });
+
+        this.input.on('pointerup', (pointer)=>{
+            if(this.isPointerDown&&!this.isPointerMove){
+                const pointMatrix = this.findFieldCell(pointer);
+                if(pointMatrix){
+                    store.dispatch(actionPointerUp(pointMatrix)); 
                 }
             }
+            this.isPointerMove = false;
+            this.isPointerDown = false;
+        });
+
+        this.input.on('pointermove', (pointer)=>{
+            const pointMatrix = this.findFieldCell(pointer);
+            if(pointMatrix){
+                store.dispatch(actionPointerMove(pointMatrix)); 
+            }
+
+            //console.log('point = ', point);
+            
+            
+            // for (let i = 0; i < this.vMatrix.length; i++) {
+            //     const row = this.vMatrix[i];
+            //     for (let j = 0; j < row.length; j++) {
+            //         const cell = row[j];
+            //         if((scrollX>=cell.x-20&&scrollX<=cell.x+20)
+            //             && (scrollY>=cell.y-halfHeightCell&&scrollY<=cell.y+halfHeightCell)
+            //         ){
+            //             store.dispatch(actionPointerMove([i,j]));
+                        
+            //             graphicsDot.fillRect(cell.x-5,cell.y-5,10,10);
+                        
+            //         }
+            //     }
+            // }
         });
 
         const graphicsRect3 = this.add.graphics();
@@ -278,7 +324,26 @@ export default class MainScene extends Scene{
         // graphicsDot2.fillStyle('blue');
         // graphicsDot2.fillRect(this.vMatrix[5][5].x-5,this.vMatrix[5][5].y-5,10,10);
 
-        graphicsDot.setZindex(2);
+        this.pointerDot.setZindex(2);
+    }
+
+    findFieldCell(point:TPoint):TPointMatrix{
+        const scrollX = point.x-this.game.camera.cameraPoint().x;
+        const scrollY = point.y-this.game.camera.cameraPoint().y;
+        for (let i = 0; i < this.vMatrix.length; i++) {
+            const row = this.vMatrix[i];
+            for (let j = 0; j < row.length; j++) {
+                const cell = row[j];
+                if((scrollX>=cell.x-20&&scrollX<=cell.x+20)
+                    && (scrollY>=cell.y-this.halfHeightCell&&scrollY<=cell.y+this.halfHeightCell)
+                ){
+                    this.pointerDot.fillRect(cell.x-5,cell.y-5,10,10);
+                    return [i,j];
+                    //store.dispatch(actionPointerMove([i,j]));
+                    
+                }
+            }
+        }
     }
 
     findPointOnLinearCurve(startPoint:TPoint, endPoint:TPoint, t:number):TPoint {
@@ -292,7 +357,7 @@ export default class MainScene extends Scene{
         capitals.forEach(c=>{
             const castle = this.capitalCities.find(c2=>c2.id===c.id);
             if(castle){
-                castle.update(c);
+                castle.updateState(c);
             }else{
                 console.log('add to render new CapitalCity');
                 const capitalCity = new CapitalCity(
