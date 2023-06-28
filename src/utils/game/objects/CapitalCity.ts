@@ -16,8 +16,9 @@ export default class CapitalCity extends BaseObject{
     }
 
     create(){
-        this._sprite = this.scene.add.sprite(`${this.race}-castle`);
+        this._sprite = this.scene.add.sprite(`castle-${this.race}`);
         this._sprite.setZindex(200);
+        this._sprite.play();
         this.move();
         // const i = this.matrixPoint[0]+2;
         // const j = this.matrixPoint[1]+2;
@@ -42,8 +43,9 @@ export default class CapitalCity extends BaseObject{
         const vMatrix = this.scene.vMatrix;
         const cell = vMatrix[i][j];
         //console.log('render!! = ', cell);
-        this.sprite.x = cell.x;
-        this.sprite.y = cell.y-35;
+        this.sprite.x = cell.x-9;
+        this.sprite.y = cell.y-45;
+        //this.sprite.y = cell.y-35;
 
         // if(this.fundament){
         //     this.fundament.x = cell.x;

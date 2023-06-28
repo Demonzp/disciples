@@ -61,7 +61,7 @@ export default class MainScene extends Scene{
         console.log('mainScene');
         //const sizeField = 20;
 
-        const rectCell = this.add.virtualRect(44,44);
+        const rectCell = this.add.virtualRect(45,45);
         rectCell.rotate = 45;
         rectCell.scaleX = 0.5;
         this.widthCell = rectCell.x1-rectCell.x3;
@@ -70,7 +70,7 @@ export default class MainScene extends Scene{
         this.halfHeightCell = this.heightCell/2;
         //console.log(widthCell, '||',heightCell);
 
-        const rectangle = this.add.virtualRect(44*this.sizeField,44*this.sizeField);
+        const rectangle = this.add.virtualRect(45*this.sizeField,45*this.sizeField);
         rectangle.rotate = 45;
         rectangle.scaleX = 0.5;
         this.widthField = rectangle.x1-rectangle.x3;
@@ -111,11 +111,11 @@ export default class MainScene extends Scene{
         //graphicsDot.fillRect(0,0,10,10);
         store.dispatch(setFieldMatrix(this.vMatrix));
         setTimeout(()=>{
-            store.dispatch(actionAddCapitalCity([4,4]));
+            store.dispatch(actionAddCapitalCity([3,3]));
             setTimeout(()=>{
-                store.dispatch(actionAddCapitalCity([10,8]));
-            },1000);
-        },1000);
+                store.dispatch(actionAddCapitalCity([6,10]));
+            },600);
+        },600);
         // setTimeout(()=>{
         //     console.log('add first');
         //     store.dispatch(actionAddCapitalCity([1,4]));
@@ -382,12 +382,12 @@ export default class MainScene extends Scene{
         const camera = this.game.camera;
 
         if(this.isCameraDown){
-            // if(this.isSelectCasle){
-            //     this.empCastle.y += 1;
-            //     console.log('5,5 = ', this.vMatrix[5][5]);
-            //     console.log(this.empCastle.x,'|',this.empCastle.y);
-            //     return;
-            // }
+
+            // const casl = this.capitalCities[0];
+            // casl.sprite.y+=1;
+            // console.log('5,5 = ', this.vMatrix[3][3]);
+            // console.log(casl.sprite.x,'|',casl.sprite.y);
+            // return;
             this.game.camera.scrollY(camera.cameraPoint().y-this.cameraSpeed);
             if(camera.cameraPoint().y<-this.cameraMaxY){
                 this.game.camera.scrollY(-this.cameraMaxY);
@@ -400,6 +400,11 @@ export default class MainScene extends Scene{
             //     console.log(this.empCastle.x,'|',this.empCastle.y);
             //     return;
             // }
+            // const casl = this.capitalCities[0];
+            // casl.sprite.y-=1;
+            // console.log('5,5 = ', this.vMatrix[3][3]);
+            // console.log(casl.sprite.x,'|',casl.sprite.y);
+            // return;
             this.game.camera.scrollY(camera.cameraPoint().y+this.cameraSpeed);
             if(camera.cameraPoint().y>80){
                 this.game.camera.scrollY(80);
@@ -413,6 +418,11 @@ export default class MainScene extends Scene{
             //     console.log(this.empCastle.x,'|',this.empCastle.y);
             //     return;
             // }
+            // const casl = this.capitalCities[0];
+            // casl.sprite.x-=1;
+            // console.log('5,5 = ', this.vMatrix[3][3]);
+            // console.log(casl.sprite.x,'|',casl.sprite.y);
+            // return;
             this.game.camera.scrollX(camera.cameraPoint().x+this.cameraSpeed);
             if(camera.cameraPoint().x>80){
                 this.game.camera.scrollX(80);
@@ -424,6 +434,11 @@ export default class MainScene extends Scene{
             //     console.log(this.empCastle.x,'|',this.empCastle.y);
             //     return;
             // }
+            // const casl = this.capitalCities[0];
+            // casl.sprite.x+=1;
+            // console.log('5,5 = ', this.vMatrix[3][3]);
+            // console.log(casl.sprite.x,'|',casl.sprite.y);
+            // return;
             this.game.camera.scrollX(camera.cameraPoint().x-this.cameraSpeed);
             //console.log('cameraPointX = ', camera.cameraPoint().x);
             if(camera.cameraPoint().x<-this.cameraMaxX){

@@ -20,11 +20,13 @@ export default class LoaderScene extends Scene{
     graphics.fillStyle('#ffffff');
     graphics.fillRect(0,0,0,20);
 
-    this.load.image('empire-castle', './assets/imgs/castle-empire2.png');
+    this.load.spritesheet('castle-legions', './assets/imgs/castle-legions.png',{ frameWidth: 314, frameHeight: 300, endFrame: 30 });
+    //this.load.image('castle-empire', './assets/imgs/castle-empire.png');
     this.load.image('origin-field', './assets/imgs/origin-field.jpg');
     this.load.image('map-grid', './assets/imgs/map-grid.jpg');
     this.load.image('fundament5x5', './assets/imgs/fundament5x5.png');
     this.load.spritesheet('grass-water', './assets/imgs/isometric-grass-and-water-64x64.png',{ frameWidth: 64, frameHeight: 64, endFrame: 24 });
+    this.load.spritesheet('castle-empire', './assets/imgs/castle-empire.png',{ frameWidth: 314, frameHeight: 300, endFrame: 15 });
   }
 
   create(){

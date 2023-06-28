@@ -3,6 +3,7 @@ import { AppState } from '../store';
 import Game from 'utils/gameLib/Game';
 import { TPointMatrix } from 'utils/game/scenes/mainScene';
 import { ICapitalCity, TFieldMatrix } from 'store/slices/sliceGame';
+import { TCapitalRace } from 'utils/game/objects/CapitalCity';
 
 const isCanPutBuild = (fieldMatrix: TFieldMatrix, point: TPointMatrix, matrix: TPointMatrix) => {
   const iX = point[0];
@@ -124,6 +125,8 @@ export const actionPointerUp = createAsyncThunk<TActionPointerUp, TPointMatrix, 
   }
 );
 
+let i = 0;
+
 export const actionAddCapitalCity = createAsyncThunk<ICapitalCity, TPointMatrix, { state: AppState, rejectWithValue: any }>(
   'game/actonAddCapitalCity',
   async (point, { getState, rejectWithValue }) => {
@@ -133,7 +136,11 @@ export const actionAddCapitalCity = createAsyncThunk<ICapitalCity, TPointMatrix,
       //const sizeMatrix = fieldMatrix.length - 1;
       let iX = point[0]-2;
       let jY = point[1]-2;
+      let race:TCapitalRace = 'empire';
       const isCanPut = isCanPutBuild(fieldMatrix, [iX,jY], [5, 5]);
+      if(i>0){
+        race = 'legions';
+      }
       //let isCanPut = true;
       
       // do {
@@ -175,12 +182,13 @@ export const actionAddCapitalCity = createAsyncThunk<ICapitalCity, TPointMatrix,
         prevMatrixPoint: [iX, jY],
         matrix: [5, 5],
         id: Game.createId(),
-        race: "empire",
+        race,
         squadOut: [],
         squadIn: [],
         isCanPut,
         isUp: isCanPut ? false : true
       }
+      i+=1;
 
       return capitalCity;
     } catch (error) {
