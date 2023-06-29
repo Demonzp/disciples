@@ -6,11 +6,14 @@ import Game from "utils/gameLib/Game";
 import classes from "./game.module.css";
 import { useAppSelector } from "store/hooks";
 import MapEditor from "components/MapEditor";
+import MainMenu from "components/MainMenu";
+import MapEditorMenuScene from "utils/game/scenes/mapEditMenuScene";
+import MenuEditor from "components/MenuEditor";
 
 const GameComp = () => {
     const refCont = useRef<HTMLCanvasElement>(null);
     const [game, setGame] = useState<Game | undefined>();
-    const { pointerMatrix, capitalCities, fieldMatrix } = useAppSelector(state => state.game);
+    const { pointerMatrix, capitalCities, fieldMatrix, scene } = useAppSelector(state => state.game);
 
     useEffect(() => {
         if (refCont.current && !game) {
@@ -22,7 +25,7 @@ const GameComp = () => {
                 // height: 360,
                 width: 854,
                 height: 480,
-                scenes: [LoaderScene, MainScene]
+                scenes: [LoaderScene, MainScene, MapEditorMenuScene]
             });
 
             setGame(g);
@@ -38,29 +41,47 @@ const GameComp = () => {
         };
     }, []);
 
-    useEffect(()=>{
-        if(game){
-            const scene = game.scene.getScene<MainScene>('MainScene');
-            //console.log('update state capitalCities = ', scene);
-            if(scene){
-                scene.updateCapitals();
-            }
+    useEffect(() => {
+        if (game) {
+            // const scene = game.scene.getScene<MainScene>('MainScene');
+            // //console.log('update state capitalCities = ', scene);
+            // if(scene){
+            //     scene.updateCapitals();
+            // }
         }
-    }, [capitalCities, game]);
+    }, [capitalCities]);
 
-    useEffect(()=>{
+    useEffect(() => {
         //console.log('fieldMatrix = ', fieldMatrix);
-    },[fieldMatrix]);
+    }, [fieldMatrix]);
 
-    useEffect(()=>{
-        if(game){
-            const scene = game.scene.getScene<MainScene>('MainScene');
-            //console.log('update state updatePointer = ', scene);
-            if(scene){
-                scene.updatePointer();
+    useEffect(() => {
+        if (game) {
+            // const scene = game.scene.getScene<MainScene>('MainScene');
+            // //console.log('update state updatePointer = ', scene);
+            // if(scene){
+            //     scene.updatePointer();
+            // }
+        }
+    }, [pointerMatrix]);
+
+    useEffect(() => {
+        if (game) {
+            switch (scene) {
+                case 'mainMenu':
+                    game.scene.start('MainScene');
+                    break;
+
+                case 'mapEditorMenu':
+                    game.scene.start('MapEditorMenuScene');
+                    break;
+
+                default:
+                    break;
             }
         }
-    }, [pointerMatrix, game]);
+
+    }, [scene]);
 
     const onContext = (e: MouseEvent) => {
         e.preventDefault();
@@ -69,11 +90,13 @@ const GameComp = () => {
     return (
         <>
             <div>
-                <h4>[{ pointerMatrix[0] }, { pointerMatrix[1] }]</h4>
+                <h4>[{pointerMatrix[0]}, {pointerMatrix[1]}]</h4>
             </div>
             <div className={`${classes.gameCont} row`}>
                 <canvas ref={refCont} />
-                <MapEditor />
+                {scene === 'mainMenu' && <MainMenu />}
+                {scene === 'mapEditorMenu' && <MenuEditor />}
+                {scene === 'mapEditor' && <MapEditor />}
             </div>
         </>
 

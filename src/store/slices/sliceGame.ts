@@ -1,8 +1,9 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { actionAddCapitalCity, actionPointerMove, actionPointerUp } from 'store/actions/actionsGame';
 import { TCapitalRace } from 'utils/game/objects/CapitalCity';
-import { TPointMatrix } from 'utils/game/scenes/mainScene';
-import { TPoint } from 'utils/gameLib/Game';
+import { TPointMatrix } from 'utils/game/scenes/mainScene2';
+
+export type TWhatScene = 'loading' | 'mainMenu' | 'mapEditorMenu' | 'mapEditor';
 
 export type TTerrain = 'neutral' | 'empire' | 'legions' | 'clans' | 'elves' | 'undead';
 
@@ -45,6 +46,7 @@ export interface IStateGame {
     selectObj: TSelectObj | null;
     isPointerMove: boolean;
     isPointerDown: boolean;
+    scene: TWhatScene;
 }
 
 const initialState: IStateGame = {
@@ -55,6 +57,7 @@ const initialState: IStateGame = {
     selectObj: null,
     isPointerMove: false,
     isPointerDown: false,
+    scene: 'loading',
 };
 
 const sliceGame = createSlice({
@@ -64,6 +67,10 @@ const sliceGame = createSlice({
         // selectObj(state, action:PayloadAction<string>){
         //     state.selectObj = state.capitalCities.find(c=>c.id===action.payload);
         // },
+
+        setScene(state, action: PayloadAction<TWhatScene>) {
+            state.scene = action.payload;
+        },
 
         setFieldMatrix(state, action: PayloadAction<TFieldMatrix>) {
             state.fieldMatrix = action.payload;
@@ -116,12 +123,12 @@ const sliceGame = createSlice({
             const point = payload.point;
             const cell = state.fieldMatrix[point[0]][point[1]];
 
-            if(state.selectObj){
+            if (state.selectObj) {
                 console.log('isCanPut = ', payload.isCanPut);
-                if(payload.isCanPut){
+                if (payload.isCanPut) {
                     const city = state.capitalCities[state.selectObj.idx];
                     if (city) {
-                        city.matrixPoint = [point[0]-2, point[1]-2];
+                        city.matrixPoint = [point[0] - 2, point[1] - 2];
                         city.isCanPut = true;
                         city.isUp = false;
 
@@ -138,14 +145,14 @@ const sliceGame = createSlice({
                         state.selectObj = null;
                     }
                 }
-            }else{
+            } else {
 
                 if (cell.objId) {
                     const cityIdx = state.capitalCities.findIndex(c => c.id === cell.objId);
                     if (cityIdx !== -1) {
                         const city = state.capitalCities[cityIdx];
                         city.isUp = true;
-                        
+
 
                         for (let i = city.matrixPoint[0]; i < city.matrixPoint[0] + city.matrix[0]; i++) {
                             for (let j = city.matrixPoint[1]; j < city.matrixPoint[1] + city.matrix[1]; j++) {
@@ -200,6 +207,7 @@ const sliceGame = createSlice({
 
 export const {
     setFieldMatrix,
+    setScene,
     setPointerMatrix,
     addCapitalCity,
 } = sliceGame.actions;

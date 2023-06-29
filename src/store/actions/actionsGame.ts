@@ -1,7 +1,7 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
 import { AppState } from '../store';
 import Game from 'utils/gameLib/Game';
-import { TPointMatrix } from 'utils/game/scenes/mainScene';
+import { TPointMatrix } from 'utils/game/scenes/mainScene2';
 import { ICapitalCity, TFieldMatrix } from 'store/slices/sliceGame';
 import { TCapitalRace } from 'utils/game/objects/CapitalCity';
 

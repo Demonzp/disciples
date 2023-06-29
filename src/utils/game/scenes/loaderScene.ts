@@ -1,3 +1,5 @@
+import { setScene } from "store/slices/sliceGame";
+import store from "store/store";
 import { ELoadEvents } from "utils/gameLib/Loader";
 import Scene from "utils/gameLib/Scene";
 
@@ -21,6 +23,7 @@ export default class LoaderScene extends Scene{
     graphics.fillRect(0,0,0,20);
 
     this.load.spritesheet('castle-legions', './assets/imgs/castle-legions.png',{ frameWidth: 314, frameHeight: 300, endFrame: 30 });
+    this.load.image('fon-menu-editor', './assets/imgs/fon-menu-editor.jpg');
     //this.load.image('castle-empire', './assets/imgs/castle-empire.png');
     this.load.image('origin-field', './assets/imgs/origin-field.jpg');
     this.load.image('map-grid', './assets/imgs/map-grid.jpg');
@@ -31,6 +34,7 @@ export default class LoaderScene extends Scene{
 
   create(){
     console.log('loaded!!!');
-    this.scene.start('MainScene');
+    store.dispatch(setScene('mainMenu'));
+    //this.scene.start('MainScene');
   }
 }

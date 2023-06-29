@@ -1,0 +1,20 @@
+.cont{
+    background-color:lightgray;
+    justify-content: start !important;
+    min-width: 600px;
+    min-height: 400px;
+    font-size: 16px !important;
+    position: absolute;
+}
+
+button{
+    min-width: 120px;
+    min-height: 40px;
+    font-size: 18px;
+}
+
+.item{
+    margin-top: 8px;
+    display: flex;
+    flex-direction: column;
+}

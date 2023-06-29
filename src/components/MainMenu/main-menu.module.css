@@ -1,0 +1,10 @@
+.cont{
+    position: absolute;
+}
+
+button{
+    margin-top: 8px;
+    min-width: 200px;
+    min-height: 50px;
+    font-size: 30px;
+}
