@@ -10,7 +10,7 @@ import Graphics from "utils/gameLib/Graphics";
 
 export type TPointMatrix = [number,number];
 
-export default class MainScene2 extends Scene{
+export default class EditorScene extends Scene{
     capitalCities:CapitalCity[] = [];
     isCameraLeft = false;
     isCameraRight = false;
@@ -39,11 +39,28 @@ export default class MainScene2 extends Scene{
 
     //pointerMatrix: TPointMatrix = [0,0];
     constructor(){
-        super('MainScene');
+        super('EditorScene');
     }
 
     create(): void {
-        console.log('mainScene');
+        console.log('EditorScene');
+        const rectField = store.getState().game.fieldRect;
+
+        const graphicsRect = this.add.graphics();
+        graphicsRect.strokeStyle('#02b331');
+        graphicsRect.beginPath();
+          
+        graphicsRect.moveTo(rectField.x0, rectField.y0);
+        graphicsRect.lineTo(rectField.x1, rectField.y1);
+        graphicsRect.lineTo(rectField.x2, rectField.y2);
+        graphicsRect.lineTo(rectField.x3, rectField.y3);
+        graphicsRect.lineTo(rectField.x0, rectField.y0);
+
+        graphicsRect.stroke();
+    }
+
+    createOld(): void {
+        console.log('');
         const rectCell = this.add.virtualRect(45,45);
         rectCell.rotate = 45;
         rectCell.scaleX = 0.5;
@@ -51,7 +68,6 @@ export default class MainScene2 extends Scene{
         this.heightCell = rectCell.y2-rectCell.y0;
         this.halfWidthCell = this.widthCell/2;
         this.halfHeightCell = this.heightCell/2;
-        //console.log(widthCell, '||',heightCell);
 
         const rectangle = this.add.virtualRect(45*this.sizeField,45*this.sizeField);
         rectangle.rotate = 45;
@@ -99,37 +115,7 @@ export default class MainScene2 extends Scene{
                 store.dispatch(actionAddCapitalCity([6,10]));
             },600);
         },600);
-        // setTimeout(()=>{
-        //     console.log('add first');
-        //     store.dispatch(actionAddCapitalCity([1,4]));
-        //     setTimeout(()=>{
-        //         console.log('add second');
-        //         store.dispatch(actionAddCapitalCity([1,1]));
-        //         setTimeout(()=>{
-        //             console.log('add second');
-        //             store.dispatch(actionAddCapitalCity([1,1]));
-        //             setTimeout(()=>{
-        //                 console.log('add second');
-        //                 store.dispatch(actionAddCapitalCity([1,1]));
-        //             }, 1000);
-        //         }, 1000);
-                
-        //     }, 1000);
-        // }, 1000);
-        //this.empCastle = new CapitalCity(this, [1,1], 'empire');
-
-        // this.empCastle = this.add.sprite('emp-castle');
-
-        // this.empCastle.x = this.vMatrix[3][3].x;
-        // this.empCastle.y = this.vMatrix[3][3].y-35;
-
-        //console.log('5,5 = ', this.vMatrix[5][5]);
-
-        // this.empCastle.on('pointerup', ()=>{
-        //     console.log('pointerup');
-        //     this.isSelectCasle = true;
-        // });
-
+        
         this.input.on('pointerdown', ()=>{
             this.isPointerDown = true;
             this.timeHoldDown = Date.now();
@@ -151,24 +137,6 @@ export default class MainScene2 extends Scene{
             if(pointMatrix){
                 store.dispatch(actionPointerMove(pointMatrix)); 
             }
-
-            //console.log('point = ', point);
-            
-            
-            // for (let i = 0; i < this.vMatrix.length; i++) {
-            //     const row = this.vMatrix[i];
-            //     for (let j = 0; j < row.length; j++) {
-            //         const cell = row[j];
-            //         if((scrollX>=cell.x-20&&scrollX<=cell.x+20)
-            //             && (scrollY>=cell.y-halfHeightCell&&scrollY<=cell.y+halfHeightCell)
-            //         ){
-            //             store.dispatch(actionPointerMove([i,j]));
-                        
-            //             graphicsDot.fillRect(cell.x-5,cell.y-5,10,10);
-                        
-            //         }
-            //     }
-            // }
         });
 
         const graphicsRect3 = this.add.graphics();
@@ -300,14 +268,8 @@ export default class MainScene2 extends Scene{
         //const cameraPoint = this.game.camera.cameraPoint();
         this.game.camera.scrollX(-this.widthField/2+this.halfWidth);
         this.game.camera.scrollY(-this.heightField/2+this.halfHeight);
-        
 
-
-        // const graphicsDot2 = this.add.graphics();
-        // graphicsDot2.fillStyle('blue');
-        // graphicsDot2.fillRect(this.vMatrix[5][5].x-5,this.vMatrix[5][5].y-5,10,10);
-
-        this.pointerDot.setZindex(2);
+        this.pointerDot.setZindex(2000);
     }
 
     findFieldCell(point:TPoint):TPointMatrix{

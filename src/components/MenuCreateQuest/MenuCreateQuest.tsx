@@ -2,6 +2,8 @@ import { FC, useState, Dispatch, SetStateAction } from "react";
 import classes from "./menu-create-q.module.css";
 import { TMenu } from "components/MenuEditor/MenuEditor";
 import { TCapitalRace } from "utils/game/objects/CapitalCity";
+import { useAppDispatch } from "store/hooks";
+import { actionInitNewMap } from "store/actions/actionsGame";
 
 type TChooseRace = {
     race: TCapitalRace,
@@ -12,16 +14,20 @@ type TProps={
     setMenuType: Dispatch<SetStateAction<TMenu>>
 }
 
+const minSize = 24;
+const maxSize = 144;
+
 const MenuCreateQuest:FC<TProps> = ({setMenuType})=>{
     const [mapName, setMapName] = useState('');
     const [errorName, setErrorName] = useState('');
-    const [mapSize, setMapSize] = useState('48');
+    const [mapSize, setMapSize] = useState(String(minSize));
     const [errorSize, setErrorSize] = useState('');
     const [race, setRace] = useState<TCapitalRace[]>([]);
     const [errorRace, setErrorRace] = useState('');
+    const dispatch = useAppDispatch();
 
     const onChooseRace = (data:TChooseRace)=>{
-        console.log('data = ', data);
+        //console.log('data = ', data);
         if(data.value){
             setRace(prev=>{
                 return [...prev, data.race];
@@ -34,7 +40,40 @@ const MenuCreateQuest:FC<TProps> = ({setMenuType})=>{
     };
 
     const submit = ()=>{
+        let isCan = true;
+        setErrorName('');
+        setErrorSize('');
+        setErrorRace('');
+        if(mapName.length<=0){
+            isCan = false;
+            setErrorName('please enter name');
+        }
         
+        if(mapSize.length<=0){
+            isCan = false;
+            setErrorSize('please enter size of map');
+        }
+
+        const size = Number(mapSize);
+        if(Number.isNaN(size)||size<minSize||size>maxSize){
+            isCan = false;
+            setErrorSize('please enter correct size');
+        }
+
+        if(race.length<=0){
+            isCan = false;
+            setErrorRace('Please select at least one race');
+        }
+
+        if(!isCan){
+            return;
+        }
+
+        dispatch(actionInitNewMap({
+            name:mapName,
+            size,
+            race,
+        }));
     };
 
     return(
@@ -43,6 +82,7 @@ const MenuCreateQuest:FC<TProps> = ({setMenuType})=>{
                 <h3 className={classes.item}>Create new Map</h3>
                 <div className={classes.item}>
                     <label>Enter name:</label>
+                    {errorName.length>0&&<label className={classes.error}>{errorName}</label>}
                     <input 
                         type="text" 
                         value={mapName}
@@ -50,15 +90,17 @@ const MenuCreateQuest:FC<TProps> = ({setMenuType})=>{
                     />
                 </div>
                 <div className={classes.item}>
-                    <label>Enter map size(min:48, max:144):</label>
+                    <label>Enter map size(min:{minSize}, max:{maxSize}):</label>
+                    {errorSize.length>0&&<label className={classes.error}>{errorSize}</label>}
                     <input 
-                        type="number" 
+                        type="number"
                         value={mapSize}
                         onChange={(e)=>setMapSize(e.target.value)}
                     />
                 </div>
                 <div className={classes.item}>
                     <label>Choose race:</label>
+                    {errorRace.length>0&&<label className={classes.error}>{errorRace}</label>}
                     <div>
                         <input
                             type="checkbox" 
@@ -74,7 +116,9 @@ const MenuCreateQuest:FC<TProps> = ({setMenuType})=>{
                     </div>
                 </div>
                 <div>
-                    <button>
+                    <button
+                        onClick={submit}
+                    >
                         Ok
                     </button>
                     <button

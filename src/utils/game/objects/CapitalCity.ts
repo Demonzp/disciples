@@ -1,5 +1,5 @@
 import Sprite from "utils/gameLib/Sprite";
-import MainScane, { TPointMatrix } from "../scenes/mainScene2";
+import MainScane, { TPointMatrix } from "../scenes/editorScene";
 import BaseObject from "./BaseObject";
 import { ICapitalCity } from "store/slices/sliceGame";
 

@@ -1,13 +1,10 @@
-import GameObject from "./GameObject";
-import Scene from "./Scene";
-
 /*
 x0,y0-----x1,y1
 |         |
 |         |
 x3,y3-----x2,y2
 */
-export default class VirtualRectangle extends GameObject{
+export default class VirtualRect{
     x0=0;
     y0=0;
     x1=0;
@@ -16,11 +13,14 @@ export default class VirtualRectangle extends GameObject{
     y2=0;
     x3=0;
     y3=0;
+    angle = 0;
+    halfWidth = 0;
+    halfHeight = 0;
     private _scaleX = 1;
     private _scaleY = 1;
-    constructor(scene:Scene, width:number, height:number, x=0,y=0){
-        super(scene, 'virtualRect', 'VirtualRectangle', x, y, width, height);
-
+    constructor( width:number, height:number, public x=0, public y=0){
+        this.halfWidth = width/2;
+        this.halfHeight = height/2;
         this.calcRect();
     }
 

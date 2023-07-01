@@ -9,6 +9,7 @@ import MapEditor from "components/MapEditor";
 import MainMenu from "components/MainMenu";
 import MapEditorMenuScene from "utils/game/scenes/mapEditMenuScene";
 import MenuEditor from "components/MenuEditor";
+import EditorScene from "utils/game/scenes/editorScene";
 
 const GameComp = () => {
     const refCont = useRef<HTMLCanvasElement>(null);
@@ -25,7 +26,7 @@ const GameComp = () => {
                 // height: 360,
                 width: 854,
                 height: 480,
-                scenes: [LoaderScene, MainScene, MapEditorMenuScene]
+                scenes: [LoaderScene, MainScene, MapEditorMenuScene, EditorScene]
             });
 
             setGame(g);
@@ -74,6 +75,10 @@ const GameComp = () => {
 
                 case 'mapEditorMenu':
                     game.scene.start('MapEditorMenuScene');
+                    break;
+                    
+                case 'mapEditor':
+                    game.scene.start('EditorScene');
                     break;
 
                 default:
