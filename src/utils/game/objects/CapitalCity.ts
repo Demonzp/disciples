@@ -1,9 +1,7 @@
 import Sprite from "utils/gameLib/Sprite";
 import MainScane, { TPointMatrix } from "../scenes/editorScene";
 import BaseObject from "./BaseObject";
-import { ICapitalCity } from "store/slices/sliceGame";
-
-export type TCapitalRace = 'empire'|'legions'|'clans'|'elves'|'undead';
+import { ICapitalCity, TCapitalRace } from "store/slices/sliceGame";
 
 export default class CapitalCity extends BaseObject{
     private _sprite:Sprite|undefined;
@@ -40,9 +38,11 @@ export default class CapitalCity extends BaseObject{
         //console.log('pointerMatrix = ', pointerMatrix);
         const i = this.matrixPoint[0]+2;
         const j = this.matrixPoint[1]+2;
+        
         const vMatrix = this.scene.vMatrix;
+        console.log('vMatrix = ', vMatrix);
         const cell = vMatrix[i][j];
-        //console.log('render!! = ', cell);
+        console.log('render!! = ', cell);
         this.sprite.x = cell.x-9;
         this.sprite.y = cell.y-45;
         //this.sprite.y = cell.y-35;

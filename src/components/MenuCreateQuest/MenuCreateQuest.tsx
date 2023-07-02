@@ -1,9 +1,9 @@
 import { FC, useState, Dispatch, SetStateAction } from "react";
 import classes from "./menu-create-q.module.css";
 import { TMenu } from "components/MenuEditor/MenuEditor";
-import { TCapitalRace } from "utils/game/objects/CapitalCity";
 import { useAppDispatch } from "store/hooks";
 import { actionInitNewMap } from "store/actions/actionsGame";
+import { TCapitalRace } from "store/slices/sliceGame";
 
 type TChooseRace = {
     race: TCapitalRace,
@@ -111,6 +111,7 @@ const MenuCreateQuest:FC<TProps> = ({setMenuType})=>{
                     <div>
                         <input
                             type="checkbox" 
+                            onChange={(e)=>onChooseRace({race:'legions',value:e.target.checked})}
                         />
                         <label>Legions of the Demned</label>
                     </div>

@@ -34,6 +34,7 @@ export default class EditorScene extends Scene{
     heightCell = 0;
     halfWidthCell = 0;
     halfHeightCell = 0;
+    isInit = false;
 
     pointerDot:Graphics|null;
 
@@ -45,22 +46,168 @@ export default class EditorScene extends Scene{
     create(): void {
         console.log('EditorScene');
         const rectField = store.getState().game.fieldRect;
+        //this.sizeField = store.getState().game.fieldMatrix.length;
+        this.vMatrix = store.getState().game.fieldMatrix;
+        const rectCell = store.getState().game.cellRect;
+        this.sizeField = this.vMatrix.length;
+        this.halfWidthCell = rectCell.halfWidth;
+        this.halfHeightCell = rectCell.halfHeight;
 
-        const graphicsRect = this.add.graphics();
-        graphicsRect.strokeStyle('#02b331');
-        graphicsRect.beginPath();
+        const graficsGrid = this.add.graphics();
+        graficsGrid.strokeStyle('#02b331');
+        graficsGrid.beginPath();
           
-        graphicsRect.moveTo(rectField.x0, rectField.y0);
-        graphicsRect.lineTo(rectField.x1, rectField.y1);
-        graphicsRect.lineTo(rectField.x2, rectField.y2);
-        graphicsRect.lineTo(rectField.x3, rectField.y3);
-        graphicsRect.lineTo(rectField.x0, rectField.y0);
+        graficsGrid.moveTo(rectField.x0, rectField.y0);
+        graficsGrid.lineTo(rectField.x1, rectField.y1);
+        graficsGrid.lineTo(rectField.x2, rectField.y2);
+        graficsGrid.lineTo(rectField.x3, rectField.y3);
+        graficsGrid.lineTo(rectField.x0, rectField.y0);
 
-        graphicsRect.stroke();
+        for (let i = 1; i < this.sizeField; i++) {
+            const t = (1/this.sizeField)*i;
+            const startPoint = this.findPointOnLinearCurve(
+                {
+                    x:rectField.x3,
+                    y:rectField.y3,
+                },
+                {
+                    x:rectField.x0,
+                    y:rectField.y0,
+                },
+                t
+            );
+
+            const endPoint = this.findPointOnLinearCurve(
+                {
+                    x:rectField.x2,
+                    y:rectField.y2,
+                },
+                {
+                    x:rectField.x1,
+                    y:rectField.y1,
+                },
+                t
+            );
+
+            graficsGrid.moveTo(startPoint.x, startPoint.y);
+            graficsGrid.lineTo(endPoint.x, endPoint.y);
+        }
+
+        for (let i = 1; i < this.sizeField; i++) {
+            const t = (1/this.sizeField)*i;
+            const startPoint = this.findPointOnLinearCurve(
+                {
+                    x:rectField.x3,
+                    y:rectField.y3,
+                },
+                {
+                    x:rectField.x2,
+                    y:rectField.y2,
+                },
+                t
+            );
+
+            const endPoint = this.findPointOnLinearCurve(
+                {
+                    x:rectField.x0,
+                    y:rectField.y0,
+                },
+                {
+                    x:rectField.x1,
+                    y:rectField.y1,
+                },
+                t
+            );
+            graficsGrid.moveTo(startPoint.x, startPoint.y);
+            graficsGrid.lineTo(endPoint.x, endPoint.y);
+        }
+        graficsGrid.stroke();
+
+        document.addEventListener('keydown',(e)=>{
+            switch(e.code) {
+                case 'ArrowLeft':
+                    //console.log('Press a key');
+                    this.isCameraLeft = true;
+                    break;
+                case 'ArrowRight':
+                    //console.log('Press a key');
+                    this.isCameraRight = true;
+                    break;
+            }
+
+            switch(e.code) {
+                case 'ArrowUp':
+                    //console.log('Press a key');
+                    this.isCameraUp = true;
+                    break;
+                case 'ArrowDown':
+                    //console.log('Press a key');
+                    this.isCameraDown = true;
+                    break;
+            }
+        });
+
+        document.addEventListener('keyup',(e)=>{
+            switch(e.code) {
+                case 'ArrowLeft':
+                    //console.log('Press a key');
+                    this.isCameraLeft = false;
+                    break;
+                case 'ArrowRight':
+                    //console.log('Press a key');
+                    this.isCameraRight = false;
+                    break;
+            }
+
+            switch(e.code) {
+                case 'ArrowUp':
+                    //console.log('Press a key');
+                    this.isCameraUp = false;
+                    break;
+                case 'ArrowDown':
+                    //console.log('Press a key');
+                    this.isCameraDown = false;
+                    break;
+            }
+        });
+
+        this.input.on('pointerdown', ()=>{
+            this.isPointerDown = true;
+            this.timeHoldDown = Date.now();
+        });
+
+        this.input.on('pointerup', (pointer)=>{
+            if(this.isPointerDown&&!this.isPointerMove){
+                const pointMatrix = this.findFieldCell(pointer);
+                //console.log('pointerUp = ', pointMatrix);
+                if(pointMatrix){
+                    
+                    store.dispatch(actionPointerUp(pointMatrix)); 
+                }
+            }
+            this.isPointerMove = false;
+            this.isPointerDown = false;
+        });
+
+        this.input.on('pointermove', (pointer)=>{
+            const pointMatrix = this.findFieldCell(pointer);
+            if(pointMatrix){
+                store.dispatch(actionPointerMove(pointMatrix)); 
+            }
+        });
+
+        this.widthField = rectField.x1-rectField.x3;
+        this.heightField = rectField.y2-rectField.y0;
+        this.cameraMaxX = this.widthField-this.width+80;
+        this.cameraMaxY = this.heightField-this.height+80;
+        this.pointerDot = this.add.graphics();
+        this.pointerDot.fillStyle('red');
+        this.pointerDot.setZindex(2000);
+        this.isInit = true;
+        this.updateCapitals();
     }
 
     createOld(): void {
-        console.log('');
         const rectCell = this.add.virtualRect(45,45);
         rectCell.rotate = 45;
         rectCell.scaleX = 0.5;
@@ -275,6 +422,8 @@ export default class EditorScene extends Scene{
     findFieldCell(point:TPoint):TPointMatrix{
         const scrollX = point.x-this.game.camera.cameraPoint().x;
         const scrollY = point.y-this.game.camera.cameraPoint().y;
+        //console.log('this.vMatrix = ', this.vMatrix[0][this.sizeField-1]);
+        //console.log(scrollX, '||', scrollY);
         for (let i = 0; i < this.vMatrix.length; i++) {
             const row = this.vMatrix[i];
             for (let j = 0; j < row.length; j++) {

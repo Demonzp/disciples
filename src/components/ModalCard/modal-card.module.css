@@ -1,0 +1,25 @@
+.card {
+    /* position: absolute; */
+    display: flex;
+    flex-direction: column;
+    margin-top: 1.75rem;
+    margin-bottom: 1.75rem;
+    z-index: 2;
+    background-color: white;
+    min-width: 320px;
+    min-height: 150px;
+}
+
+.head {
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+    padding-bottom: 15px;
+    border-bottom: solid;
+}
+
+.buttonClose{
+    min-width: auto !important;
+    min-height: auto !important;
+    background-color: red !important;
+}

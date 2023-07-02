@@ -1,8 +1,9 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { actionAddCapitalCity, actionInitNewMap, actionPointerMove, actionPointerUp } from 'store/actions/actionsGame';
-import { TCapitalRace } from 'utils/game/objects/CapitalCity';
 import { TPointMatrix } from 'utils/game/scenes/editorScene';
 
+export type TCapitalRace = 'empire' | 'legions' | 'clans' | 'elves' | 'undead';
+export const arrRaces: TCapitalRace[] = ['empire', 'legions', 'clans'];
 export type TWhatScene = 'loading' | 'mainMenu' | 'mapEditorMenu' | 'mapEditor';
 
 export type TTerrain = 'neutral' | 'empire' | 'legions' | 'clans' | 'elves' | 'undead';
@@ -39,41 +40,41 @@ export interface ICapitalCity extends IBaseGameObj {
 }
 
 export type TRectangle = {
-    x0:number,
-    x1:number,
-    x2:number,
-    x3:number,
-    y0:number,
-    y1:number,
-    y2:number,
-    y3:number,
-    width:number,
-    height:number,
-    halfWidth:number,
-    halfHeight:number,
+    x0: number,
+    x1: number,
+    x2: number,
+    x3: number,
+    y0: number,
+    y1: number,
+    y2: number,
+    y3: number,
+    width: number,
+    height: number,
+    halfWidth: number,
+    halfHeight: number,
 }
 
-export const defaultRect = ():TRectangle=> {
-    return{
-        x0:0,
-        x1:0,
-        x2:0,
-        x3:0,
-        y0:0,
-        y1:0,
-        y2:0,
-        y3:0,
-        width:0,
-        height:0,
-        halfWidth:0,
-        halfHeight:0,
+export const defaultRect = (): TRectangle => {
+    return {
+        x0: 0,
+        x1: 0,
+        x2: 0,
+        x3: 0,
+        y0: 0,
+        y1: 0,
+        y2: 0,
+        y3: 0,
+        width: 0,
+        height: 0,
+        halfWidth: 0,
+        halfHeight: 0,
     }
 
 }
 
 export interface IStateGame {
     errors: any[],
-    isMapInit:boolean,
+    isMapInit: boolean,
     cellSize: number,
     fieldRect: TRectangle,
     cellRect: TRectangle,
@@ -91,7 +92,7 @@ const initialState: IStateGame = {
     isMapInit: false,
     cellRect: defaultRect(),
     fieldRect: defaultRect(),
-    cellSize:45,
+    cellSize: 45,
     pointerMatrix: [0, 0],
     capitalCities: [],
     fieldMatrix: [],
@@ -135,6 +136,7 @@ const sliceGame = createSlice({
             state.fieldMatrix = payload.matrixField;
             state.cellRect = payload.rectCell;
             state.fieldRect = payload.rectField;
+            state.capitalCities = payload.capitalCities;
             state.isMapInit = true;
             state.scene = 'mapEditor';
         });

@@ -2,8 +2,7 @@ import { createAsyncThunk } from '@reduxjs/toolkit';
 import { AppState } from '../store';
 import Game from 'utils/gameLib/Game';
 import { TPointMatrix } from 'utils/game/scenes/editorScene';
-import { ICapitalCity, TCell, TFieldMatrix, TRectangle, defaultRect } from 'store/slices/sliceGame';
-import { TCapitalRace } from 'utils/game/objects/CapitalCity';
+import { ICapitalCity, TCapitalRace, TCell, TFieldMatrix, TRectangle, defaultRect } from 'store/slices/sliceGame';
 import VirtualRect from 'utils/virtualRect';
 
 const isCanPutBuild = (fieldMatrix: TFieldMatrix, point: TPointMatrix, matrix: TPointMatrix) => {
@@ -207,8 +206,9 @@ export type TDataInitMap = {
 
 export type TStoreInitMap = {
   matrixField: TFieldMatrix;
-  rectCell: TRectangle,
-  rectField: TRectangle
+  rectCell: TRectangle;
+  rectField: TRectangle;
+  capitalCities: ICapitalCity[];
 }
 
 export const actionInitNewMap = createAsyncThunk<TStoreInitMap, TDataInitMap, { state: AppState, rejectWithValue: any }>(
@@ -237,7 +237,7 @@ export const actionInitNewMap = createAsyncThunk<TStoreInitMap, TDataInitMap, { 
       storeCell.height = heightCell;
       storeCell.halfWidth = halfWidthCell;
       storeCell.halfHeight = halfHeightCell;
-      
+
       const rectangle = new VirtualRect(cellSize * data.size, cellSize * data.size);
 
       rectangle.rotate = 45;
@@ -246,7 +246,7 @@ export const actionInitNewMap = createAsyncThunk<TStoreInitMap, TDataInitMap, { 
       const heightField = rectangle.y2 - rectangle.y0;
       rectangle.moveX(widthField / 2);
       rectangle.moveY(heightField / 2);
-      console.log('rectangle = ', rectangle);
+      //console.log('rectangle = ', rectangle);
       const storeFieldRect = defaultRect();
       storeFieldRect.x0 = rectangle.x0;
       storeFieldRect.x1 = rectangle.x1;
@@ -258,8 +258,8 @@ export const actionInitNewMap = createAsyncThunk<TStoreInitMap, TDataInitMap, { 
       storeFieldRect.y3 = rectangle.y3;
       storeFieldRect.width = widthField;
       storeFieldRect.height = heightField;
-      storeFieldRect.halfWidth = widthField/2;
-      storeFieldRect.halfHeight = heightField/2;
+      storeFieldRect.halfWidth = widthField / 2;
+      storeFieldRect.halfHeight = heightField / 2;
 
       let startX = rectangle.x0;
       let startY = rectangle.y0 + halfHeightCell
@@ -287,10 +287,59 @@ export const actionInitNewMap = createAsyncThunk<TStoreInitMap, TDataInitMap, { 
         startY = rectangle.y0 + halfHeightCell * (i + 1);
       }
 
+      const capitalCities: ICapitalCity[] = [];
+      data.race.forEach(race => {
+        //console.log('add race = ', race);
+        let iX = 1;
+        let jY = 1;
+        let isCanPut = true;
+        do {
+          isCanPut = isCanPutBuild(matrix, [iX, jY], [5, 5]);
+          if (!isCanPut) {
+            if (jY + 7 < data.size) {
+              jY += 1;
+            } else {
+              jY = 1;
+              if (iX + 7 < data.size) {
+                iX += 1;
+              } else {
+                iX = 1;
+              }
+            }
+          }
+        } while (!isCanPut);
+
+        const capitalCity: ICapitalCity = {
+          matrixPoint: [iX, jY],
+          prevMatrixPoint: [iX, jY],
+          matrix: [5, 5],
+          id: Game.createId(),
+          race,
+          squadOut: [],
+          squadIn: [],
+          isCanPut,
+          isUp: isCanPut ? false : true
+        }
+
+        for (let i = capitalCity.matrixPoint[0]; i < capitalCity.matrixPoint[0] + capitalCity.matrix[0]; i++) {
+          for (let j = capitalCity.matrixPoint[1]; j < capitalCity.matrixPoint[1] + capitalCity.matrix[1]; j++) {
+            matrix[i][j] = {
+              ...matrix[i][j],
+              objId: capitalCity.id,
+              isBuild: true
+            }
+          }
+        }
+
+        capitalCities.push(capitalCity);
+      });
+
+
       return {
-        matrixField:matrix,
-        rectCell:storeCell,
-        rectField:storeFieldRect
+        matrixField: matrix,
+        rectCell: storeCell,
+        rectField: storeFieldRect,
+        capitalCities,
       };
     } catch (error) {
       console.error('error = ', (error as Error).message);
