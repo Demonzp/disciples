@@ -256,12 +256,6 @@ export default class EditorScene extends Scene{
         this.pointerDot.fillStyle('red');
         //graphicsDot.fillRect(0,0,10,10);
         store.dispatch(setFieldMatrix(this.vMatrix));
-        setTimeout(()=>{
-            store.dispatch(actionAddCapitalCity([3,3]));
-            setTimeout(()=>{
-                store.dispatch(actionAddCapitalCity([6,10]));
-            },600);
-        },600);
         
         this.input.on('pointerdown', ()=>{
             this.isPointerDown = true;

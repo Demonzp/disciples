@@ -3,8 +3,9 @@ import Modal from "components/Modal/Modal";
 import ModalCard from "components/ModalCard/ModalCard";
 
 import classes from "./modal-add-race.module.css";
-import { useAppSelector } from "store/hooks";
+import { useAppDispatch, useAppSelector } from "store/hooks";
 import { TCapitalRace, arrRaces } from "store/slices/sliceGame";
+import { actionAddCapitalCity } from "store/actions/actionsGame";
 
 type TProps = {
     show: Boolean,
@@ -15,6 +16,7 @@ const ModalAddRace: FC<TProps> = ({ show, onToggle }) => {
     const { capitalCities } = useAppSelector(state => state.game);
     const [races, setRaces] = useState([]);
     const [checkedRace, setCheckedRace] = useState<TCapitalRace>();
+    const dispatch = useAppDispatch();
 
     useEffect(() => {
         setRaces(arrRaces.filter(r => {
@@ -27,7 +29,16 @@ const ModalAddRace: FC<TProps> = ({ show, onToggle }) => {
 
     const onChecked = (data:TCapitalRace)=>{
         setCheckedRace(data);
-    }
+    };
+
+    const onAddRace = ()=>{
+        dispatch(actionAddCapitalCity(checkedRace))
+            .unwrap()
+            .then(()=>{
+                setCheckedRace(null);
+                //onToggle();
+            });
+    };
 
     return (
         <div className={classes.cont}>
@@ -54,6 +65,10 @@ const ModalAddRace: FC<TProps> = ({ show, onToggle }) => {
                                 );
                             })
                         }
+                        <div className="row">
+                            <button onClick={onAddRace}>OK</button>
+                            <button onClick={onToggle}>cancel</button>
+                        </div>
                     </div>
                 </ModalCard>
             </Modal>

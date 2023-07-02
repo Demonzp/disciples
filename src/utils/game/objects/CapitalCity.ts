@@ -40,9 +40,9 @@ export default class CapitalCity extends BaseObject{
         const j = this.matrixPoint[1]+2;
         
         const vMatrix = this.scene.vMatrix;
-        console.log('vMatrix = ', vMatrix);
+        //console.log('vMatrix = ', vMatrix);
         const cell = vMatrix[i][j];
-        console.log('render!! = ', cell);
+        //console.log('render!! = ', cell);
         this.sprite.x = cell.x-9;
         this.sprite.y = cell.y-45;
         //this.sprite.y = cell.y-35;

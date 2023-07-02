@@ -1,13 +1,13 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { actionAddCapitalCity, actionInitNewMap, actionPointerMove, actionPointerUp } from 'store/actions/actionsGame';
+import { actionAddCapitalCity, actionInitNewMap, actionPointerMove, actionPointerUp, actionSetEditorMod } from 'store/actions/actionsGame';
 import { TPointMatrix } from 'utils/game/scenes/editorScene';
 
 export type TCapitalRace = 'empire' | 'legions' | 'clans' | 'elves' | 'undead';
-export const arrRaces: TCapitalRace[] = ['empire', 'legions', 'clans'];
+export const arrRaces: TCapitalRace[] = ['empire', 'legions'];
 export type TWhatScene = 'loading' | 'mainMenu' | 'mapEditorMenu' | 'mapEditor';
 
 export type TTerrain = 'neutral' | 'empire' | 'legions' | 'clans' | 'elves' | 'undead';
-
+export type TEditorMod = 'add-race' | 'properties' | 'move' | 'add-party' | 'copy-party';
 export type TCell = {
     x: number,
     y: number,
@@ -85,6 +85,7 @@ export interface IStateGame {
     isPointerMove: boolean;
     isPointerDown: boolean;
     scene: TWhatScene;
+    editorMod: TEditorMod;
 }
 
 const initialState: IStateGame = {
@@ -100,6 +101,7 @@ const initialState: IStateGame = {
     isPointerMove: false,
     isPointerDown: false,
     scene: 'loading',
+    editorMod: 'properties',
 };
 
 const sliceGame = createSlice({
@@ -162,7 +164,9 @@ const sliceGame = createSlice({
                         }
                     }
                 }
+                state.editorMod = 'properties';
             } else {
+                state.editorMod = 'move';
                 state.selectObj = {
                     id: payload.id,
                     type: 'capitalCity',
@@ -170,7 +174,7 @@ const sliceGame = createSlice({
                 }
                 //state.selectObj = payload;
             }
-
+            
             state.capitalCities.push(payload);
         });
 
@@ -208,12 +212,11 @@ const sliceGame = createSlice({
                 }
             } else {
 
-                if (cell.objId) {
+                if (cell.objId&&state.editorMod==='move') {
                     const cityIdx = state.capitalCities.findIndex(c => c.id === cell.objId);
                     if (cityIdx !== -1) {
                         const city = state.capitalCities[cityIdx];
                         city.isUp = true;
-
 
                         for (let i = city.matrixPoint[0]; i < city.matrixPoint[0] + city.matrix[0]; i++) {
                             for (let j = city.matrixPoint[1]; j < city.matrixPoint[1] + city.matrix[1]; j++) {
@@ -239,7 +242,7 @@ const sliceGame = createSlice({
         });
 
         builder.addCase(actionPointerMove.fulfilled, (state, { payload }) => {
-            if (state.selectObj) {
+            if (state.selectObj&&state.editorMod==='move') {
                 //const obj = state.selectObj;
                 const city = state.capitalCities[state.selectObj.idx];
                 if (city) {
@@ -262,6 +265,10 @@ const sliceGame = createSlice({
             }
 
             //state.capitalCities.push(payload);
+        });
+
+        builder.addCase(actionSetEditorMod.fulfilled, (state, { payload }) => {
+            state.editorMod = payload;
         });
     }
 });

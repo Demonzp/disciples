@@ -2,7 +2,7 @@ import { createAsyncThunk } from '@reduxjs/toolkit';
 import { AppState } from '../store';
 import Game from 'utils/gameLib/Game';
 import { TPointMatrix } from 'utils/game/scenes/editorScene';
-import { ICapitalCity, TCapitalRace, TCell, TFieldMatrix, TRectangle, defaultRect } from 'store/slices/sliceGame';
+import { ICapitalCity, TCapitalRace, TCell, TEditorMod, TFieldMatrix, TRectangle, defaultRect } from 'store/slices/sliceGame';
 import VirtualRect from 'utils/virtualRect';
 
 const isCanPutBuild = (fieldMatrix: TFieldMatrix, point: TPointMatrix, matrix: TPointMatrix) => {
@@ -104,6 +104,7 @@ export const actionPointerUp = createAsyncThunk<TActionPointerUp, TPointMatrix, 
   async (point, { getState, rejectWithValue }) => {
     try {
       console.log('game/actionPointerUp');
+      const editorMod = getState().game.editorMod;
       const selectObj = getState().game.selectObj;
       let isCanPut = true;
       if (selectObj) {
@@ -125,57 +126,18 @@ export const actionPointerUp = createAsyncThunk<TActionPointerUp, TPointMatrix, 
   }
 );
 
-let i = 0;
 
-export const actionAddCapitalCity = createAsyncThunk<ICapitalCity, TPointMatrix, { state: AppState, rejectWithValue: any }>(
+export const actionAddCapitalCity = createAsyncThunk<ICapitalCity, TCapitalRace, { state: AppState, rejectWithValue: any }>(
   'game/actonAddCapitalCity',
-  async (point, { getState, rejectWithValue }) => {
+  async (race, { getState, rejectWithValue }) => {
     try {
 
       const fieldMatrix = getState().game.fieldMatrix;
-      //const sizeMatrix = fieldMatrix.length - 1;
-      let iX = point[0] - 2;
-      let jY = point[1] - 2;
-      let race: TCapitalRace = 'empire';
+
+      let iX = 1;
+      let jY = 1;
+
       const isCanPut = isCanPutBuild(fieldMatrix, [iX, jY], [5, 5]);
-      if (i > 0) {
-        race = 'legions';
-      }
-      //let isCanPut = true;
-
-      // do {
-      //   isCanPut = true;
-      //   if (iX < 1) {
-      //     iX += 1;
-      //   }
-      //   if (jY < 1) {
-      //     jY += 1;
-      //   }
-      //   for (let i = iX; i < iX + 5; i++) {
-      //     for (let j = jY; j < jY + 5; j++) {
-      //       const cell = fieldMatrix[i][j];
-      //       //console.log(i,'||',j,'=',cell);
-      //       if (cell.objId) {
-      //         isCanPut = false;
-      //       }
-      //     }
-      //   }
-
-      //   if (!isCanPut) {
-      //     if (jY + 6 < sizeMatrix) {
-      //       //console.log('y MOVE');
-      //       jY += 1;
-      //     } else {
-      //       jY = 1;
-      //       if (iX + 6 < sizeMatrix) {
-      //         //console.log('x MOVE');
-      //         iX += 1;
-      //       } else {
-      //         iX = 1;
-      //       }
-      //     }
-      //   }
-      // } while (!isCanPut);
 
       const capitalCity: ICapitalCity = {
         matrixPoint: [iX, jY],
@@ -188,7 +150,6 @@ export const actionAddCapitalCity = createAsyncThunk<ICapitalCity, TPointMatrix,
         isCanPut,
         isUp: isCanPut ? false : true
       }
-      i += 1;
 
       return capitalCity;
     } catch (error) {
@@ -341,6 +302,18 @@ export const actionInitNewMap = createAsyncThunk<TStoreInitMap, TDataInitMap, { 
         rectField: storeFieldRect,
         capitalCities,
       };
+    } catch (error) {
+      console.error('error = ', (error as Error).message);
+      return rejectWithValue({ message: (error as Error).message, field: 'nameTable' });
+    }
+  }
+);
+
+export const actionSetEditorMod = createAsyncThunk<TEditorMod, TEditorMod, { state: AppState, rejectWithValue: any }>(
+  'game/actionSetEditorMod',
+  async (data, { rejectWithValue }) => {
+    try {
+      return data;
     } catch (error) {
       console.error('error = ', (error as Error).message);
       return rejectWithValue({ message: (error as Error).message, field: 'nameTable' });
