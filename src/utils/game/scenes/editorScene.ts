@@ -7,11 +7,13 @@ import CapitalCity from "../objects/CapitalCity";
 import BaseObject from "../objects/BaseObject";
 import { actionPointerMove, actionPointerUp, actionAddCapitalCity } from "store/actions/actionsGame";
 import Graphics from "utils/gameLib/Graphics";
+import City from "../objects/City";
 
 export type TPointMatrix = [number,number];
 
 export default class EditorScene extends Scene{
     capitalCities:CapitalCity[] = [];
+    cities: City[] = [];
     isCameraLeft = false;
     isCameraRight = false;
     isCameraUp = false;
@@ -35,6 +37,7 @@ export default class EditorScene extends Scene{
     halfWidthCell = 0;
     halfHeightCell = 0;
     isInit = false;
+    
 
     pointerDot:Graphics|null;
 
@@ -205,6 +208,14 @@ export default class EditorScene extends Scene{
         this.pointerDot.setZindex(2000);
         this.isInit = true;
         this.updateCapitals();
+
+        // this.cities.push(new City(
+        //     this,
+        //     'dawdawd',
+        //     [1,1],
+        //     'neutral',
+        //     2
+        // ));
     }
 
     createOld(): void {
@@ -459,6 +470,26 @@ export default class EditorScene extends Scene{
         });
     }
 
+    updateCities(){
+        const cities = store.getState().game.cities;
+        cities.forEach(c=>{
+            const city = this.cities.find(c2=>c2.id===c.id);
+            if(city){
+                city.updateState(c);
+            }else{
+                console.log('add to render new City');
+                const newCity = new City(
+                    this,
+                    c.id,
+                    c.matrixPoint,
+                    c.owner,
+                    c.lvl
+                );
+                this.cities.push(newCity);
+            }
+        });
+    }
+
     updatePointer(){
         const point = store.getState().game.pointerMatrix;
         if(this.selectObj){
@@ -471,9 +502,9 @@ export default class EditorScene extends Scene{
 
         if(this.isCameraDown){
 
-            // const casl = this.capitalCities[0];
+            // const casl = this.cities[0];
             // casl.sprite.y+=1;
-            // console.log('5,5 = ', this.vMatrix[3][3]);
+            // console.log('5,5 = ', this.vMatrix[3][2]);
             // console.log(casl.sprite.x,'|',casl.sprite.y);
             // return;
             this.game.camera.scrollY(camera.cameraPoint().y-this.cameraSpeed);
@@ -488,9 +519,9 @@ export default class EditorScene extends Scene{
             //     console.log(this.empCastle.x,'|',this.empCastle.y);
             //     return;
             // }
-            // const casl = this.capitalCities[0];
+            // const casl = this.cities[0];
             // casl.sprite.y-=1;
-            // console.log('5,5 = ', this.vMatrix[3][3]);
+            // console.log('5,5 = ', this.vMatrix[3][2]);
             // console.log(casl.sprite.x,'|',casl.sprite.y);
             // return;
             this.game.camera.scrollY(camera.cameraPoint().y+this.cameraSpeed);
@@ -506,9 +537,9 @@ export default class EditorScene extends Scene{
             //     console.log(this.empCastle.x,'|',this.empCastle.y);
             //     return;
             // }
-            // const casl = this.capitalCities[0];
+            // const casl = this.cities[0];
             // casl.sprite.x-=1;
-            // console.log('5,5 = ', this.vMatrix[3][3]);
+            // console.log('5,5 = ', this.vMatrix[3][2]);
             // console.log(casl.sprite.x,'|',casl.sprite.y);
             // return;
             this.game.camera.scrollX(camera.cameraPoint().x+this.cameraSpeed);
@@ -522,9 +553,9 @@ export default class EditorScene extends Scene{
             //     console.log(this.empCastle.x,'|',this.empCastle.y);
             //     return;
             // }
-            // const casl = this.capitalCities[0];
+            // const casl = this.cities[0];
             // casl.sprite.x+=1;
-            // console.log('5,5 = ', this.vMatrix[3][3]);
+            // console.log('5,5 = ', this.vMatrix[3][2]);
             // console.log(casl.sprite.x,'|',casl.sprite.y);
             // return;
             this.game.camera.scrollX(camera.cameraPoint().x-this.cameraSpeed);

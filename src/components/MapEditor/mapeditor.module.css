@@ -1,5 +1,12 @@
 .cont{
+    font-size: 16px !important;
     background-color: darkgray;
     height: auto;
     justify-content: flex-start !important;
+}
+
+.cont button{
+    min-width: 96px !important;
+    min-height: 26px !important;
+    font-size: 12px !important;
 }

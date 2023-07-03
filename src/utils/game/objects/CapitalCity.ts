@@ -1,13 +1,14 @@
 import Sprite from "utils/gameLib/Sprite";
-import MainScane, { TPointMatrix } from "../scenes/editorScene";
+import { TPointMatrix } from "../scenes/editorScene";
 import BaseObject from "./BaseObject";
 import { ICapitalCity, TCapitalRace } from "store/slices/sliceGame";
+import { IScene } from "../scenes/IScene";
 
 export default class CapitalCity extends BaseObject{
     private _sprite:Sprite|undefined;
     fundament:Sprite|undefined;
     isCanPut = true;
-    constructor(scene:MainScane, public id: string, matrixPoint:TPointMatrix, public race:TCapitalRace){
+    constructor(scene:IScene, public id: string, matrixPoint:TPointMatrix, public race:TCapitalRace){
         super(scene, matrixPoint, [5,5]);
         
         this.create();
@@ -17,6 +18,7 @@ export default class CapitalCity extends BaseObject{
         this._sprite = this.scene.add.sprite(`castle-${this.race}`);
         this._sprite.setZindex(200);
         this._sprite.play();
+        //this._sprite.alpha = 0;
         this.move();
         // const i = this.matrixPoint[0]+2;
         // const j = this.matrixPoint[1]+2;

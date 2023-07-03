@@ -1,7 +1,8 @@
-import MainScane, { TPointMatrix } from "../scenes/editorScene";
+import { TPointMatrix } from "../scenes/editorScene";
+import { IScene } from "../scenes/IScene";
 
 export default class BaseObject{
-    constructor(protected scene:MainScane, public matrixPoint:TPointMatrix, public matrixSize:TPointMatrix){
+    constructor(protected scene:IScene, public matrixPoint:TPointMatrix, public matrixSize:TPointMatrix){
 
     }
 

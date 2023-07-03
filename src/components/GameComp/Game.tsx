@@ -14,7 +14,7 @@ import EditorScene from "utils/game/scenes/editorScene";
 const GameComp = () => {
     const refCont = useRef<HTMLCanvasElement>(null);
     const [game, setGame] = useState<Game | undefined>();
-    const { pointerMatrix, capitalCities, fieldMatrix, scene, isMapInit } = useAppSelector(state => state.game);
+    const { pointerMatrix, capitalCities, cities, fieldMatrix, scene, isMapInit } = useAppSelector(state => state.game);
 
     useEffect(() => {
         if (refCont.current && !game) {
@@ -51,6 +51,16 @@ const GameComp = () => {
             }
         }
     }, [capitalCities, isMapInit, game]);
+
+    useEffect(() => {
+        if (game) {
+            const gameScene = game.scene.getScene<EditorScene>('EditorScene');
+            //console.log('update state capitalCities = ', scene);
+            if(isMapInit&&gameScene&&gameScene.isInit){
+                gameScene.updateCities();
+            }
+        }
+    }, [cities, isMapInit, game]);
 
     useEffect(() => {
         //console.log('fieldMatrix = ', fieldMatrix);

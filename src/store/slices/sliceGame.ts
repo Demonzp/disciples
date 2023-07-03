@@ -1,5 +1,5 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { actionAddCapitalCity, actionInitNewMap, actionPointerMove, actionPointerUp, actionSetEditorMod } from 'store/actions/actionsGame';
+import { actionAddCapitalCity, actionAddCity, actionInitNewMap, actionPointerMove, actionPointerUp, actionSetEditorMod } from 'store/actions/actionsGame';
 import { TPointMatrix } from 'utils/game/scenes/editorScene';
 
 export type TCapitalRace = 'empire' | 'legions' | 'clans' | 'elves' | 'undead';
@@ -7,7 +7,7 @@ export const arrRaces: TCapitalRace[] = ['empire', 'legions'];
 export type TWhatScene = 'loading' | 'mainMenu' | 'mapEditorMenu' | 'mapEditor';
 
 export type TTerrain = 'neutral' | 'empire' | 'legions' | 'clans' | 'elves' | 'undead';
-export type TEditorMod = 'add-race' | 'properties' | 'move' | 'add-party' | 'copy-party';
+export type TEditorMod = 'add-race' | 'properties' | 'move' | 'add-party' | 'copy-party' | 'add-city';
 export type TCell = {
     x: number,
     y: number,
@@ -29,14 +29,20 @@ export interface IBaseGameObj {
     prevMatrixPoint: TPointMatrix;
     matrix: [number, number];
     id: string;
-    race: TCapitalRace;
     squadIn: string[];
     isUp: boolean;
     isCanPut: boolean;
 }
 
 export interface ICapitalCity extends IBaseGameObj {
+    race: TCapitalRace;
     squadOut: string[];
+}
+
+export interface ICity extends IBaseGameObj {
+    owner: TTerrain;
+    squadOut: string[];
+    lvl:number;
 }
 
 export type TRectangle = {
@@ -80,6 +86,7 @@ export interface IStateGame {
     cellRect: TRectangle,
     pointerMatrix: TPointMatrix;
     capitalCities: ICapitalCity[];
+    cities: any[];
     fieldMatrix: TFieldMatrix;
     selectObj: TSelectObj | null;
     isPointerMove: boolean;
@@ -96,6 +103,7 @@ const initialState: IStateGame = {
     cellSize: 45,
     pointerMatrix: [0, 0],
     capitalCities: [],
+    cities: [],
     fieldMatrix: [],
     selectObj: null,
     isPointerMove: false,
@@ -174,11 +182,32 @@ const sliceGame = createSlice({
                 }
                 //state.selectObj = payload;
             }
-            
+
             state.capitalCities.push(payload);
         });
 
         builder.addCase(actionAddCapitalCity.rejected, (state, { payload }) => {
+
+            //const payload = action.payload as ICustomError;
+            state.errors.push(payload);
+        });
+
+        builder.addCase(actionAddCity.pending, (state) => {
+            state.errors = [];
+        });
+
+        builder.addCase(actionAddCity.fulfilled, (state, { payload }) => {
+            state.editorMod = 'add-city';
+            state.selectObj = {
+                id: payload.id,
+                type: 'city',
+                idx: state.cities.length
+            }
+
+            state.cities.push(payload);
+        });
+
+        builder.addCase(actionAddCity.rejected, (state, { payload }) => {
 
             //const payload = action.payload as ICustomError;
             state.errors.push(payload);
@@ -212,7 +241,7 @@ const sliceGame = createSlice({
                 }
             } else {
 
-                if (cell.objId&&state.editorMod==='move') {
+                if (cell.objId && state.editorMod === 'move') {
                     const cityIdx = state.capitalCities.findIndex(c => c.id === cell.objId);
                     if (cityIdx !== -1) {
                         const city = state.capitalCities[cityIdx];
@@ -242,26 +271,54 @@ const sliceGame = createSlice({
         });
 
         builder.addCase(actionPointerMove.fulfilled, (state, { payload }) => {
-            if (state.selectObj&&state.editorMod==='move') {
+            if (state.selectObj && (state.editorMod === 'move' || state.editorMod === 'add-city')) {
                 //const obj = state.selectObj;
-                const city = state.capitalCities[state.selectObj.idx];
-                if (city) {
-                    let i = payload.point[0] - 2;
-                    let j = payload.point[1] - 2;
-                    if (i < 0) {
-                        i = 0;
-                    } else if (i + 5 > state.fieldMatrix.length) {
-                        i = state.fieldMatrix.length - 5;
-                    }
-                    if (j < 0) {
-                        j = 0;
-                    } else if (j + 5 > state.fieldMatrix.length) {
-                        j = state.fieldMatrix.length - 5;
-                    }
-                    //console.log('isCanPut = ', payload.isCanPut);
-                    state.capitalCities[state.selectObj.idx].isCanPut = payload.isCanPut;
-                    state.capitalCities[state.selectObj.idx].matrixPoint = [i, j];
+                switch (state.selectObj.type) {
+                    case 'capitalCity':
+                        const capitalCity = state.capitalCities[state.selectObj.idx];
+                        if (capitalCity) {
+                            let i = payload.point[0] - 2;
+                            let j = payload.point[1] - 2;
+                            if (i < 0) {
+                                i = 0;
+                            } else if (i + 5 > state.fieldMatrix.length) {
+                                i = state.fieldMatrix.length - 5;
+                            }
+                            if (j < 0) {
+                                j = 0;
+                            } else if (j + 5 > state.fieldMatrix.length) {
+                                j = state.fieldMatrix.length - 5;
+                            }
+                            //console.log('isCanPut = ', payload.isCanPut);
+                            state.capitalCities[state.selectObj.idx].isCanPut = payload.isCanPut;
+                            state.capitalCities[state.selectObj.idx].matrixPoint = [i, j];
+                        }
+                        break;
+                    case 'city':
+                        const city = state.cities[state.selectObj.idx];
+                        if (city) {
+                            let i = payload.point[0] - 2;
+                            let j = payload.point[1] - 1;
+                            if (i < 0) {
+                                i = 0;
+                            } else if (i + 4 > state.fieldMatrix.length) {
+                                i = state.fieldMatrix.length - 4;
+                            }
+                            if (j < 0) {
+                                j = 0;
+                            } else if (j + 4 > state.fieldMatrix.length) {
+                                j = state.fieldMatrix.length - 4;
+                            }
+                            //console.log('isCanPut = ', payload.isCanPut);
+                            state.cities[state.selectObj.idx].isCanPut = payload.isCanPut;
+                            state.cities[state.selectObj.idx].matrixPoint = [i, j];
+                        }
+                        break;
+
+                    default:
+                        break;
                 }
+
             }
 
             //state.capitalCities.push(payload);

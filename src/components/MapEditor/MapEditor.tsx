@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import classes from "./mapeditor.module.css";
 import ModalAddRace from "components/ModalAddRace";
 import { useAppDispatch, useAppSelector } from "store/hooks";
-import { actionSetEditorMod } from "store/actions/actionsGame";
+import { actionAddCity, actionSetEditorMod } from "store/actions/actionsGame";
 
 const MapEditor = () => {
     const { editorMod } = useAppSelector(state=>state.game);
@@ -11,8 +11,9 @@ const MapEditor = () => {
     const onToggle = ()=>{
         if(showAddRace){
             dispatch(actionSetEditorMod('properties'));
+            return;
         }
-        setShowAddRace(!showAddRace); 
+        setShowAddRace(true); 
     };
 
     useEffect(()=>{
@@ -33,6 +34,10 @@ const MapEditor = () => {
 
     const onMove = ()=>{
         dispatch(actionSetEditorMod('move'));
+    };
+
+    const onAddCity = ()=>{
+        dispatch(actionAddCity());
     };
 
     return (
@@ -58,7 +63,20 @@ const MapEditor = () => {
                     onClick={onAddRace}
                     disabled={editorMod==='add-race'}
                 >Add Race</button>
-                <div>
+                <div className="row">
+                    <div className="col">
+                        <button
+                            onClick={onAddCity}
+                            disabled={editorMod==='add-city'} 
+                        >City</button>
+                        <button >Mage</button>
+                        <button >Trainer</button>
+                    </div>
+                    <div className="col">
+                        <button >Merchant</button>
+                        <button >Mercenary</button>
+                        <button >Ruins</button>
+                    </div>
                 </div>
             </div>
         </>
