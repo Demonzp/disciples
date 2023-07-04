@@ -11,7 +11,7 @@ type Props = {
 }
 
 const MapEditor:FC<Props> = ({game}) => {
-    const { editorMod } = useAppSelector(state=>state.game);
+    const { editorMod, selectObj } = useAppSelector(state=>state.game);
     const dispatch = useAppDispatch();
     const [showAddRace, setShowAddRace] = useState(false);
     const onToggle = ()=>{
@@ -24,9 +24,7 @@ const MapEditor:FC<Props> = ({game}) => {
 
     const [showPropsCapital, setShowPropsCapital] = useState(false);
 
-    const onTogglePropsCapital = ()=>{
-
-    };
+    const onTogglePropsCapital = ()=>setShowPropsCapital(!showPropsCapital);
 
     useEffect(()=>{
         switch (editorMod) {
@@ -39,6 +37,12 @@ const MapEditor:FC<Props> = ({game}) => {
                 break;
         }
     }, [editorMod]);
+
+    useEffect(()=>{
+        if(selectObj&&editorMod==='properties'){
+            onTogglePropsCapital();
+        }
+    }, [editorMod, selectObj]);
 
     const onAddRace = ()=>{
         dispatch(actionSetEditorMod('add-race'));
@@ -58,7 +62,7 @@ const MapEditor:FC<Props> = ({game}) => {
 
     return (
         <>
-            <ModalMainCapitalCity game={game}/>
+            <ModalMainCapitalCity game={game} show={showPropsCapital} onToggle={onTogglePropsCapital}/>
             <ModalAddRace show={showAddRace} onToggle={onToggle}/>
             <div className={`content ${classes.cont} row`}>
                 <label>Objects</label>

@@ -33,6 +33,7 @@ export type TLoadedItem = {
   key: string;
   keyScene: string;
   file: HTMLImageElement;
+  //blob: Blob;
 }
 
 const imgLoad = (blob: Blob)=>{
@@ -106,6 +107,12 @@ export default class Loader{
     return image?.file;
   }
 
+  // getBLob(key: string):Blob|undefined{
+  //   const data = this.loadedImages.find(el=>el.key===key);
+
+  //   return data?.blob;
+  // }
+
   on(event: ELoadEvents, callback: (value:number)=>void, context?: any){
     switch (event) {
       case ELoadEvents.progress:
@@ -129,7 +136,12 @@ export default class Loader{
         const img = await imgLoad(blob);
         //console.log('zagruzil = ', iterator.key);
         num = (1/100)*(100/(this.loadImages.length/i));
-        this.loadedImages.push({key: iterator.key, keyScene: iterator.keyScene, file: img});
+        this.loadedImages.push({
+          key: iterator.key, 
+          keyScene: iterator.keyScene, 
+          file: img,
+          //blob
+        });
         this.eventProgressCallbacks.forEach(callback=>callback(num));
         i++;
       } catch (error) {

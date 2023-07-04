@@ -9,6 +9,7 @@ import { actionPointerMove, actionPointerUp, actionAddCapitalCity } from "store/
 import Graphics from "utils/gameLib/Graphics";
 import City from "../objects/City";
 import ModalPropertiesCapital from "../objects/ModalPropertiesCapital";
+import InputEl from "../objects/InputEl";
 
 export type TPointMatrix = [number,number];
 
@@ -211,6 +212,7 @@ export default class EditorScene extends Scene{
         this.updateCapitals();
         this.modalPropertiesCapital.init();
 
+        new InputEl(this);
         // this.cities.push(new City(
         //     this,
         //     'dawdawd',
