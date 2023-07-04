@@ -14,7 +14,7 @@ import EditorScene from "utils/game/scenes/editorScene";
 const GameComp = () => {
     const refCont = useRef<HTMLCanvasElement>(null);
     const [game, setGame] = useState<Game | undefined>();
-    const { pointerMatrix, capitalCities, cities, fieldMatrix, scene, isMapInit } = useAppSelector(state => state.game);
+    const { pointerMatrix, capitalCities, cities, fieldMatrix, scene, isMapInit, editorMod, selectObj } = useAppSelector(state => state.game);
 
     useEffect(() => {
         if (refCont.current && !game) {
@@ -61,6 +61,20 @@ const GameComp = () => {
             }
         }
     }, [cities, isMapInit, game]);
+
+    useEffect(() => {
+        if (game) {
+            const gameScene = game.scene.getScene<EditorScene>('EditorScene');
+            //console.log('update state capitalCities = ', scene);
+            if(
+                isMapInit
+                &&gameScene
+                &&gameScene.isInit
+            ){
+                gameScene.updateProperties();
+            }
+        }
+    }, [selectObj, editorMod, game]);
 
     useEffect(() => {
         //console.log('fieldMatrix = ', fieldMatrix);
@@ -111,7 +125,7 @@ const GameComp = () => {
                 <canvas ref={refCont} />
                 {scene === 'mainMenu' && <MainMenu />}
                 {scene === 'mapEditorMenu' && <MenuEditor />}
-                {scene === 'mapEditor' && <MapEditor />}
+                {scene === 'mapEditor' && <MapEditor game={game}/>}
             </div>
         </>
 

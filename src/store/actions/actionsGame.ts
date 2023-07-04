@@ -123,10 +123,18 @@ export const actionPointerUp = createAsyncThunk<TActionPointerUp, TPointMatrix, 
       let isCanPut = true;
       if (selectObj) {
         const fieldMatrix = getState().game.fieldMatrix;
-        const city = getState().game.capitalCities[selectObj.idx];
-        if (city) {
-          isCanPut = isCanPutBuild(fieldMatrix, [point[0] - 2, point[1] - 2], [5, 5]);
+        if(selectObj.type==='capitalCity'){
+          const city = getState().game.capitalCities[selectObj.idx];
+          if (city) {
+            isCanPut = isCanPutBuild(fieldMatrix, [point[0] - 2, point[1] - 2], [5, 5]);
+          }
+        }else if(selectObj.type==='city'){
+          const city = getState().game.cities[selectObj.idx];
+          if (city) {
+            isCanPut = isCanPutBuild(fieldMatrix, [point[0] - 2, point[1] - 1], [4, 4]);
+          }
         }
+        
       }
       //const fieldMatrix = getState().game.fieldMatrix;
 
@@ -156,6 +164,8 @@ export const actionAddCapitalCity = createAsyncThunk<ICapitalCity, TCapitalRace,
         matrixPoint: [iX, jY],
         prevMatrixPoint: [iX, jY],
         matrix: [5, 5],
+        center:[2, 2],
+        type: 'capitalCity',
         id: Game.createId(),
         race,
         squadOut: [],
@@ -186,6 +196,8 @@ export const actionAddCity = createAsyncThunk<ICity, undefined, { state: AppStat
         matrixPoint: [iX, jY],
         prevMatrixPoint: [iX, jY],
         matrix: [4, 4],
+        center:[2, 1],
+        type: 'city',
         id: Game.createId(),
         squadIn: [],
         isUp: true,
@@ -278,6 +290,7 @@ export const actionInitNewMap = createAsyncThunk<TStoreInitMap, TDataInitMap, { 
             y,
             objId: null,
             terrain: 'neutral',
+            typeObject: null,
             isBuild: false
           });
 
@@ -316,6 +329,8 @@ export const actionInitNewMap = createAsyncThunk<TStoreInitMap, TDataInitMap, { 
           matrixPoint: [iX, jY],
           prevMatrixPoint: [iX, jY],
           matrix: [5, 5],
+          center: [2, 2],
+          type: 'capitalCity',
           id: Game.createId(),
           race,
           squadOut: [],
@@ -329,6 +344,7 @@ export const actionInitNewMap = createAsyncThunk<TStoreInitMap, TDataInitMap, { 
             matrix[i][j] = {
               ...matrix[i][j],
               objId: capitalCity.id,
+              typeObject: 'capitalCity',
               isBuild: true
             }
           }

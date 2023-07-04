@@ -13,14 +13,17 @@ export type TCell = {
     y: number,
     objId: string | null,
     terrain: TTerrain,
+    typeObject: TObject | null,
     isBuild: boolean
 }
 
 export type TFieldMatrix = (TCell[])[];
 
+export type TObject = 'capitalCity' | 'city' | 'squad';
+
 export type TSelectObj = {
     id: string;
-    type: 'capitalCity' | 'city' | 'squad';
+    type: TObject;
     idx: number;
 }
 
@@ -28,6 +31,8 @@ export interface IBaseGameObj {
     matrixPoint: TPointMatrix;
     prevMatrixPoint: TPointMatrix;
     matrix: [number, number];
+    center: [number, number];
+    type: TObject;
     id: string;
     squadIn: string[];
     isUp: boolean;
@@ -42,7 +47,7 @@ export interface ICapitalCity extends IBaseGameObj {
 export interface ICity extends IBaseGameObj {
     owner: TTerrain;
     squadOut: string[];
-    lvl:number;
+    lvl: number;
 }
 
 export type TRectangle = {
@@ -168,6 +173,7 @@ const sliceGame = createSlice({
                         state.fieldMatrix[i][j] = {
                             ...state.fieldMatrix[i][j],
                             objId: payload.id,
+                            typeObject: 'capitalCity',
                             isBuild: true
                         }
                     }
@@ -197,7 +203,7 @@ const sliceGame = createSlice({
         });
 
         builder.addCase(actionAddCity.fulfilled, (state, { payload }) => {
-            state.editorMod = 'add-city';
+            state.editorMod = 'move';
             state.selectObj = {
                 id: payload.id,
                 type: 'city',
@@ -220,17 +226,30 @@ const sliceGame = createSlice({
             if (state.selectObj) {
                 console.log('isCanPut = ', payload.isCanPut);
                 if (payload.isCanPut) {
-                    const city = state.capitalCities[state.selectObj.idx];
-                    if (city) {
-                        city.matrixPoint = [point[0] - 2, point[1] - 2];
-                        city.isCanPut = true;
-                        city.isUp = false;
+                    let obj: IBaseGameObj | null = null;
+                    switch (state.selectObj.type) {
+                        case 'capitalCity':
+                            obj = state.capitalCities[state.selectObj.idx];
+                            break;
+                        case 'city':
+                            obj = state.cities[state.selectObj.idx];
+                            break;
 
-                        for (let i = city.matrixPoint[0]; i < city.matrixPoint[0] + city.matrix[0]; i++) {
-                            for (let j = city.matrixPoint[1]; j < city.matrixPoint[1] + city.matrix[1]; j++) {
+                        default:
+                            break;
+                    }
+                    //const city = state.capitalCities[state.selectObj.idx];
+                    if (obj) {
+                        obj.matrixPoint = [point[0] - obj.center[0], point[1] - obj.center[1]];
+                        obj.isCanPut = true;
+                        obj.isUp = false;
+
+                        for (let i = obj.matrixPoint[0]; i < obj.matrixPoint[0] + obj.matrix[0]; i++) {
+                            for (let j = obj.matrixPoint[1]; j < obj.matrixPoint[1] + obj.matrix[1]; j++) {
                                 state.fieldMatrix[i][j] = {
                                     ...state.fieldMatrix[i][j],
-                                    objId: city.id,
+                                    objId: obj.id,
+                                    typeObject: obj.type,
                                     isBuild: true
                                 }
                             }
@@ -241,16 +260,37 @@ const sliceGame = createSlice({
                 }
             } else {
 
-                if (cell.objId && state.editorMod === 'move') {
-                    const cityIdx = state.capitalCities.findIndex(c => c.id === cell.objId);
-                    if (cityIdx !== -1) {
-                        const city = state.capitalCities[cityIdx];
-                        city.isUp = true;
+                if (cell.objId) {
+                    let obj: IBaseGameObj | null = null;
+                    let idx = -1;
 
-                        for (let i = city.matrixPoint[0]; i < city.matrixPoint[0] + city.matrix[0]; i++) {
-                            for (let j = city.matrixPoint[1]; j < city.matrixPoint[1] + city.matrix[1]; j++) {
+                    switch (cell.typeObject) {
+                        case 'capitalCity':
+                            idx = state.capitalCities.findIndex(c => c.id === cell.objId);
+                            if (idx !== -1) {
+                                obj = state.capitalCities[idx];
+                            }
+
+                            break;
+                        case 'city':
+                            idx = state.cities.findIndex(c => c.id === cell.objId);
+                            if (idx !== -1) {
+                                obj = state.cities[idx];
+                            }
+                            break;
+
+                        default:
+                            break;
+                    }
+
+                    if (obj && state.editorMod === 'move') {
+                        obj.isUp = true;
+
+                        for (let i = obj.matrixPoint[0]; i < obj.matrixPoint[0] + obj.matrix[0]; i++) {
+                            for (let j = obj.matrixPoint[1]; j < obj.matrixPoint[1] + obj.matrix[1]; j++) {
                                 state.fieldMatrix[i][j] = {
                                     ...state.fieldMatrix[i][j],
+                                    typeObject: null,
                                     objId: null,
                                     isBuild: false
                                 }
@@ -258,13 +298,20 @@ const sliceGame = createSlice({
                         }
 
                         state.selectObj = {
-                            id: city.id,
-                            type: 'capitalCity',
-                            idx: cityIdx
+                            id: obj.id,
+                            type: obj.type,
+                            idx: idx
                         }
 
+                    } else if (obj && state.editorMod === 'properties') {
+                        state.selectObj = {
+                            id: obj.id,
+                            type: obj.type,
+                            idx: idx
+                        }
                     }
                 }
+
             }
 
             //state.capitalCities.push(payload);
@@ -326,6 +373,7 @@ const sliceGame = createSlice({
 
         builder.addCase(actionSetEditorMod.fulfilled, (state, { payload }) => {
             state.editorMod = payload;
+            state.selectObj = null;
         });
     }
 });

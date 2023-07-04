@@ -8,6 +8,7 @@ import BaseObject from "../objects/BaseObject";
 import { actionPointerMove, actionPointerUp, actionAddCapitalCity } from "store/actions/actionsGame";
 import Graphics from "utils/gameLib/Graphics";
 import City from "../objects/City";
+import ModalPropertiesCapital from "../objects/ModalPropertiesCapital";
 
 export type TPointMatrix = [number,number];
 
@@ -37,7 +38,7 @@ export default class EditorScene extends Scene{
     halfWidthCell = 0;
     halfHeightCell = 0;
     isInit = false;
-    
+    modalPropertiesCapital = new ModalPropertiesCapital(this);
 
     pointerDot:Graphics|null;
 
@@ -208,6 +209,7 @@ export default class EditorScene extends Scene{
         this.pointerDot.setZindex(2000);
         this.isInit = true;
         this.updateCapitals();
+        this.modalPropertiesCapital.init();
 
         // this.cities.push(new City(
         //     this,
@@ -251,6 +253,7 @@ export default class EditorScene extends Scene{
                     y,
                     objId: null,
                     terrain: 'neutral',
+                    typeObject:null,
                     isBuild: false
                 });
 
@@ -494,6 +497,15 @@ export default class EditorScene extends Scene{
         const point = store.getState().game.pointerMatrix;
         if(this.selectObj){
             this.selectObj.moveTo(point);
+        }
+    }
+
+    updateProperties(){
+        const gameState = store.getState().game;
+        if(gameState.editorMod==='properties'&&gameState.selectObj){
+            console.log('render Properties');
+        }else{
+            console.log('hide Properties');
         }
     }
 

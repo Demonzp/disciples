@@ -1,10 +1,16 @@
-import { useEffect, useState } from "react";
+import { FC, useEffect, useState } from "react";
 import classes from "./mapeditor.module.css";
 import ModalAddRace from "components/ModalAddRace";
 import { useAppDispatch, useAppSelector } from "store/hooks";
 import { actionAddCity, actionSetEditorMod } from "store/actions/actionsGame";
+import Game from "utils/gameLib/Game";
+import ModalMainCapitalCity from "components/ModalMainCapitalCity";
 
-const MapEditor = () => {
+type Props = {
+    game:Game;
+}
+
+const MapEditor:FC<Props> = ({game}) => {
     const { editorMod } = useAppSelector(state=>state.game);
     const dispatch = useAppDispatch();
     const [showAddRace, setShowAddRace] = useState(false);
@@ -14,6 +20,12 @@ const MapEditor = () => {
             return;
         }
         setShowAddRace(true); 
+    };
+
+    const [showPropsCapital, setShowPropsCapital] = useState(false);
+
+    const onTogglePropsCapital = ()=>{
+
     };
 
     useEffect(()=>{
@@ -40,15 +52,23 @@ const MapEditor = () => {
         dispatch(actionAddCity());
     };
 
+    const onProperties = ()=>{
+        dispatch(actionSetEditorMod('properties'));
+    };
+
     return (
         <>
+            <ModalMainCapitalCity game={game}/>
             <ModalAddRace show={showAddRace} onToggle={onToggle}/>
             <div className={`content ${classes.cont} row`}>
                 <label>Objects</label>
                 <button>Errase</button>
                 <div className="row">
                     <div className="col">
-                        <button disabled={editorMod==='properties'}>Propertise</button>
+                        <button 
+                            disabled={editorMod==='properties'}
+                            onClick={onProperties}
+                        >Propertise</button>
                         <button disabled={editorMod==='add-party'}>Add Party</button>
                     </div>
                     <div className="col">
