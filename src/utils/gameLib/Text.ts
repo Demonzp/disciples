@@ -15,6 +15,7 @@ export default class Text extends GameObject {
     private _fontBoundingBoxDescent = 0;
     private _heightLine = 0;
     private _delimiterIdx = 0;
+    inRow:number[]=[];
     //private _fontStretch = '';
     constructor(scene: Scene, text = '', x = 0, y = 0, width?: number) {
         super(scene, 'text', 'Text', x, y);
@@ -49,7 +50,7 @@ export default class Text extends GameObject {
 
             //console.log('allHeight = ', allHeight);
 
-            if(width>this._maxWidth){
+            if(width>this._maxWidth&&this._maxWidth>0){
                 idxesSplit.push(i);
                 allHeight += data.fontBoundingBoxAscent;
                 text = '';
@@ -87,7 +88,7 @@ export default class Text extends GameObject {
             }
         });
 
-        //console.log('splitedArr =', splitedArr);
+        //console.log('idxesSplit =', idxesSplit);
         return {splitedArr, over, allHeight, widths};
     }
 
@@ -288,21 +289,22 @@ export default class Text extends GameObject {
 
     render() {
         //console.log('_text = ', this._text);
+        const cameraPoint = this.scene.game.camera.cameraPoint();
         this._text.forEach((t,i) => {
             this.scene.ctx?.save();
-            const y = this.y+this._heightLine*i;
-            this.scene.ctx?.translate(this.x, y);
+            const y = this.y+this._heightLine*i+cameraPoint.y;
+            this.scene.ctx?.translate(this.x+cameraPoint.x, y);
             this.scene.ctx?.rotate(this.pi * this.angle);
-            this.scene.ctx?.translate(-(this.x), -(y));
+            this.scene.ctx?.translate(-(this.x+cameraPoint.x), -(y));
             this.scene.ctx!.globalAlpha = this.alpha;
             //this.scene.ctx!.font = "expanded 66px 'Press Start 2P', cursive";
             this.scene.ctx!.font = `${this._fontSize}px '${this._fontFamely}', ${this._fontStyle}`;
             if (this._isStrokeText) {
                 this.scene.ctx!.strokeStyle = this._color;
-                this.scene.ctx?.strokeText(t, this.x, y);
+                this.scene.ctx?.strokeText(t, this.x+cameraPoint.x, y);
             } else {
                 this.scene.ctx!.fillStyle = this._color;
-                this.scene.ctx?.fillText(t, this.x, y);
+                this.scene.ctx?.fillText(t, this.x+cameraPoint.x, y);
             }
             //this.scene.ctx?.drawImage(this.image, this.center.x, this.center.y, this.width, this.height);
             //console.log('text = ', this.text);
