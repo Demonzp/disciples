@@ -1,6 +1,6 @@
 import Graphics from "utils/gameLib/Graphics";
 import { IScene } from "../scenes/IScene";
-import Text from "utils/gameLib/Text";
+import Text, { TDataSymbol } from "utils/gameLib/Text";
 import Container from "utils/gameLib/Container";
 
 export default class InputEl{
@@ -14,6 +14,7 @@ export default class InputEl{
     private _mainCont: Container|undefined;
     private _beginCont: Container|undefined;
     conts:Container[] = [];
+    dataSymbols:TDataSymbol[] = [];
     isSelect = false;
     index = 0;
     constructor(public scene:IScene){
@@ -55,7 +56,7 @@ export default class InputEl{
         this.cursor.fillStyle('black');
         this.cursor.fillRect(this.textEl.width+4,0+2,2,this.height-4);
         this.cursor.alpha = 0;
-        this.scene.timer.on(this.updateCursor,0.6,this,true);
+        this.scene.timer.on(this.updateCursor,0.5,this,true);
 
         this.updateText();
         //console.log('data = ', dataSymbols);
@@ -72,23 +73,50 @@ export default class InputEl{
 
     onChange(e:KeyboardEvent){
         //e.preventDefault();
-        //console.log('e.code = ', e.code, '||', e.key, '||', e.shiftKey);
+        console.log('e.code = ', e.code, '||', e.key);
         if(this.isPositiveIntegerSymbol(e.key)){
+            
             const strPrev = this.textEl.text;
             console.log('index = ', this.index);
             const part1 = strPrev.slice(0,this.index+1);
             const part2 = strPrev.slice(this.index+1);
             const newStr = part1+e.key+part2;
+            if(newStr.length>4){
+                return;
+            }
             //console.log(part1+e.key+part2);
             this.textEl.text = newStr;
+            this.index+=1;
             this.updateText();
             console.log('onChange = ', e.key, '||', e.shiftKey);
+        }else if(e.code==='ArrowRight'){
+            this.index+=1;
+            this.updateCursorPos();
+        }else if(e.code==='ArrowLeft'){
+            this.index-=1;
+            this.updateCursorPos();
+        }else if(e.code==='Backspace'){
+            if(this.index<=-1){
+                return;
+            }
+            const strPrev = this.textEl.text;
+            console.log(strPrev);
+            const part1 = strPrev.slice(0,this.index);
+            const part2 = strPrev.slice(this.index+1);
+            console.log(part1,'||',part2);
+            const newStr = part1+part2;
+            this.textEl.text = newStr;
+            this.index-=1;
+            this.updateText();
+        }else if(e.code==='Delete'){
+            
         }
     }
 
     updateText(){
-        const dataSymbols = this.textEl.getArrSymbolData();
-        const prevSymbol = dataSymbols[0][0];
+        this.dataSymbols = this.textEl.getArrSymbolData()[0];
+        
+        
         if(this._beginCont){
             this.scene.add.remove(this._beginCont);
         }
@@ -99,61 +127,97 @@ export default class InputEl{
         if(this._mainCont){
             this.scene.add.remove(this._mainCont);
         }
+
+        if(this.dataSymbols.length<=0){
+            this._mainCont = this.scene.add.container(0+this.width/2,0+this.height/2);
+            this._mainCont.setInteractiveRect(this.width,this.height);
+            this._mainCont.on('pointerup', ()=>{
+                console.log('contMain = ');
+                //this.cursor.x = this.textEl.width+4;
+                this.index = this.dataSymbols.length-1;
+                this.updateCursorPos();
+                this.select();
+            });
+    
+            this.updateCursorPos();
+            return;
+        }
+
+        const prevSymbol = this.dataSymbols[0];
         this._beginCont = this.scene.add.container();
         this._beginCont.x = prevSymbol.x+3+prevSymbol.width/2;
         this._beginCont.y = prevSymbol.y+5+prevSymbol.height/2+1;
         this._beginCont.setInteractiveRect(prevSymbol.width,prevSymbol.height+2);
         this._beginCont.on('pointerup', ()=>{
             console.log('click on = ', 'begin');
-            this.cursor.x = 4;
+            //this.cursor.x = 4;
             this.index = -1;
+            this.updateCursorPos();
             this.select();
         });
-        const noLast = dataSymbols[0].slice(0,dataSymbols[0].length-1);
+        const noLast = this.dataSymbols.slice(0,this.dataSymbols.length-1);
         console.log('noLast = ', noLast);
         noLast.forEach((d,i)=>{
             const cont = this.scene.add.container();
-            cont.x = d.x+3+d.width/2+prevSymbol.width;
+            cont.x = d.x+3+d.width/2+4+(4*i);
             cont.y = d.y+5+d.height/2+1;
             cont.setInteractiveRect(d.width,d.height+2);
             cont.on('pointerup', ()=>{
                 console.log('click on = ', d.symbol);
-                this.cursor.x = d.x+d.width+4+(4*i);
+                //this.cursor.x = d.x+d.width+4+(4*i);
                 this.index = i;
+                this.updateCursorPos();
                 this.select();
             });
             this.conts.push(cont);
         });
 
-        this._mainCont = this.scene.add.container(0+this.width/2,0+this.height/2);
-        this._mainCont.setInteractiveRect(this.width,this.height);
+        this._mainCont = this.scene.add.container(0+this.width/2+this.textEl.width/2,0+this.height/2);
+        this._mainCont.setInteractiveRect(this.width-this.textEl.width,this.height);
         this._mainCont.on('pointerup', ()=>{
             console.log('contMain = ');
-            this.cursor.x = this.textEl.width+4;
-            this.index = dataSymbols[0].length;
+            //this.cursor.x = this.textEl.width+4;
+            this.index = this.dataSymbols.length-1;
+            this.updateCursorPos();
             this.select();
         });
+
+        this.updateCursorPos();
+    }
+
+    updateCursorPos(){
+        if(this.index<=-1){
+            this.index=-1;
+            this.cursor.x = 4;
+            return;
+        }else if(this.index>=this.dataSymbols.length-1){
+            this.index = this.dataSymbols.length-1;
+            this.cursor.x = this.textEl.width+4;
+            return;
+        }
+        const symbolData = this.dataSymbols[this.index];
+        this.cursor.x = symbolData.x+symbolData.width+4+(3.5*this.index);
     }
 
     select(){
         this.isSelect = true;
         this.borderGraphics.lineWidth(2);
-        this.borderGraphics.strokeStyle('black');
-        this.borderGraphics.strokeRect(0,0,this.width,this.height);
+        // this.borderGraphics.strokeStyle('black');
+        // this.borderGraphics.strokeRect(0,0,this.width,this.height);
     }
 
     ofSelect(){
         this.isSelect = false;
         this.borderGraphics.lineWidth(1);
-        this.borderGraphics.strokeStyle('black');
-        this.borderGraphics.strokeRect(0,0,this.width,this.height);
+        //this.borderGraphics.strokeStyle('black');
+        //this.borderGraphics.strokeRect(0,0,this.width,this.height);
         this.cursor.alpha = 0;
     }
 
     updateCursor(){
         if(this.cursor.alpha>0){
             this.cursor.alpha = 0;
-        }else if(this.select){
+        }else if(this.isSelect){
             this.cursor.alpha = 1;
         }
     }

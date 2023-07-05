@@ -195,6 +195,7 @@ export default class EditorScene extends Scene{
         this.input.on('pointerup', (pointer)=>{
             if(this.isPointerDown&&!this.isPointerMove){
                 const pointMatrix = this.findFieldCell(pointer);
+                this.inputs.forEach(inputEl=>inputEl.ofSelect());
                 //console.log('pointerUp = ', pointMatrix);
                 if(pointMatrix){
                     

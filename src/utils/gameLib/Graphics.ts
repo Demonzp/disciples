@@ -2,18 +2,27 @@ import Game, { TGameObjectType } from './Game';
 import { TParetGameObject } from './GameObject';
 import Scene from './Scene';
 
+const getInitState = ():TComands[]=> {
+  return [
+    {
+      key:'lineWidth',
+      val: 1
+    }
+  ]
+};
+
 export type TComands = {
-  key: string;
+  key: TKeys;
   val: any;
 }
 
-type TKeys = 'fillStyle'|'strokeStyle'|'lineStyle'|'fillRect';
+type TKeys = 'fillStyle'|'strokeStyle'|'lineStyle'|'fillRect'|'lineWidth'|'strokeRect'|'beginPath'|'lineTo'|'moveTo'|'stroke';
 
 export default class Graphics{
   scene: Scene;
   uid: string;
   type: TGameObjectType = 'graphics';
-  arr: TComands[] = [];
+  arr: TComands[] = getInitState();
   zIndex = 0;
   alpha = 1;
   x: number = 0;
@@ -38,7 +47,7 @@ export default class Graphics{
   }
 
   clear(){
-    this.arr = [];
+    this.arr = getInitState();
   }
 
   setZindex(val:number){
@@ -117,10 +126,13 @@ export default class Graphics{
   }
 
   strokeRect(x:number,y:number,width:number,height:number){
-    this.arr.push({
-      key: 'strokeRect',
-      val: {x,y,width,height}
-    });
+    this.addCommand('strokeRect', {x,y,width,height});
+    this.x = x;
+    this.y = y;
+    // this.arr.push({
+    //   key: 'strokeRect',
+    //   val: {x,y,width,height}
+    // });
   }
 
   lineStyle(lineWidth: number, color: number, alpha?: number){
@@ -131,11 +143,12 @@ export default class Graphics{
   }
 
   lineWidth(lineWidth: number){
+    this.addCommand('lineWidth', lineWidth);
     //console.log('lineWidth = ', lineWidth);
-    this.arr.push({
-      key: 'lineWidth',
-      val: lineWidth
-    });
+    // this.arr.push({
+    //   key: 'lineWidth',
+    //   val: lineWidth
+    // });
   }
 
   lineTo(x:number, y:number){
@@ -165,6 +178,7 @@ export default class Graphics{
     let x=0;
     let y=0;
     this.scene.ctx!.save();
+    //console.log('render grapfics!!!', this.arr);
     this.arr.forEach(comand=>{
       //console.log('render grapfics!!!', comand.key);
       switch (comand.key) {
@@ -191,7 +205,7 @@ export default class Graphics{
           //this.scene.ctx!.restore();
           break;
         case 'strokeRect':
-          //console.log('render fillRect!!!');
+          //console.log('render strokeRect!!!');
           //this.scene.ctx!.lineWidth = 3;
           //console.log(this.scene.ctx!.l);
           this.scene.ctx!.beginPath();
@@ -211,7 +225,7 @@ export default class Graphics{
           this.scene.ctx!.lineWidth = comand.val.width;
           break;
         case 'lineWidth':
-          //console.log('render lineWidth!!! = ', comand.val);
+          console.log('render lineWidth!!! = ', comand.val);
           this.scene.ctx!.lineWidth = comand.val;
           break;
         case 'moveTo':
