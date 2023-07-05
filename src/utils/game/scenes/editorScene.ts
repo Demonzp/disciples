@@ -42,6 +42,7 @@ export default class EditorScene extends Scene{
     modalPropertiesCapital = new ModalPropertiesCapital(this);
 
     pointerDot:Graphics|null;
+    inputs:InputEl[] = [];
 
     //pointerMatrix: TPointMatrix = [0,0];
     constructor(){
@@ -129,6 +130,16 @@ export default class EditorScene extends Scene{
         graficsGrid.stroke();
 
         document.addEventListener('keydown',(e)=>{
+            let isInput = false;
+            this.inputs.forEach(inputEl=>{
+                if(inputEl.isSelect){
+                    inputEl.onChange(e);
+                    isInput = true;
+                }
+            });
+            if(isInput){
+                return;
+            }
             switch(e.code) {
                 case 'ArrowLeft':
                     //console.log('Press a key');
@@ -212,7 +223,7 @@ export default class EditorScene extends Scene{
         this.updateCapitals();
         this.modalPropertiesCapital.init();
 
-        new InputEl(this);
+        this.inputs.push(new InputEl(this));
         // this.cities.push(new City(
         //     this,
         //     'dawdawd',
