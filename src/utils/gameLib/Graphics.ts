@@ -92,6 +92,8 @@ export default class Graphics{
 
   fillRect(x:number,y:number,width:number,height:number){
     this.addCommand('fillRect', {x,y,width,height});
+    this.x = x;
+    this.y = y;
     // this.arr.push({
     //   key: 'fillRect',
     //   val: {x,y,width,height}
@@ -162,6 +164,7 @@ export default class Graphics{
     const cameraPoint = this.scene.game.camera.cameraPoint();
     let x=0;
     let y=0;
+    this.scene.ctx!.save();
     this.arr.forEach(comand=>{
       //console.log('render grapfics!!!', comand.key);
       switch (comand.key) {
@@ -177,15 +180,15 @@ export default class Graphics{
           break;
         case 'fillRect':
           //console.log('render fillRect!!!');
-          this.scene.ctx!.save();
+          //this.scene.ctx!.save();
           this.scene.ctx!.globalAlpha = this.alpha;
-          x = comand.val.x+this.x+cameraPoint.x;
-          y = comand.val.y+this.y+cameraPoint.y;
+          x = this.x+cameraPoint.x;
+          y = this.y+cameraPoint.y;
           this.scene.ctx!.translate(x, y);
           this.scene.ctx!.rotate(this.pi*this.angle);
           this.scene.ctx!.translate(-(x), -(y));
           this.scene.ctx!.fillRect(x, y, comand.val.width, comand.val.height);
-          this.scene.ctx!.restore();
+          //this.scene.ctx!.restore();
           break;
         case 'strokeRect':
           //console.log('render fillRect!!!');
@@ -227,5 +230,6 @@ export default class Graphics{
           break;
       }
     });
+    this.scene.ctx!.restore();
   }
 }
