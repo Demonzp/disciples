@@ -5,6 +5,7 @@ import { useAppDispatch, useAppSelector } from "store/hooks";
 import { actionAddCity, actionSetEditorMod } from "store/actions/actionsGame";
 import Game from "utils/gameLib/Game";
 import ModalMainCapitalCity from "components/ModalMainCapitalCity";
+import EditorScene from "utils/game/scenes/editorScene";
 
 type Props = {
     game:Game;
@@ -39,9 +40,14 @@ const MapEditor:FC<Props> = ({game}) => {
     }, [editorMod]);
 
     useEffect(()=>{
-        if(selectObj&&editorMod==='properties'){
-            onTogglePropsCapital();
-        }
+        //if(selectObj){
+            const gameScene = game.scene.getScene<EditorScene>('EditorScene');
+            //console.log('update state capitalCities = ', scene);
+            if(gameScene){
+                gameScene.openProperties();
+            }
+            //onTogglePropsCapital();
+        //}
     }, [editorMod, selectObj]);
 
     const onAddRace = ()=>{
@@ -62,7 +68,7 @@ const MapEditor:FC<Props> = ({game}) => {
 
     return (
         <>
-            <ModalMainCapitalCity game={game} show={showPropsCapital} onToggle={onTogglePropsCapital}/>
+            {/* <ModalMainCapitalCity game={game} show={showPropsCapital} onToggle={onTogglePropsCapital}/> */}
             <ModalAddRace show={showAddRace} onToggle={onToggle}/>
             <div className={`content ${classes.cont} row`}>
                 <label>Objects</label>

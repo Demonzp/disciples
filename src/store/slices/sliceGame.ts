@@ -42,6 +42,12 @@ export interface IBaseGameObj {
 export interface ICapitalCity extends IBaseGameObj {
     race: TCapitalRace;
     squadOut: string[];
+    manaLife: number;
+    manaInfernal: number;
+    manaDeath: number;
+    manaRune: number;
+    manaForest: number;
+    gold: number;
 }
 
 export interface ICity extends IBaseGameObj {

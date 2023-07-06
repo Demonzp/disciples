@@ -209,8 +209,8 @@ export default class Graphics{
           //this.scene.ctx!.lineWidth = 3;
           //console.log(this.scene.ctx!.l);
           this.scene.ctx!.beginPath();
-          x = comand.val.x+cameraPoint.x;
-          y = comand.val.y+cameraPoint.y;
+          x = this.x+cameraPoint.x;
+          y = this.y+cameraPoint.y;
           this.scene.ctx!.moveTo(x, y);
           this.scene.ctx!.lineTo(x + comand.val.width, y);
           this.scene.ctx!.lineTo(x + comand.val.width, y+comand.val.height);
@@ -225,7 +225,7 @@ export default class Graphics{
           this.scene.ctx!.lineWidth = comand.val.width;
           break;
         case 'lineWidth':
-          console.log('render lineWidth!!! = ', comand.val);
+          //console.log('render lineWidth!!! = ', comand.val);
           this.scene.ctx!.lineWidth = comand.val;
           break;
         case 'moveTo':

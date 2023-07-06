@@ -120,6 +120,9 @@ export const actionPointerUp = createAsyncThunk<TActionPointerUp, TPointMatrix, 
       console.log('game/actionPointerUp');
       const editorMod = getState().game.editorMod;
       const selectObj = getState().game.selectObj;
+      if(editorMod==='properties'){
+        return {point,isCanPut:false};
+      }
       let isCanPut = true;
       if (selectObj) {
         const fieldMatrix = getState().game.fieldMatrix;
@@ -164,14 +167,20 @@ export const actionAddCapitalCity = createAsyncThunk<ICapitalCity, TCapitalRace,
         matrixPoint: [iX, jY],
         prevMatrixPoint: [iX, jY],
         matrix: [5, 5],
-        center:[2, 2],
+        center: [2, 2],
         type: 'capitalCity',
         id: Game.createId(),
         race,
         squadOut: [],
         squadIn: [],
         isCanPut,
-        isUp: isCanPut ? false : true
+        isUp: isCanPut ? false : true,
+        manaLife: 0,
+        manaInfernal: 0,
+        manaDeath: 0,
+        manaRune: 0,
+        manaForest: 0,
+        gold: 0
       }
 
       return capitalCity;
@@ -336,7 +345,13 @@ export const actionInitNewMap = createAsyncThunk<TStoreInitMap, TDataInitMap, { 
           squadOut: [],
           squadIn: [],
           isCanPut,
-          isUp: isCanPut ? false : true
+          isUp: isCanPut ? false : true,
+          manaLife: 0,
+          manaInfernal: 0,
+          manaDeath: 0,
+          manaRune: 0,
+          manaForest: 0,
+          gold: 0
         }
 
         for (let i = capitalCity.matrixPoint[0]; i < capitalCity.matrixPoint[0] + capitalCity.matrix[0]; i++) {

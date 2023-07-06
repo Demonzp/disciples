@@ -62,19 +62,19 @@ const GameComp = () => {
         }
     }, [cities, isMapInit, game]);
 
-    useEffect(() => {
-        if (game) {
-            const gameScene = game.scene.getScene<EditorScene>('EditorScene');
-            //console.log('update state capitalCities = ', scene);
-            if(
-                isMapInit
-                &&gameScene
-                &&gameScene.isInit
-            ){
-                gameScene.updateProperties();
-            }
-        }
-    }, [selectObj, editorMod, game]);
+    // useEffect(() => {
+    //     if (game) {
+    //         const gameScene = game.scene.getScene<EditorScene>('EditorScene');
+    //         //console.log('update state capitalCities = ', scene);
+    //         if(
+    //             isMapInit
+    //             &&gameScene
+    //             &&gameScene.isInit
+    //         ){
+    //             gameScene.updateProperties();
+    //         }
+    //     }
+    // }, [selectObj, editorMod, game]);
 
     useEffect(() => {
         //console.log('fieldMatrix = ', fieldMatrix);
