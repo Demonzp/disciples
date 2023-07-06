@@ -3,8 +3,8 @@ import { IScene } from "../scenes/IScene";
 import Text, { TDataSymbol } from "utils/gameLib/Text";
 import Container from "utils/gameLib/Container";
 
-export default class InputEl{
-    width = 58;
+export default class InputElString{
+    width = 140;
     height = 20;
     fontSize = 16;
     private _x = 0;
@@ -18,12 +18,12 @@ export default class InputEl{
     conts:Container[] = [];
     dataSymbols:TDataSymbol[] = [];
     isSelect = false;
-    private _value = '0';
+    private _value = '';
     index = 0;
     callbackSelect: ()=>any;
-    constructor(public scene:IScene, defaultValue = 0, callbackSelect?:()=>any){
+    constructor(public scene:IScene, defaultValue = '', public maxLength = 16, callbackSelect?:()=>any){
         this.callbackSelect = callbackSelect;
-        this._value = String(defaultValue);
+        this._value = defaultValue;
         this.create();
     }
 
@@ -53,7 +53,7 @@ export default class InputEl{
     }
 
     get value(){
-        return Number(this.textEl.text);
+        return this.textEl.text;
     }
 
     get borderGraphics(){
@@ -119,29 +119,16 @@ export default class InputEl{
         return str.replace(/^0+/, "");
     }
 
+    containsValidCharacters(str:string) {
+        return /^[A-Za-z0-9_-]+$/.test(str);
+    }
+
     onChange(e:KeyboardEvent){
         if(!this.isSelect){
             return;
         }
-        console.log('onChange');
-        //e.preventDefault();
-        //console.log('e.code = ', e.code, '||', e.key);
-        if(this.isPositiveIntegerSymbol(e.key)){
-            
-            const strPrev = this.textEl.text;
-            if(strPrev.length>3){
-                return;
-            }
-            console.log('index = ', this.index);
-            const part1 = strPrev.slice(0,this.index+1);
-            const part2 = strPrev.slice(this.index+1);
-            const newStr = part1+e.key+part2;
-            //console.log(part1+e.key+part2);
-            this.textEl.text = newStr;
-            this.index+=1;
-            this.updateText();
-            console.log('onChange = ', e.key, '||', e.shiftKey);
-        }else if(e.code==='ArrowRight'){
+        //console.log('onChange');
+        if(e.code==='ArrowRight'){
             this.index+=1;
             this.updateCursorPos();
         }else if(e.code==='ArrowLeft'){
@@ -172,6 +159,20 @@ export default class InputEl{
                 //this.index-=1;
                 this.updateText();
             }
+        }else if(e.key.length===1&&this.containsValidCharacters(e.key)){
+            const strPrev = this.textEl.text;
+            if(strPrev.length>this.maxLength){
+                return;
+            }
+            console.log('index = ', this.index);
+            const part1 = strPrev.slice(0,this.index+1);
+            const part2 = strPrev.slice(this.index+1);
+            const newStr = part1+e.key+part2;
+            //console.log(part1+e.key+part2);
+            this.textEl.text = newStr;
+            this.index+=1;
+            this.updateText();
+            console.log('onChange = ', e.key, '||', e.shiftKey);
         }
     }
 
@@ -273,11 +274,11 @@ export default class InputEl{
     }
 
     ofSelect(){
-        if(this.isSelect){
-            const noZeros = this.removeLeadingZeros(this.textEl.text);
-            this.textEl.text = noZeros;
-            this.updateText();
-        }
+        // if(this.isSelect){
+        //     const noZeros = this.removeLeadingZeros(this.textEl.text);
+        //     this.textEl.text = noZeros;
+        //     this.updateText();
+        // }
         this.isSelect = false;
         this.borderGraphics.lineWidth(1);
         //this.borderGraphics.strokeStyle('black');

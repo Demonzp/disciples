@@ -4,17 +4,21 @@ import Sprite from "utils/gameLib/Sprite";
 import { ICapitalCity } from "store/slices/sliceGame";
 import Text from "utils/gameLib/Text";
 import InputEl from "./InputEl";
+import InputElString from "./InputElString";
 
 export default class ModalPropertiesCapital{
     private _graphics:Graphics|undefined;
     fon:Sprite|undefined;
     textOwner: Text|undefined;
+    inputCapitalName: InputElString|undefined;
+    inputLordName: InputElString|undefined;
     inputManaLife: InputEl|undefined;
     inputManaInfernal: InputEl|undefined;
     inputManaDeath: InputEl|undefined;
     inputManaRune: InputEl|undefined;
     inputManaForest: InputEl|undefined;
     inputGold: InputEl|undefined;
+    allInputs:(InputEl|InputElString)[]=[];
     //width = 660;
     //height = 460;
     halfWidth = 0;
@@ -43,15 +47,49 @@ export default class ModalPropertiesCapital{
         this.textOwner.x = x-290;
         this.textOwner.y = y-110;
 
+        this.inputCapitalName = new InputElString(this.scene, capitalData.cityName, 16, ()=>{
+            this.inputManaInfernal.ofSelect();
+            this.inputManaRune.ofSelect();
+            this.inputManaDeath.ofSelect();
+            this.inputManaForest.ofSelect();
+            this.inputGold.ofSelect();
+            this.inputManaLife.ofSelect();
+            this.inputLordName.ofSelect();
+        });
+
+        this.inputCapitalName.x = x - 295;
+        this.inputCapitalName.y = y - 65;
+
+        this.allInputs.push(this.inputCapitalName);
+
+        this.inputLordName = new InputElString(this.scene, capitalData.lordName, 24, ()=>{
+            this.inputManaInfernal.ofSelect();
+            this.inputManaRune.ofSelect();
+            this.inputManaDeath.ofSelect();
+            this.inputManaForest.ofSelect();
+            this.inputGold.ofSelect();
+            this.inputManaLife.ofSelect();
+            this.inputCapitalName.ofSelect();
+        });
+
+        this.inputLordName.x = x - 295;
+        this.inputLordName.y = y + 15;
+
+        this.allInputs.push(this.inputLordName);
+
         this.inputManaLife = new InputEl(this.scene, capitalData.manaLife, ()=>{
             this.inputManaInfernal.ofSelect();
             this.inputManaRune.ofSelect();
             this.inputManaDeath.ofSelect();
             this.inputManaForest.ofSelect();
             this.inputGold.ofSelect();
+            this.inputCapitalName.ofSelect();
+            this.inputLordName.ofSelect()
         });
         this.inputManaLife.x = x-320;
         this.inputManaLife.y = y+170;
+
+        this.allInputs.push(this.inputManaLife);
 
         this.inputManaInfernal = new InputEl(this.scene, capitalData.manaInfernal, ()=>{
             this.inputManaLife.ofSelect();
@@ -59,9 +97,13 @@ export default class ModalPropertiesCapital{
             this.inputManaDeath.ofSelect();
             this.inputManaForest.ofSelect();
             this.inputGold.ofSelect();
+            this.inputCapitalName.ofSelect();
+            this.inputLordName.ofSelect()
         });
         this.inputManaInfernal.x = x-250;
         this.inputManaInfernal.y = y+170;
+
+        this.allInputs.push(this.inputManaInfernal);
 
         this.inputManaRune = new InputEl(this.scene, capitalData.manaRune, ()=>{
             this.inputManaLife.ofSelect();
@@ -69,9 +111,13 @@ export default class ModalPropertiesCapital{
             this.inputManaDeath.ofSelect();
             this.inputManaForest.ofSelect();
             this.inputGold.ofSelect();
+            this.inputCapitalName.ofSelect();
+            this.inputLordName.ofSelect()
         });
         this.inputManaRune.x = x-180;
         this.inputManaRune.y = y+170;
+
+        this.allInputs.push(this.inputManaRune);
 
         this.inputManaDeath = new InputEl(this.scene, capitalData.manaDeath, ()=>{
             this.inputManaLife.ofSelect();
@@ -79,9 +125,13 @@ export default class ModalPropertiesCapital{
             this.inputManaRune.ofSelect();
             this.inputManaForest.ofSelect();
             this.inputGold.ofSelect();
+            this.inputCapitalName.ofSelect();
+            this.inputLordName.ofSelect()
         });
         this.inputManaDeath.x = x-110;
         this.inputManaDeath.y = y+170;
+
+        this.allInputs.push(this.inputManaDeath);
 
         this.inputManaForest = new InputEl(this.scene, capitalData.manaForest, ()=>{
             this.inputManaLife.ofSelect();
@@ -89,9 +139,13 @@ export default class ModalPropertiesCapital{
             this.inputManaRune.ofSelect();
             this.inputManaDeath.ofSelect();
             this.inputGold.ofSelect();
+            this.inputCapitalName.ofSelect();
+            this.inputLordName.ofSelect()
         });
         this.inputManaForest.x = x-40;
         this.inputManaForest.y = y+170;
+
+        this.allInputs.push(this.inputManaForest);
 
         this.inputGold = new InputEl(this.scene, capitalData.manaForest, ()=>{
             this.inputManaLife.ofSelect();
@@ -99,9 +153,13 @@ export default class ModalPropertiesCapital{
             this.inputManaRune.ofSelect();
             this.inputManaDeath.ofSelect();
             this.inputManaForest.ofSelect();
+            this.inputCapitalName.ofSelect();
+            this.inputLordName.ofSelect()
         });
         this.inputGold.x = x+30;
         this.inputGold.y = y+170;
+
+        this.allInputs.push(this.inputGold);
 
         this.isOpen = true;
     }
@@ -112,6 +170,9 @@ export default class ModalPropertiesCapital{
             this.scene.add.remove(this.textOwner);
             this.fon = undefined;
             this.textOwner = undefined;
+            this.allInputs.forEach(input=>{
+                input.destroy();
+            });
         }
         this.isOpen = false;
     }
@@ -121,17 +182,15 @@ export default class ModalPropertiesCapital{
             return;
         }
         //console.log('pointerUp');
-        this.inputManaLife.ofSelect();
-        this.inputManaInfernal.ofSelect();
+        this.allInputs.forEach(input=>{
+            input.ofSelect();
+        });
     }
 
     keyboardInput(e:KeyboardEvent){
         //console.log('keyboardInput');
-        this.inputManaLife.onChange(e);
-        this.inputManaInfernal.onChange(e);
-        this.inputManaRune.onChange(e);
-        this.inputManaDeath.onChange(e);
-        this.inputManaForest.onChange(e);
-        this.inputGold.onChange(e);
+        this.allInputs.forEach(input=>{
+            input.onChange(e);
+        });
     }
 }
