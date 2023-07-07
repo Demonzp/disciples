@@ -23,6 +23,7 @@ export default class LoaderScene extends Scene{
     graphics.fillRect(0,0,0,20);
 
     this.load.spritesheet('castle-legions', './assets/imgs/castle-legions.png',{ frameWidth: 314, frameHeight: 300, endFrame: 30 });
+    this.load.spritesheet('arrows', './assets/imgs/arrows.png',{ frameWidth: 20, frameHeight: 20, endFrame: 23 });
     this.load.spritesheet('city-1', './assets/imgs/city-1.png',{ frameWidth: 314, frameHeight: 300, endFrame: 20 });
     this.load.spritesheet('city-2', './assets/imgs/city-2.png',{ frameWidth: 314, frameHeight: 300, endFrame: 20 });
     this.load.image('fon-menu-editor', './assets/imgs/fon-menu-editor.jpg');

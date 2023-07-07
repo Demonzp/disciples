@@ -5,6 +5,8 @@ import { ICapitalCity } from "store/slices/sliceGame";
 import Text from "utils/gameLib/Text";
 import InputEl from "./InputEl";
 import InputElString from "./InputElString";
+import SelectLine from "./SelectLine";
+import Button from "./Button";
 
 export default class ModalPropertiesCapital{
     private _graphics:Graphics|undefined;
@@ -12,6 +14,7 @@ export default class ModalPropertiesCapital{
     textOwner: Text|undefined;
     inputCapitalName: InputElString|undefined;
     inputLordName: InputElString|undefined;
+    selectLordType: SelectLine|undefined;
     inputManaLife: InputEl|undefined;
     inputManaInfernal: InputEl|undefined;
     inputManaDeath: InputEl|undefined;
@@ -19,6 +22,7 @@ export default class ModalPropertiesCapital{
     inputManaForest: InputEl|undefined;
     inputGold: InputEl|undefined;
     allInputs:(InputEl|InputElString)[]=[];
+    allSelects:SelectLine[]=[];
     //width = 660;
     //height = 460;
     halfWidth = 0;
@@ -76,6 +80,14 @@ export default class ModalPropertiesCapital{
         this.inputLordName.y = y + 15;
 
         this.allInputs.push(this.inputLordName);
+
+        this.selectLordType = new SelectLine(this.scene, ['mag','war','rogue']);
+        this.selectLordType.init();
+
+        this.selectLordType.x = x - 295;
+        this.selectLordType.y = y + 70;
+
+        this.allSelects.push(this.selectLordType);
 
         this.inputManaLife = new InputEl(this.scene, capitalData.manaLife, ()=>{
             this.inputManaInfernal.ofSelect();
@@ -161,6 +173,11 @@ export default class ModalPropertiesCapital{
 
         this.allInputs.push(this.inputGold);
 
+        const button = new Button(this.scene, 'Cancel');
+        button.init();
+        
+        button.x = 100;
+        button.y = 200;
         this.isOpen = true;
     }
 
@@ -173,6 +190,9 @@ export default class ModalPropertiesCapital{
             this.allInputs.forEach(input=>{
                 input.destroy();
             });
+            this.allSelects.forEach(select=>{
+                select.destroy();
+            })
         }
         this.isOpen = false;
     }
