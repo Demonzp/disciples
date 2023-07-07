@@ -1,12 +1,14 @@
 import Graphics from "utils/gameLib/Graphics";
 import { IScene } from "../scenes/IScene";
 import Sprite from "utils/gameLib/Sprite";
-import { ICapitalCity } from "store/slices/sliceGame";
+import { ICapitalCity, defaultLordTypes } from "store/slices/sliceGame";
 import Text from "utils/gameLib/Text";
 import InputEl from "./InputEl";
 import InputElString from "./InputElString";
 import SelectLine from "./SelectLine";
 import Button from "./Button";
+import store from "store/store";
+import { TChangeCapitalProps, actionDelSelectObj } from "store/actions/actionsGame";
 
 export default class ModalPropertiesCapital{
     private _graphics:Graphics|undefined;
@@ -21,8 +23,11 @@ export default class ModalPropertiesCapital{
     inputManaRune: InputEl|undefined;
     inputManaForest: InputEl|undefined;
     inputGold: InputEl|undefined;
+    btnCancel: Button|undefined;
+    btnOk: Button|undefined;
     allInputs:(InputEl|InputElString)[]=[];
     allSelects:SelectLine[]=[];
+    allBtns: Button[] = [];
     //width = 660;
     //height = 460;
     halfWidth = 0;
@@ -81,7 +86,7 @@ export default class ModalPropertiesCapital{
 
         this.allInputs.push(this.inputLordName);
 
-        this.selectLordType = new SelectLine(this.scene, ['mag','war','rogue']);
+        this.selectLordType = new SelectLine(this.scene, defaultLordTypes(), capitalData.lordType);
         this.selectLordType.init();
 
         this.selectLordType.x = x - 295;
@@ -173,12 +178,50 @@ export default class ModalPropertiesCapital{
 
         this.allInputs.push(this.inputGold);
 
-        const button = new Button(this.scene, 'Cancel');
-        button.init();
+        this.btnCancel = new Button(this.scene, 'Cancel', this.onCancel.bind(this));
+        this.btnCancel.init();
         
-        button.x = 100;
-        button.y = 200;
+        this.btnCancel.x = x+260;
+        this.btnCancel.y = y+170;
+        this.allBtns.push(this.btnCancel);
+
+        this.btnOk = new Button(this.scene, 'Ok', this.onOk.bind(this));
+        this.btnOk.init();
+        
+        this.btnOk.x = x+220;
+        this.btnOk.y = y+170;
+        this.allBtns.push(this.btnOk);
         this.isOpen = true;
+    }
+
+    onCancel(){
+        this.allInputs.forEach(input=>{
+            input.ofSelect();
+        });
+
+        store.dispatch(actionDelSelectObj());
+    }
+
+    onOk(){
+        this.allInputs.forEach(input=>{
+            input.ofSelect();
+        });
+        const cityName = this.inputCapitalName.value;
+        if(cityName.length<=0){
+            
+        }
+        const data:TChangeCapitalProps = {
+            cityName: string;
+            lordName: string;
+            lordType: TLordType;
+            manaLife: number;
+            manaInfernal: number;
+            manaDeath: number;
+            manaRune: number;
+            manaForest: number;
+            gold: number;
+        }
+        //store.dispatch(actionDelSelectObj());
     }
 
     hide(){
@@ -192,7 +235,9 @@ export default class ModalPropertiesCapital{
             });
             this.allSelects.forEach(select=>{
                 select.destroy();
-            })
+            });
+
+            this.allBtns.forEach(btn=>btn.destroy());
         }
         this.isOpen = false;
     }

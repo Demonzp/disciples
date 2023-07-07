@@ -1,5 +1,5 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { actionAddCapitalCity, actionAddCity, actionInitNewMap, actionPointerMove, actionPointerUp, actionSetEditorMod } from 'store/actions/actionsGame';
+import { actionAddCapitalCity, actionAddCity, actionChangeCapitalProps, actionDelSelectObj, actionInitNewMap, actionPointerMove, actionPointerUp, actionSetEditorMod } from 'store/actions/actionsGame';
 import { TPointMatrix } from 'utils/game/scenes/editorScene';
 
 export type TCapitalRace = 'empire' | 'legions' | 'clans' | 'elves' | 'undead';
@@ -20,6 +20,14 @@ export type TCell = {
 export type TFieldMatrix = (TCell[])[];
 
 export type TObject = 'capitalCity' | 'city' | 'squad';
+export type TLordType = 'mage' | 'warrior' | 'guildmaster';
+export const defaultLordTypes = ():TLordType[]=>{
+    return [
+        'mage',
+        'warrior',
+        'guildmaster'
+    ]
+}
 
 export type TSelectObj = {
     id: string;
@@ -44,6 +52,7 @@ export interface ICapitalCity extends IBaseGameObj {
     squadOut: string[];
     cityName: string;
     lordName: string;
+    lordType: TLordType;
     manaLife: number;
     manaInfernal: number;
     manaDeath: number;
@@ -151,6 +160,10 @@ const sliceGame = createSlice({
         }
     },
     extraReducers: (builder) => {
+        builder.addCase(actionDelSelectObj.fulfilled, (state, { payload }) => {
+            state.selectObj = null;
+        });
+
         builder.addCase(actionInitNewMap.pending, (state) => {
             state.errors = [];
         });
@@ -201,6 +214,36 @@ const sliceGame = createSlice({
         });
 
         builder.addCase(actionAddCapitalCity.rejected, (state, { payload }) => {
+
+            //const payload = action.payload as ICustomError;
+            state.errors.push(payload);
+        });
+
+        builder.addCase(actionChangeCapitalProps.pending, (state) => {
+            state.errors = [];
+        });
+
+        builder.addCase(actionChangeCapitalProps.fulfilled, (state, { payload }) => {
+            
+            if(state.capitalCities[state.selectObj.idx]){
+                state.capitalCities[state.selectObj.idx] = {
+                    ...state.capitalCities[state.selectObj.idx],
+                    cityName:payload.cityName,
+                    lordName:payload.lordName,
+                    lordType:payload.lordType,
+                    manaLife:payload.manaLife,
+                    manaInfernal:payload.manaInfernal,
+                    manaRune:payload.manaRune,
+                    manaDeath:payload.manaDeath,
+                    manaForest:payload.manaForest,
+                    gold:payload.gold
+                }
+            }
+            state.selectObj = null;
+            //state.cities.push(payload);
+        });
+
+        builder.addCase(actionChangeCapitalProps.rejected, (state, { payload }) => {
 
             //const payload = action.payload as ICustomError;
             state.errors.push(payload);

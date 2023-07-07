@@ -28,7 +28,7 @@ export default class Button{
     set x(value: number){
         this.fon.x = value;
         this.cont.x = value+(this.textEl.width+6)/2;
-        this.textEl.x = value+3;
+        this.textEl.x = value+5;
     }
 
     set y(value:number){
@@ -51,14 +51,21 @@ export default class Button{
         this._textEl.x = 0+3;
         this._textEl.y = 0+this.height-(this.height-this._textEl.height)/2;
 
-        this._fon.fillRect(0,0,this._textEl.width+6,this.height);
-        this._cont.setInteractiveRect(this._textEl.width+6,this.height);
-        this._cont.x = 0+(this._textEl.width+6)/2;
+        this._fon.fillRect(0,0,this._textEl.width+10,this.height);
+        this._cont.setInteractiveRect(this._textEl.width+10,this.height);
+        this._cont.x = 0+(this._textEl.width+10)/2;
         this._cont.y = 0+this.height/2;
         this._cont.on('pointerup', ()=>{
-            console.log('click on ',this._text);
+            if(this.onClick){
+                this.onClick();
+            }
+            //console.log('click on ',this._text);
         });
     }
 
-
+    destroy(){
+        this.scene.add.remove(this.fon);
+        this.scene.add.remove(this.cont);
+        this.scene.add.remove(this.textEl);
+    }
 }

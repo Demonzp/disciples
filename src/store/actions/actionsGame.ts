@@ -2,7 +2,7 @@ import { createAsyncThunk } from '@reduxjs/toolkit';
 import { AppState } from '../store';
 import Game from 'utils/gameLib/Game';
 import { TPointMatrix } from 'utils/game/scenes/editorScene';
-import { ICapitalCity, ICity, TCapitalRace, TCell, TEditorMod, TFieldMatrix, TRectangle, defaultRect } from 'store/slices/sliceGame';
+import { ICapitalCity, ICity, TCapitalRace, TCell, TEditorMod, TFieldMatrix, TLordType, TRectangle, defaultRect } from 'store/slices/sliceGame';
 import VirtualRect from 'utils/virtualRect';
 
 const isCanPutBuild = (fieldMatrix: TFieldMatrix, point: TPointMatrix, matrix: TPointMatrix) => {
@@ -172,6 +172,7 @@ export const actionAddCapitalCity = createAsyncThunk<ICapitalCity, TCapitalRace,
         id: Game.createId(),
         cityName: 'Runia',
         lordName: 'Lord',
+        lordType: 'mage',
         race,
         squadOut: [],
         squadIn: [],
@@ -345,6 +346,7 @@ export const actionInitNewMap = createAsyncThunk<TStoreInitMap, TDataInitMap, { 
           id: Game.createId(),
           cityName: 'Runia',
           lordName: 'Lord',
+          lordType: 'mage',
           race,
           squadOut: [],
           squadIn: [],
@@ -388,6 +390,42 @@ export const actionInitNewMap = createAsyncThunk<TStoreInitMap, TDataInitMap, { 
 
 export const actionSetEditorMod = createAsyncThunk<TEditorMod, TEditorMod, { state: AppState, rejectWithValue: any }>(
   'game/actionSetEditorMod',
+  async (data, { rejectWithValue }) => {
+    try {
+      return data;
+    } catch (error) {
+      console.error('error = ', (error as Error).message);
+      return rejectWithValue({ message: (error as Error).message, field: 'nameTable' });
+    }
+  }
+);
+
+export const actionDelSelectObj = createAsyncThunk<undefined, undefined, { state: AppState, rejectWithValue: any }>(
+  'game/actionDelSelectObj',
+  async (_, { rejectWithValue }) => {
+    try {
+      return;
+    } catch (error) {
+      console.error('error = ', (error as Error).message);
+      return rejectWithValue({ message: (error as Error).message, field: 'nameTable' });
+    }
+  }
+);
+
+export type TChangeCapitalProps = {
+  cityName: string;
+  lordName: string;
+  lordType: TLordType;
+  manaLife: number;
+  manaInfernal: number;
+  manaDeath: number;
+  manaRune: number;
+  manaForest: number;
+  gold: number;
+}
+
+export const actionChangeCapitalProps = createAsyncThunk<TChangeCapitalProps, TChangeCapitalProps, { state: AppState, rejectWithValue: any }>(
+  'game/actionDelSelectObj',
   async (data, { rejectWithValue }) => {
     try {
       return data;
