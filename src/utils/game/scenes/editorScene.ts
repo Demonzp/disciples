@@ -323,6 +323,7 @@ export default class EditorScene extends Scene {
             if (gameState.selectObj.type === 'capitalCity') {
                 console.log('properties of capital');
                 const capital = gameState.capitalCities[gameState.selectObj.idx];
+                console.log('gold = ',capital.gold);
                 this.modalPropertiesCapital.init(capital);
             }
         } else {

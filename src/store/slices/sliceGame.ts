@@ -226,6 +226,7 @@ const sliceGame = createSlice({
         builder.addCase(actionChangeCapitalProps.fulfilled, (state, { payload }) => {
             
             if(state.capitalCities[state.selectObj.idx]){
+                console.log('payload.gold = ', payload.gold);
                 state.capitalCities[state.selectObj.idx] = {
                     ...state.capitalCities[state.selectObj.idx],
                     cityName:payload.cityName,

@@ -425,7 +425,7 @@ export type TChangeCapitalProps = {
 }
 
 export const actionChangeCapitalProps = createAsyncThunk<TChangeCapitalProps, TChangeCapitalProps, { state: AppState, rejectWithValue: any }>(
-  'game/actionDelSelectObj',
+  'game/actionChangeCapitalProps',
   async (data, { rejectWithValue }) => {
     try {
       return data;

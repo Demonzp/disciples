@@ -1,14 +1,14 @@
 import Graphics from "utils/gameLib/Graphics";
 import { IScene } from "../scenes/IScene";
 import Sprite from "utils/gameLib/Sprite";
-import { ICapitalCity, defaultLordTypes } from "store/slices/sliceGame";
+import { ICapitalCity, TLordType, defaultLordTypes } from "store/slices/sliceGame";
 import Text from "utils/gameLib/Text";
 import InputEl from "./InputEl";
 import InputElString from "./InputElString";
 import SelectLine from "./SelectLine";
 import Button from "./Button";
 import store from "store/store";
-import { TChangeCapitalProps, actionDelSelectObj } from "store/actions/actionsGame";
+import { TChangeCapitalProps, actionChangeCapitalProps, actionDelSelectObj } from "store/actions/actionsGame";
 
 export default class ModalPropertiesCapital{
     private _graphics:Graphics|undefined;
@@ -28,10 +28,15 @@ export default class ModalPropertiesCapital{
     allInputs:(InputEl|InputElString)[]=[];
     allSelects:SelectLine[]=[];
     allBtns: Button[] = [];
+    errorCityName: Text|undefined;
+    errorLordName: Text|undefined;
+    allErrors: Text[] = [];
     //width = 660;
     //height = 460;
     halfWidth = 0;
     halfHeight = 0;
+    x = 0;
+    y = 0;
     isOpen = false;
     constructor(public scene:IScene){
         //this.init();
@@ -44,10 +49,16 @@ export default class ModalPropertiesCapital{
     }
 
     init(capitalData:ICapitalCity){
+        this.allInputs = [];
+        this.allSelects = [];
+        this.allBtns = [];
+        this.allErrors = [];
         this.fon = this.scene.add.sprite('modal-capital1');
         const cameraPoint = this.scene.game.camera.cameraPoint();
         const x = 0+this.scene.halfWidth-cameraPoint.x;
         const y = 0+this.scene.halfHeight-cameraPoint.y;
+        this.x = x;
+        this.y = y;
         this.fon.x = x;
         this.fon.y = y;
         
@@ -67,7 +78,7 @@ export default class ModalPropertiesCapital{
         });
 
         this.inputCapitalName.x = x - 295;
-        this.inputCapitalName.y = y - 65;
+        this.inputCapitalName.y = y - 48;
 
         this.allInputs.push(this.inputCapitalName);
 
@@ -82,7 +93,7 @@ export default class ModalPropertiesCapital{
         });
 
         this.inputLordName.x = x - 295;
-        this.inputLordName.y = y + 15;
+        this.inputLordName.y = y + 26;
 
         this.allInputs.push(this.inputLordName);
 
@@ -164,7 +175,7 @@ export default class ModalPropertiesCapital{
 
         this.allInputs.push(this.inputManaForest);
 
-        this.inputGold = new InputEl(this.scene, capitalData.manaForest, ()=>{
+        this.inputGold = new InputEl(this.scene, capitalData.gold, ()=>{
             this.inputManaLife.ofSelect();
             this.inputManaInfernal.ofSelect();
             this.inputManaRune.ofSelect();
@@ -198,6 +209,7 @@ export default class ModalPropertiesCapital{
         this.allInputs.forEach(input=>{
             input.ofSelect();
         });
+        
 
         store.dispatch(actionDelSelectObj());
     }
@@ -208,20 +220,33 @@ export default class ModalPropertiesCapital{
         });
         const cityName = this.inputCapitalName.value;
         if(cityName.length<=0){
-            
+            this.errorCityName = this.scene.add.text('Input city name');
+            this.errorCityName.color = 'red';
+            this.errorCityName.x = this.x - 292;
+            this.errorCityName.y = this.y - 58;
+            this.allErrors.push(this.errorCityName);
+        }
+
+        const lordName = this.inputLordName.value;
+        if(lordName.length<=0){
+            this.errorLordName = this.scene.add.text('Input lord name');
+            this.errorLordName.color = 'red';
+            this.errorLordName.x = this.x - 292;
+            this.errorLordName.y = this.y + 17;
+            this.allErrors.push(this.errorLordName);
         }
         const data:TChangeCapitalProps = {
-            cityName: string;
-            lordName: string;
-            lordType: TLordType;
-            manaLife: number;
-            manaInfernal: number;
-            manaDeath: number;
-            manaRune: number;
-            manaForest: number;
-            gold: number;
+            cityName,
+            lordName,
+            lordType: this.selectLordType.value as TLordType,
+            manaLife: this.inputManaLife.value,
+            manaInfernal: this.inputManaInfernal.value,
+            manaDeath: this.inputManaDeath.value,
+            manaRune: this.inputManaRune.value,
+            manaForest: this.inputManaForest.value,
+            gold: this.inputGold.value,
         }
-        //store.dispatch(actionDelSelectObj());
+        store.dispatch(actionChangeCapitalProps(data));
     }
 
     hide(){
@@ -238,6 +263,7 @@ export default class ModalPropertiesCapital{
             });
 
             this.allBtns.forEach(btn=>btn.destroy());
+            this.allErrors.forEach(t=>this.scene.add.remove(t));
         }
         this.isOpen = false;
     }
