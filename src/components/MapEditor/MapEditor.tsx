@@ -59,6 +59,7 @@ const MapEditor:FC<Props> = ({game}) => {
     };
 
     const onAddCity = ()=>{
+        console.log('onAddCity');
         dispatch(actionAddCity());
     };
 

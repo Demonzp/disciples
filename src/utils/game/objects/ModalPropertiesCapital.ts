@@ -9,9 +9,11 @@ import SelectLine from "./SelectLine";
 import Button from "./Button";
 import store from "store/store";
 import { TChangeCapitalProps, actionChangeCapitalProps, actionDelSelectObj } from "store/actions/actionsGame";
+import ModalPropertiesCapitalParty from "./ModalPropertiesCapitalParty";
 
 export default class ModalPropertiesCapital{
     private _graphics:Graphics|undefined;
+    private _modalCityParty:ModalPropertiesCapitalParty|undefined; 
     fon:Sprite|undefined;
     textOwner: Text|undefined;
     inputCapitalName: InputElString|undefined;
@@ -25,6 +27,7 @@ export default class ModalPropertiesCapital{
     inputGold: InputEl|undefined;
     btnCancel: Button|undefined;
     btnOk: Button|undefined;
+    btnParty: Button|undefined;
     allInputs:(InputEl|InputElString)[]=[];
     allSelects:SelectLine[]=[];
     allBtns: Button[] = [];
@@ -42,6 +45,7 @@ export default class ModalPropertiesCapital{
         //this.init();
         //this.halfWidth = this.width/2;
         //this.halfHeight = this.height/2;
+        this._modalCityParty = new ModalPropertiesCapitalParty(this.scene);
     }
 
     get graphics(){
@@ -199,9 +203,16 @@ export default class ModalPropertiesCapital{
         this.btnOk = new Button(this.scene, 'Ok', this.onOk.bind(this));
         this.btnOk.init();
         
-        this.btnOk.x = x+220;
+        this.btnOk.x = x+224;
         this.btnOk.y = y+170;
         this.allBtns.push(this.btnOk);
+
+        this.btnParty = new Button(this.scene, 'Party & Reserve', this.onParty.bind(this));
+        this.btnParty.init();
+        
+        this.btnParty.x = x+100;
+        this.btnParty.y = y+170;
+        this.allBtns.push(this.btnParty);
         this.isOpen = true;
     }
 
@@ -249,7 +260,33 @@ export default class ModalPropertiesCapital{
         store.dispatch(actionChangeCapitalProps(data));
     }
 
+    onParty(){
+        this._hide();
+        this._modalCityParty.init();
+    }
+
     hide(){
+        // if(this.fon){
+        //     this.scene.add.remove(this.fon);
+        //     this.scene.add.remove(this.textOwner);
+        //     this.fon = undefined;
+        //     this.textOwner = undefined;
+        //     this.allInputs.forEach(input=>{
+        //         input.destroy();
+        //     });
+        //     this.allSelects.forEach(select=>{
+        //         select.destroy();
+        //     });
+
+        //     this.allBtns.forEach(btn=>btn.destroy());
+        //     this.allErrors.forEach(t=>this.scene.add.remove(t));
+        // }
+        this._modalCityParty.hide();
+        this._hide();
+        this.isOpen = false;
+    }
+
+    private _hide(){
         if(this.fon){
             this.scene.add.remove(this.fon);
             this.scene.add.remove(this.textOwner);
@@ -265,7 +302,6 @@ export default class ModalPropertiesCapital{
             this.allBtns.forEach(btn=>btn.destroy());
             this.allErrors.forEach(t=>this.scene.add.remove(t));
         }
-        this.isOpen = false;
     }
 
     pointerUp(){

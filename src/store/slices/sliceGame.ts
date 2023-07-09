@@ -2,6 +2,47 @@ import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { actionAddCapitalCity, actionAddCity, actionChangeCapitalProps, actionDelSelectObj, actionInitNewMap, actionPointerMove, actionPointerUp, actionSetEditorMod } from 'store/actions/actionsGame';
 import { TPointMatrix } from 'utils/game/scenes/editorScene';
 
+export const baseUnits: IBaseUnit[] = [
+    {
+        id: '1',
+        level: 1,
+        defaultName: 'Archmage',
+        isCanLider: true,
+        fraction: 'empire',
+        icon: 'hero-archmage',
+        hitPoints: 65,
+        damageName: 'Lightning',
+        damage: 16,
+        sourceDamage: 'air',
+        iniative: 30,
+        leadership: 3,
+        needExperience: 150,
+        movePoints: 20,
+        discription: '',
+    },
+    {
+        id: '2',
+        level: 1,
+        defaultName: 'Pegasus Knight',
+        isCanLider: true,
+        fraction: 'empire',
+        icon: 'hero-pegasus',
+        hitPoints: 150,
+        damageName: 'Long Sword',
+        damage: 23,
+        sourceDamage: 'weapon',
+        iniative: 40,
+        leadership: 3,
+        needExperience: 150,
+        movePoints: 20,
+        discription: '',
+    }
+];
+
+export type TSourceDamage = 'weapon' | 'air' | 'life' | 'death' | 'fire' | 'water';
+
+export type TFraction = 'empire' | 'legions';
+export type TRace = 'empire' | 'legions' | 'clans' | 'elves' | 'undead' | 'dragons' | 'greenskins';
 export type TCapitalRace = 'empire' | 'legions' | 'clans' | 'elves' | 'undead';
 export const arrRaces: TCapitalRace[] = ['empire', 'legions'];
 export type TWhatScene = 'loading' | 'mainMenu' | 'mapEditorMenu' | 'mapEditor';
@@ -21,12 +62,42 @@ export type TFieldMatrix = (TCell[])[];
 
 export type TObject = 'capitalCity' | 'city' | 'squad';
 export type TLordType = 'mage' | 'warrior' | 'guildmaster';
-export const defaultLordTypes = ():TLordType[]=>{
+export const defaultLordTypes = (): TLordType[] => {
     return [
         'mage',
         'warrior',
         'guildmaster'
     ]
+};
+
+export type TParty = {
+    partyId: string;
+}
+
+export interface IBaseUnit {
+    id: string;
+    level: number;
+    defaultName: string;
+    isCanLider: boolean;
+    fraction: TFraction;
+    icon: string;
+    hitPoints: number;
+    damageName: string;
+    damage: number;
+    sourceDamage: TSourceDamage;
+    iniative: number;
+    leadership: number;
+    needExperience: number;
+    movePoints: number;
+    discription: string;
+}
+
+export interface IUnut extends IBaseUnit {
+    name: string;
+    partyId: string;
+    isLider: boolean;
+    race: TCapitalRace;
+    battlesWon: number;
 }
 
 export type TSelectObj = {
@@ -115,6 +186,7 @@ export interface IStateGame {
     isPointerDown: boolean;
     scene: TWhatScene;
     editorMod: TEditorMod;
+    units: IUnut[];
 }
 
 const initialState: IStateGame = {
@@ -132,6 +204,7 @@ const initialState: IStateGame = {
     isPointerDown: false,
     scene: 'loading',
     editorMod: 'properties',
+    units: [],
 };
 
 const sliceGame = createSlice({
@@ -224,20 +297,20 @@ const sliceGame = createSlice({
         });
 
         builder.addCase(actionChangeCapitalProps.fulfilled, (state, { payload }) => {
-            
-            if(state.capitalCities[state.selectObj.idx]){
+
+            if (state.capitalCities[state.selectObj.idx]) {
                 console.log('payload.gold = ', payload.gold);
                 state.capitalCities[state.selectObj.idx] = {
                     ...state.capitalCities[state.selectObj.idx],
-                    cityName:payload.cityName,
-                    lordName:payload.lordName,
-                    lordType:payload.lordType,
-                    manaLife:payload.manaLife,
-                    manaInfernal:payload.manaInfernal,
-                    manaRune:payload.manaRune,
-                    manaDeath:payload.manaDeath,
-                    manaForest:payload.manaForest,
-                    gold:payload.gold
+                    cityName: payload.cityName,
+                    lordName: payload.lordName,
+                    lordType: payload.lordType,
+                    manaLife: payload.manaLife,
+                    manaInfernal: payload.manaInfernal,
+                    manaRune: payload.manaRune,
+                    manaDeath: payload.manaDeath,
+                    manaForest: payload.manaForest,
+                    gold: payload.gold
                 }
             }
             state.selectObj = null;
@@ -263,6 +336,7 @@ const sliceGame = createSlice({
             }
 
             state.cities.push(payload);
+            console.log('builder actionAddCity');
         });
 
         builder.addCase(actionAddCity.rejected, (state, { payload }) => {

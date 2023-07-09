@@ -221,8 +221,9 @@ export default class EditorScene extends Scene {
         this.pointerDot = this.add.graphics();
         this.pointerDot.fillStyle('red');
         this.pointerDot.setZindex(2000);
-        //this.isInit = true;
+        
         this.updateCapitals();
+        this.isInit = true;
         //this.modalPropertiesCapital.init();
 
         //this.inputs.push(new InputEl(this));
@@ -283,6 +284,7 @@ export default class EditorScene extends Scene {
 
     updateCities() {
         const cities = store.getState().game.cities;
+        console.log('updateCities');
         cities.forEach(c => {
             const city = this.cities.find(c2 => c2.id === c.id);
             if (city) {

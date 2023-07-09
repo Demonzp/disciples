@@ -55,8 +55,9 @@ const GameComp = () => {
     useEffect(() => {
         if (game) {
             const gameScene = game.scene.getScene<EditorScene>('EditorScene');
-            //console.log('update state capitalCities = ', scene);
+            console.log('update state cities = ',gameScene.isInit);
             if(isMapInit&&gameScene&&gameScene.isInit){
+                
                 gameScene.updateCities();
             }
         }
