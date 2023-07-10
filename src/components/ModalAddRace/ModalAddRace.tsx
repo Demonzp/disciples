@@ -15,7 +15,7 @@ type TProps = {
 const ModalAddRace: FC<TProps> = ({ show, onToggle }) => {
     const { capitalCities } = useAppSelector(state => state.game);
     const [races, setRaces] = useState([]);
-    const [checkedRace, setCheckedRace] = useState<TCapitalRace>();
+    const [checkedRace, setCheckedRace] = useState<TCapitalRace|null>();
     const dispatch = useAppDispatch();
 
     useEffect(() => {
@@ -32,12 +32,17 @@ const ModalAddRace: FC<TProps> = ({ show, onToggle }) => {
     };
 
     const onAddRace = ()=>{
-        dispatch(actionAddCapitalCity(checkedRace))
-            .unwrap()
-            .then(()=>{
-                setCheckedRace(null);
-                //onToggle();
-            });
+        if(checkedRace){
+            dispatch(actionAddCapitalCity(checkedRace))
+                .unwrap()
+                .then(()=>{
+                    setCheckedRace(null);
+                    //onToggle();
+                });
+        }else{
+            onToggle();
+        }
+        
     };
 
     return (

@@ -4,12 +4,30 @@ import { TPointMatrix } from 'utils/game/scenes/editorScene';
 
 export const baseUnits: IBaseUnit[] = [
     {
+        id: '0',
+        level: 1,
+        defaultName: 'Myzrael',
+        isCanLider: true,
+        fraction: 'empire',
+        icon: 'myzrael',
+        hitPoints: 1200,
+        damageName: 'Holy Wrath',
+        damage: 250,
+        sourceDamage: 'life',
+        iniative: 80,
+        leadership: 3,
+        needExperience: 9000,
+        movePoints: 20,
+        discription: '',
+        armor: 40,
+    },
+    {
         id: '1',
         level: 1,
         defaultName: 'Archmage',
         isCanLider: true,
         fraction: 'empire',
-        icon: 'hero-archmage',
+        icon: 'archmage',
         hitPoints: 65,
         damageName: 'Lightning',
         damage: 16,
@@ -19,6 +37,7 @@ export const baseUnits: IBaseUnit[] = [
         needExperience: 150,
         movePoints: 20,
         discription: '',
+        armor: 0,
     },
     {
         id: '2',
@@ -26,7 +45,7 @@ export const baseUnits: IBaseUnit[] = [
         defaultName: 'Pegasus Knight',
         isCanLider: true,
         fraction: 'empire',
-        icon: 'hero-pegasus',
+        icon: 'pegasus',
         hitPoints: 150,
         damageName: 'Long Sword',
         damage: 23,
@@ -36,8 +55,15 @@ export const baseUnits: IBaseUnit[] = [
         needExperience: 150,
         movePoints: 20,
         discription: '',
+        armor:5
     }
 ];
+
+export type TCapitalGuard = 'Myzrael';
+
+export const capitalGuards = {
+    empire: 'Myzrael'
+};
 
 export type TSourceDamage = 'weapon' | 'air' | 'life' | 'death' | 'fire' | 'water';
 
@@ -70,8 +96,11 @@ export const defaultLordTypes = (): TLordType[] => {
     ]
 };
 
+export type TPartySide = 'left'|'right';
+
 export type TParty = {
-    partyId: string;
+    id: string;
+    side: TPartySide;
 }
 
 export interface IBaseUnit {
@@ -90,11 +119,16 @@ export interface IBaseUnit {
     needExperience: number;
     movePoints: number;
     discription: string;
+    armor: number;
 }
 
-export interface IUnut extends IBaseUnit {
+export interface IUnit extends IBaseUnit {
+    uid: string;
     name: string;
-    partyId: string;
+    partyId: string|null;
+    cityId: string|null;
+    capitalId: string|null;
+    position: number;
     isLider: boolean;
     race: TCapitalRace;
     battlesWon: number;
@@ -186,7 +220,8 @@ export interface IStateGame {
     isPointerDown: boolean;
     scene: TWhatScene;
     editorMod: TEditorMod;
-    units: IUnut[];
+    units: IUnit[];
+    parties: TParty[];
 }
 
 const initialState: IStateGame = {
@@ -205,6 +240,7 @@ const initialState: IStateGame = {
     scene: 'loading',
     editorMod: 'properties',
     units: [],
+    parties: [],
 };
 
 const sliceGame = createSlice({
@@ -246,6 +282,7 @@ const sliceGame = createSlice({
             state.cellRect = payload.rectCell;
             state.fieldRect = payload.rectField;
             state.capitalCities = payload.capitalCities;
+            state.units = payload.units;
             state.isMapInit = true;
             state.scene = 'mapEditor';
         });
@@ -261,12 +298,13 @@ const sliceGame = createSlice({
         });
 
         builder.addCase(actionAddCapitalCity.fulfilled, (state, { payload }) => {
-            if (payload.isCanPut && !payload.isUp) {
-                for (let i = payload.matrixPoint[0]; i < payload.matrixPoint[0] + payload.matrix[0]; i++) {
-                    for (let j = payload.matrixPoint[1]; j < payload.matrixPoint[1] + payload.matrix[1]; j++) {
+            const capital = payload.capital;
+            if (capital.isCanPut && !capital.isUp) {
+                for (let i = capital.matrixPoint[0]; i < capital.matrixPoint[0] + capital.matrix[0]; i++) {
+                    for (let j = capital.matrixPoint[1]; j < capital.matrixPoint[1] + capital.matrix[1]; j++) {
                         state.fieldMatrix[i][j] = {
                             ...state.fieldMatrix[i][j],
-                            objId: payload.id,
+                            objId: capital.id,
                             typeObject: 'capitalCity',
                             isBuild: true
                         }
@@ -276,14 +314,14 @@ const sliceGame = createSlice({
             } else {
                 state.editorMod = 'move';
                 state.selectObj = {
-                    id: payload.id,
+                    id: capital.id,
                     type: 'capitalCity',
                     idx: state.capitalCities.length
                 }
                 //state.selectObj = payload;
             }
-
-            state.capitalCities.push(payload);
+            state.units.push(payload.unit);
+            state.capitalCities.push(capital);
         });
 
         builder.addCase(actionAddCapitalCity.rejected, (state, { payload }) => {
@@ -499,6 +537,15 @@ const sliceGame = createSlice({
 
         builder.addCase(actionSetEditorMod.fulfilled, (state, { payload }) => {
             state.editorMod = payload;
+            const selectObj = state.selectObj;
+            if(selectObj){
+                if(selectObj.type==='capitalCity'){
+                    state.capitalCities = state.capitalCities.filter(c=>c.id!==selectObj.id);
+                    state.units = state.units.filter(u=>u.capitalId===selectObj.id);
+                }else if(selectObj.type==='city'){
+                    state.cities = state.cities.filter(c=>c.id!==selectObj.id);
+                }
+            }
             state.selectObj = null;
         });
     }

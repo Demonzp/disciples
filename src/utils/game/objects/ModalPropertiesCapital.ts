@@ -34,6 +34,7 @@ export default class ModalPropertiesCapital{
     errorCityName: Text|undefined;
     errorLordName: Text|undefined;
     allErrors: Text[] = [];
+    capitalData: ICapitalCity;
     //width = 660;
     //height = 460;
     halfWidth = 0;
@@ -45,7 +46,7 @@ export default class ModalPropertiesCapital{
         //this.init();
         //this.halfWidth = this.width/2;
         //this.halfHeight = this.height/2;
-        this._modalCityParty = new ModalPropertiesCapitalParty(this.scene);
+        this._modalCityParty = new ModalPropertiesCapitalParty(this);
     }
 
     get graphics(){
@@ -53,6 +54,7 @@ export default class ModalPropertiesCapital{
     }
 
     init(capitalData:ICapitalCity){
+        this.capitalData = capitalData;
         this.allInputs = [];
         this.allSelects = [];
         this.allBtns = [];

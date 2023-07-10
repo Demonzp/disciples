@@ -2,7 +2,7 @@ import { createAsyncThunk } from '@reduxjs/toolkit';
 import { AppState } from '../store';
 import Game from 'utils/gameLib/Game';
 import { TPointMatrix } from 'utils/game/scenes/editorScene';
-import { ICapitalCity, ICity, TCapitalRace, TCell, TEditorMod, TFieldMatrix, TLordType, TRectangle, defaultRect } from 'store/slices/sliceGame';
+import { ICapitalCity, ICity, IUnit, TCapitalRace, TCell, TEditorMod, TFieldMatrix, TLordType, TParty, TPartySide, TRectangle, baseUnits, capitalGuards, defaultRect } from 'store/slices/sliceGame';
 import VirtualRect from 'utils/virtualRect';
 
 const isCanPutBuild = (fieldMatrix: TFieldMatrix, point: TPointMatrix, matrix: TPointMatrix) => {
@@ -62,6 +62,35 @@ const isCanPutBuild = (fieldMatrix: TFieldMatrix, point: TPointMatrix, matrix: T
   }
 
   return true;
+}
+
+const createParty = (side:TPartySide):TParty=>{
+  return {
+    id: Game.createId(),
+    side
+  }
+}
+
+const getCapitalGuard = (race:TCapitalRace):IUnit=>{
+
+  switch (race) {
+    case 'empire':
+      const baseUnit = baseUnits.find(u=>u.defaultName===capitalGuards.empire);
+      return {
+          ...baseUnit,
+          uid: Game.createId(),
+          name: baseUnit.defaultName,
+          partyId: null,
+          cityId: null,
+          capitalId: null,
+          isLider: false,
+          race,
+          position: 1,
+          battlesWon: 0,
+      }
+    default:
+      break;
+  } 
 }
 
 export type TActionPointerMove = {
@@ -151,7 +180,12 @@ export const actionPointerUp = createAsyncThunk<TActionPointerUp, TPointMatrix, 
   }
 );
 
-export const actionAddCapitalCity = createAsyncThunk<ICapitalCity, TCapitalRace, { state: AppState, rejectWithValue: any }>(
+type TActionAddCapital = {
+  capital:ICapitalCity,
+  unit:IUnit
+}
+
+export const actionAddCapitalCity = createAsyncThunk<TActionAddCapital, TCapitalRace, { state: AppState, rejectWithValue: any }>(
   'game/actonAddCapitalCity',
   async (race, { getState, rejectWithValue }) => {
     try {
@@ -186,7 +220,12 @@ export const actionAddCapitalCity = createAsyncThunk<ICapitalCity, TCapitalRace,
         gold: 0
       }
 
-      return capitalCity;
+      const unit = getCapitalGuard(race);
+
+      return {
+        capital:capitalCity,
+        unit
+      };
     } catch (error) {
       console.error('error = ', (error as Error).message);
       return rejectWithValue({ message: (error as Error).message, field: 'nameTable' });
@@ -236,6 +275,7 @@ export type TStoreInitMap = {
   rectCell: TRectangle;
   rectField: TRectangle;
   capitalCities: ICapitalCity[];
+  units: IUnit[];
 }
 
 export const actionInitNewMap = createAsyncThunk<TStoreInitMap, TDataInitMap, { state: AppState, rejectWithValue: any }>(
@@ -316,6 +356,7 @@ export const actionInitNewMap = createAsyncThunk<TStoreInitMap, TDataInitMap, { 
       }
 
       const capitalCities: ICapitalCity[] = [];
+      const units: IUnit[] = [];
       data.race.forEach(race => {
         //console.log('add race = ', race);
         let iX = 1;
@@ -370,16 +411,18 @@ export const actionInitNewMap = createAsyncThunk<TStoreInitMap, TDataInitMap, { 
             }
           }
         }
-
+        const unit = getCapitalGuard(race);
+        unit.capitalId = capitalCity.id;
+        units.push(unit);
         capitalCities.push(capitalCity);
       });
-
 
       return {
         matrixField: matrix,
         rectCell: storeCell,
         rectField: storeFieldRect,
         capitalCities,
+        units
       };
     } catch (error) {
       console.error('error = ', (error as Error).message);

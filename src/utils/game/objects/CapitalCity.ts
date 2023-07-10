@@ -74,6 +74,13 @@ export default class CapitalCity extends BaseObject{
         return this._sprite!;
     }
 
+    destroy(){
+        this.scene.add.remove(this.sprite);
+        if(this.fundament){
+            this.scene.add.remove(this.fundament);
+        }
+    }
+
     updateState(data:ICapitalCity){
         console.log('update State!!');
         this.matrixPoint = data.matrixPoint;

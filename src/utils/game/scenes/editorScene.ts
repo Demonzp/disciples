@@ -265,6 +265,15 @@ export default class EditorScene extends Scene {
 
     updateCapitals() {
         const capitals = store.getState().game.capitalCities;
+        if(capitals.length<this.capitalCities.length){
+            for (let i = 0; i < this.capitalCities.length; i++) {
+                const capitalCity = this.capitalCities[i];
+                if(!capitals.find(c=>c.id===capitalCity.id)){
+                    capitalCity.destroy();
+                    this.capitalCities.splice(i,1);
+                }
+            }
+        }
         capitals.forEach(c => {
             const castle = this.capitalCities.find(c2 => c2.id === c.id);
             if (castle) {
@@ -285,6 +294,16 @@ export default class EditorScene extends Scene {
     updateCities() {
         const cities = store.getState().game.cities;
         console.log('updateCities');
+        if(cities.length<this.cities.length){
+            for (let i = 0; i < this.cities.length; i++) {
+                const city = this.cities[i];
+                if(!cities.find(c=>c.id===city.id)){
+                    city.destroy();
+                    this.cities.splice(i,1);
+                }
+            }
+        }
+
         cities.forEach(c => {
             const city = this.cities.find(c2 => c2.id === c.id);
             if (city) {

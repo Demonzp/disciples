@@ -27,6 +27,13 @@ export default class City extends BaseObject{
         return this._sprite!;
     }
 
+    destroy(){
+        this.scene.add.remove(this.sprite);
+        if(this.fundament){
+            this.scene.add.remove(this.fundament);
+        }
+    }
+
     move(){
 
         const i = this.matrixPoint[0]+2;
