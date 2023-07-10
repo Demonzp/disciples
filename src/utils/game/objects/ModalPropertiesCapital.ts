@@ -13,7 +13,7 @@ import ModalPropertiesCapitalParty from "./ModalPropertiesCapitalParty";
 
 export default class ModalPropertiesCapital{
     private _graphics:Graphics|undefined;
-    private _modalCityParty:ModalPropertiesCapitalParty|undefined; 
+    private _modalCityParty = new ModalPropertiesCapitalParty(this); 
     fon:Sprite|undefined;
     textOwner: Text|undefined;
     inputCapitalName: InputElString|undefined;
@@ -46,7 +46,7 @@ export default class ModalPropertiesCapital{
         //this.init();
         //this.halfWidth = this.width/2;
         //this.halfHeight = this.height/2;
-        this._modalCityParty = new ModalPropertiesCapitalParty(this);
+        //this._modalCityParty = new ModalPropertiesCapitalParty(this);
     }
 
     get graphics(){

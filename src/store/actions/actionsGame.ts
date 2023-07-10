@@ -208,7 +208,7 @@ export const actionAddCapitalCity = createAsyncThunk<TActionAddCapital, TCapital
         lordName: 'Lord',
         lordType: 'mage',
         race,
-        squadOut: [],
+        squadOut: null,
         squadIn: [],
         isCanPut,
         isUp: isCanPut ? false : true,
@@ -221,6 +221,7 @@ export const actionAddCapitalCity = createAsyncThunk<TActionAddCapital, TCapital
       }
 
       const unit = getCapitalGuard(race);
+      capitalCity.squadIn.push(unit.uid);
 
       return {
         capital:capitalCity,
@@ -243,7 +244,7 @@ export const actionAddCity = createAsyncThunk<ICity, undefined, { state: AppStat
 
       const city: ICity = {
         owner: 'neutral',
-        squadOut: [],
+        squadOut: null,
         matrixPoint: [iX, jY],
         prevMatrixPoint: [iX, jY],
         matrix: [4, 4],
@@ -389,7 +390,7 @@ export const actionInitNewMap = createAsyncThunk<TStoreInitMap, TDataInitMap, { 
           lordName: 'Lord',
           lordType: 'mage',
           race,
-          squadOut: [],
+          squadOut: null,
           squadIn: [],
           isCanPut,
           isUp: isCanPut ? false : true,
@@ -414,6 +415,7 @@ export const actionInitNewMap = createAsyncThunk<TStoreInitMap, TDataInitMap, { 
         const unit = getCapitalGuard(race);
         unit.capitalId = capitalCity.id;
         units.push(unit);
+        capitalCity.squadIn.push(unit.uid);
         capitalCities.push(capitalCity);
       });
 

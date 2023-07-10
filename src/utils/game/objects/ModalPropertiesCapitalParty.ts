@@ -4,11 +4,13 @@ import Scene from "utils/gameLib/Scene";
 import Sprite from "utils/gameLib/Sprite";
 import Text from "utils/gameLib/Text";
 import ModalPropertiesCapital from "./ModalPropertiesCapital";
+import CapitalParty from "./CapitalParty";
 
 export default class ModalPropertiesCapitalParty{
     private _fon: Sprite|undefined;
     private _fonAddLeader: Graphics|undefined;
     private _textAddLeader: Text|undefined;
+    private _capitalParty = new CapitalParty(this);
     scene:Scene;
     x = 0;
     y = 0;
@@ -27,7 +29,8 @@ export default class ModalPropertiesCapitalParty{
         this.y = y;
         this._fon.x = x;
         this._fon.y = y;
-        if(capitalData.squadOut.length<=0){
+        this._capitalParty.init();
+        if(!capitalData.squadOut){
             this._fonAddLeader = this.scene.add.graphics();
             this._fonAddLeader.fillStyle('#7b786b');
             this._fonAddLeader.fillRect(x-364,y-185,154,320);

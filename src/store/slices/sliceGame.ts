@@ -154,7 +154,7 @@ export interface IBaseGameObj {
 
 export interface ICapitalCity extends IBaseGameObj {
     race: TCapitalRace;
-    squadOut: string[];
+    squadOut: string|null;
     cityName: string;
     lordName: string;
     lordType: TLordType;
@@ -168,7 +168,7 @@ export interface ICapitalCity extends IBaseGameObj {
 
 export interface ICity extends IBaseGameObj {
     owner: TTerrain;
-    squadOut: string[];
+    squadOut: string|null;
     lvl: number;
 }
 
