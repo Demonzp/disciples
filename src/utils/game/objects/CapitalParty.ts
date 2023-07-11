@@ -8,8 +8,8 @@ export default class CapitalParty{
     conts: Container[] = [];
     contPos: TPoint[] = [
         {
-            x:90,
-            y:185,
+            x:244,
+            y:-134,
         }
     ];
     scene: Scene;
@@ -29,8 +29,8 @@ export default class CapitalParty{
                 const cont = this.parent.scene.add.container();
                 
                 cont.x = this.parent.x+this.contPos[i].x;
-                cont.y = this.parent.y;
-                cont.setInteractiveRect(70,90);
+                cont.y = this.parent.y+this.contPos[i].y;
+                cont.setInteractiveRect(70,102);
                 cont.data = i;
                 cont.on('pointerup', ()=>{
                     console.log('cont i = ', cont.data);
