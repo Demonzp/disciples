@@ -9,6 +9,18 @@ export default class CapitalParty{
     contPos: TPoint[] = [
         {
             x:244,
+            y:-133,
+        },
+        {
+            x:244,
+            y:-26,
+        },
+        {
+            x:244,
+            y:78,
+        },
+        {
+            x:324,
             y:-134,
         }
     ];
@@ -24,8 +36,8 @@ export default class CapitalParty{
         const squadIn = capitalData.squadIn.map(uid=>{
             return units.find(u=>u.uid===uid);
         });
-        for (let i = 0; i < 1; i++) {
-            if(!squadIn.find(u=>u.position===i)){
+        for (let i = 0; i < 4; i++) {
+            //if(!squadIn.find(u=>u.position===i)){
                 const cont = this.parent.scene.add.container();
                 
                 cont.x = this.parent.x+this.contPos[i].x;
@@ -35,7 +47,7 @@ export default class CapitalParty{
                 cont.on('pointerup', ()=>{
                     console.log('cont i = ', cont.data);
                 });
-            } 
+            //} 
         }
     }
 }
