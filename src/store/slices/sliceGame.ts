@@ -2,6 +2,12 @@ import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { actionAddCapitalCity, actionAddCity, actionChangeCapitalProps, actionDelSelectObj, actionInitNewMap, actionPointerMove, actionPointerUp, actionSetEditorMod } from 'store/actions/actionsGame';
 import { TPointMatrix } from 'utils/game/scenes/editorScene';
 
+export const portretPartyOneData:{[name: string]: number} = {
+    'pegasus':0,
+    'archmage':1,
+    'myzrael':2,
+};
+
 export const baseUnits: IBaseUnit[] = [
     {
         id: '0',

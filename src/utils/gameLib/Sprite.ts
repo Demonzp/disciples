@@ -22,6 +22,8 @@ export default class Sprite extends GameObject{
   cols = 0;
   isPlay = false;
   isPlayS = false;
+  isFlipX = false;
+  isFlipY = false;
   frameIdx = 0;
   framesPos: TPoint [] = [];
   isCallbacks = false;
@@ -113,6 +115,22 @@ export default class Sprite extends GameObject{
     //console.log(key, ' = ', this.image);
   }
 
+  get flipX(){
+    return this.isFlipX;
+  }
+
+  set flipX(value:boolean){
+    this.isFlipX = value;
+  }
+
+  get flipY(){
+    return this.isFlipY;
+  }
+
+  set flipY(value:boolean){
+    this.isFlipY = value;
+  }
+  
   setFrame(idx: number){
     //const spritesheet = this.scene.load.getSpritesheet(this.key);
     if(this.spritesheet&&idx<this.spritesheet.endFrame){
@@ -250,11 +268,15 @@ export default class Sprite extends GameObject{
       this._playS();
       this.scene.ctx?.save();
       const cameraPoint = this.scene.game.camera.cameraPoint();
+      this.scene.ctx!.scale(this.isFlipX?-1:1,this.isFlipY?-1:1);
+      const x = this.isFlipX?this.width*-1:0;
+      const y = this.isFlipY?this.height*-1:0;
       this.scene.ctx?.translate(this.x+cameraPoint.x, this.y+cameraPoint.y);
       this.scene.ctx?.rotate(this.pi*this.angle);
       this.scene.ctx?.translate(-(this.x+cameraPoint.x), -(this.y+cameraPoint.y));
       this.scene.ctx!.globalAlpha = this.alpha;
-
+      
+      
       if(this.mask){
         const vCanvas = this.scene.game.vCanvas;
         const vCtx = this.scene.game.vCtx;
@@ -267,7 +289,7 @@ export default class Sprite extends GameObject{
         vCtx.globalCompositeOperation = 'source-in';
         vCtx.drawImage(this.image, 0, 0, this.image.width, this.image.height, 0, 0, this.mask.width, this.mask.height);
     
-        this.scene.ctx?.drawImage(vCanvas, 0, 0, vCanvas.width, vCanvas.height, this.center.x+cameraPoint.x, this.center.y+cameraPoint.y, this.width, this.height);
+        this.scene.ctx?.drawImage(vCanvas, 0, 0, vCanvas.width, vCanvas.height, x+this.center.x+cameraPoint.x, y+this.center.y+cameraPoint.y, this.width, this.height);
 
         vCtx.restore();
       }else{

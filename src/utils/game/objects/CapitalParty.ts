@@ -3,9 +3,12 @@ import ModalPropertiesCapitalParty from "./ModalPropertiesCapitalParty";
 import Container from "utils/gameLib/Container";
 import store from "store/store";
 import { TPoint } from "utils/gameLib/Game";
+import Sprite from "utils/gameLib/Sprite";
+import { portretPartyOneData } from "store/slices/sliceGame";
 
 export default class CapitalParty{
     conts: Container[] = [];
+    units: Sprite[] = [];
     contPos: TPoint[] = [
         {
             x:244,
@@ -17,12 +20,20 @@ export default class CapitalParty{
         },
         {
             x:244,
-            y:78,
+            y:79,
         },
         {
             x:324,
-            y:-134,
-        }
+            y:-133,
+        },
+        {
+            x:324,
+            y:-26,
+        },
+        {
+            x:324,
+            y:79,
+        },
     ];
     scene: Scene;
     constructor(private parent: ModalPropertiesCapitalParty){
@@ -36,8 +47,8 @@ export default class CapitalParty{
         const squadIn = capitalData.squadIn.map(uid=>{
             return units.find(u=>u.uid===uid);
         });
-        for (let i = 0; i < 4; i++) {
-            //if(!squadIn.find(u=>u.position===i)){
+        for (let i = 0; i < 6; i++) {
+            if(!squadIn.find(u=>u.position===i)){
                 const cont = this.parent.scene.add.container();
                 
                 cont.x = this.parent.x+this.contPos[i].x;
@@ -47,7 +58,16 @@ export default class CapitalParty{
                 cont.on('pointerup', ()=>{
                     console.log('cont i = ', cont.data);
                 });
-            //} 
+            } 
         }
+
+        squadIn.forEach(unit=>{
+            const portret = this.parent.scene.add.sprite(`portrets-party-one-${unit.fraction}`);
+            portret.setFrame(portretPartyOneData[unit.icon]);
+            portret.x = this.parent.x+this.contPos[unit.position].x+1;
+            portret.y = this.parent.y+this.contPos[unit.position].y-10;
+            portret.flipX = true;
+            this.units.push(portret);
+        });
     }
 }
