@@ -269,8 +269,16 @@ export default class Sprite extends GameObject{
       this.scene.ctx?.save();
       const cameraPoint = this.scene.game.camera.cameraPoint();
       this.scene.ctx!.scale(this.isFlipX?-1:1,this.isFlipY?-1:1);
-      const x = this.isFlipX?this.width*-1:0;
-      const y = this.isFlipY?this.height*-1:0;
+      //this.scene.ctx!.scale(-1,1);
+      let x = this.center.x+cameraPoint.x;
+      x = this.isFlipX?x*-1-this.width:x;
+      ////const y = this.height*-1;
+      
+      //const x = this.isFlipX?this.width:0;
+      const y = this.isFlipY?this.height:0;
+      console.log('spriteX = ', this.center.x+cameraPoint.x);
+      console.log('x = ', x);
+      console.log('calcX = ', this.center.x+cameraPoint.x-x);
       this.scene.ctx?.translate(this.x+cameraPoint.x, this.y+cameraPoint.y);
       this.scene.ctx?.rotate(this.pi*this.angle);
       this.scene.ctx?.translate(-(this.x+cameraPoint.x), -(this.y+cameraPoint.y));
@@ -289,11 +297,12 @@ export default class Sprite extends GameObject{
         vCtx.globalCompositeOperation = 'source-in';
         vCtx.drawImage(this.image, 0, 0, this.image.width, this.image.height, 0, 0, this.mask.width, this.mask.height);
     
-        this.scene.ctx?.drawImage(vCanvas, 0, 0, vCanvas.width, vCanvas.height, x+this.center.x+cameraPoint.x, y+this.center.y+cameraPoint.y, this.width, this.height);
+        this.scene.ctx?.drawImage(vCanvas, 0, 0, vCanvas.width, vCanvas.height, this.center.x+cameraPoint.x-x, this.center.y+cameraPoint.y-y, this.width, this.height);
 
         vCtx.restore();
       }else{
-        this.scene.ctx?.drawImage(this.image, this.sx, this.sy, this.sWidth, this.sHeight, this.center.x+cameraPoint.x, this.center.y+cameraPoint.y, this.width, this.height);
+        //this.scene.ctx!.drawImage(this.image, this.center.x+cameraPoint.x-x, this.center.y+cameraPoint.y-y, this.width, this.height);
+        this.scene.ctx?.drawImage(this.image, this.sx, this.sy, this.sWidth, this.sHeight, x, this.center.y+cameraPoint.y-y, this.width, this.height);
       }
       
       this.scene.ctx?.restore();

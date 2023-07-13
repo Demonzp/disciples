@@ -64,8 +64,10 @@ export default class CapitalParty{
         squadIn.forEach(unit=>{
             const portret = this.parent.scene.add.sprite(`portrets-party-one-${unit.fraction}`);
             portret.setFrame(portretPartyOneData[unit.icon]);
-            portret.x = this.parent.x+this.contPos[unit.position].x+1;
-            portret.y = this.parent.y+this.contPos[unit.position].y-10;
+            //portret.x = this.parent.x+this.contPos[unit.position].x+1;
+            //portret.y = this.parent.y+this.contPos[unit.position].y-10;
+            portret.x = 110;
+            portret.y = 110;
             portret.flipX = true;
             this.units.push(portret);
         });

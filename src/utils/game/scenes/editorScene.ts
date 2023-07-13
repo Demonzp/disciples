@@ -224,6 +224,7 @@ export default class EditorScene extends Scene {
         
         this.updateCapitals();
         this.isInit = true;
+
         //this.modalPropertiesCapital.init();
 
         //this.inputs.push(new InputEl(this));
