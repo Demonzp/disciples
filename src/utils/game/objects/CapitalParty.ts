@@ -5,10 +5,11 @@ import store from "store/store";
 import { TPoint } from "utils/gameLib/Game";
 import Sprite from "utils/gameLib/Sprite";
 import { portretPartyOneData } from "store/slices/sliceGame";
+import PartyPortrait from "./PartyPortrait";
 
 export default class CapitalParty{
     conts: Container[] = [];
-    units: Sprite[] = [];
+    portraits: PartyPortrait[] = [];
     contPos: TPoint[] = [
         {
             x:244,
@@ -36,7 +37,7 @@ export default class CapitalParty{
         },
     ];
     scene: Scene;
-    constructor(private parent: ModalPropertiesCapitalParty){
+    constructor(public parent: ModalPropertiesCapitalParty){
         //this.scene = this.parent.scene;
     }
 
@@ -62,14 +63,13 @@ export default class CapitalParty{
         }
 
         squadIn.forEach(unit=>{
-            const portret = this.parent.scene.add.sprite(`portrets-party-one-${unit.fraction}`);
-            portret.setFrame(portretPartyOneData[unit.icon]);
-            //portret.x = this.parent.x+this.contPos[unit.position].x+1;
-            //portret.y = this.parent.y+this.contPos[unit.position].y-10;
-            portret.x = 110;
-            portret.y = 110;
-            portret.flipX = true;
-            this.units.push(portret);
+            const portrait = new PartyPortrait(this, unit, 'right');
+            // const portret = this.parent.scene.add.sprite(`portrets-party-one-${unit.fraction}`);
+            // portret.setFrame(portretPartyOneData[unit.icon]);
+            // portret.x = this.parent.x+this.contPos[unit.position].x+1;
+            // portret.y = this.parent.y+this.contPos[unit.position].y-10;
+            // portret.flipX = true;
+            this.portraits.push(portrait);
         });
     }
 }
