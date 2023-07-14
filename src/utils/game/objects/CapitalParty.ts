@@ -56,9 +56,10 @@ export default class CapitalParty{
                 cont.y = this.parent.y+this.contPos[i].y;
                 cont.setInteractiveRect(70,102);
                 cont.data = i;
-                cont.on('pointerup', ()=>{
-                    console.log('cont i = ', cont.data);
-                });
+                // cont.on('pointerup', ()=>{
+                //     console.log('cont i = ', cont.data);
+                // });
+                cont.setZindex(1000);
             } 
         }
 
@@ -70,6 +71,23 @@ export default class CapitalParty{
             // portret.y = this.parent.y+this.contPos[unit.position].y-10;
             // portret.flipX = true;
             this.portraits.push(portrait);
+        });
+
+        this.parent.scene.input.on('pointermove',(pointer)=>{
+            this.portraits.forEach(p=>p.move(pointer));
+        });
+
+        this.parent.scene.input.on('pointerup',(pointer)=>{
+            this.portraits.forEach(p=>p.drop(pointer));
+        });
+    }
+
+    dropPortrait(point:TPoint, portret:PartyPortrait){
+        console.log('drop!!!');
+        this.conts.forEach(cont=>{
+            if(cont.isOnPointer(point)){
+                console.log('on container = ', cont.data);
+            }
         });
     }
 }

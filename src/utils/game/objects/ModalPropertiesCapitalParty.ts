@@ -22,7 +22,7 @@ export default class ModalPropertiesCapitalParty{
         const capitalData = this.parent.capitalData;
         const cameraPoint = this.scene.game.camera.cameraPoint();
         this._fon = this.scene.add.sprite('modal-city-party');
-        
+        this._fon.setZindex(1000);
         const x = 0+this.scene.halfWidth-cameraPoint.x;
         const y = 0+this.scene.halfHeight-cameraPoint.y;
         this.x = x;
@@ -34,11 +34,12 @@ export default class ModalPropertiesCapitalParty{
             this._fonAddLeader = this.scene.add.graphics();
             this._fonAddLeader.fillStyle('#7b786b');
             this._fonAddLeader.fillRect(x-364,y-185,154,320);
-
+            this._fonAddLeader.setZindex(1000);
             this._textAddLeader = this.scene.add.text('In capital city you can not create a party',0,0,148);
             this._textAddLeader.fontSize = 16;
             this._textAddLeader.x = x-364+(154-this._textAddLeader.width)/2;
             this._textAddLeader.y = y-185+this._textAddLeader.height+6;
+            this._textAddLeader.setZindex(1000);
         }
     }
 

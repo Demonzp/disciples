@@ -3,6 +3,7 @@ import Graphics from './Graphics';
 import Text from './Text';
 import { TPointer } from './InputEvent';
 import Scene from './Scene';
+import { TPoint } from './Game';
 
 export default class Container extends GameObject{
 
@@ -46,7 +47,7 @@ export default class Container extends GameObject{
     super.setInteractiveRect(width, height, x, y);
   }
 
-  isOnPointer(pointer: TPointer): GameObject|undefined{
+  isOnPointer(pointer: TPoint): GameObject|undefined{
     let colligionObj = super.isOnPointer(pointer);
     if(colligionObj){
       return this;

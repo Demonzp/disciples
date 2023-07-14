@@ -244,6 +244,11 @@ export default class GameObject{
       default:
         break;
     }
+
+    if(this.isMouseEvent){
+      this.scene.add.addInteractiveObj(this);
+    }
+
     return id;
   }
 
@@ -275,19 +280,20 @@ export default class GameObject{
       &&this.pointerOverCallbacks.length===0
     ){
       this.isMouseEvent = false;
+      this.scene.add.delInteractiveObj(this);
     }
   }
 
-  isOnPointer(pointer: TPointer): GameObject|undefined{
+  isOnPointer(point: TPoint): GameObject|undefined{
     
-    if(!this.isMouseEvent){
-      return;
-    }
+    // if(!this.isMouseEvent){
+    //   return;
+    // }
 
     //console.log('isOnPointer');
     const worldPointer = {
-      x: pointer.x-this.scene.game.camera.cameraPoint().x,
-      y: pointer.y-this.scene.game.camera.cameraPoint().y
+      x: point.x-this.scene.game.camera.cameraPoint().x,
+      y: point.y-this.scene.game.camera.cameraPoint().y
     }
     if(this._parent instanceof Container){
       const globalPos = this.getGlobalPos();

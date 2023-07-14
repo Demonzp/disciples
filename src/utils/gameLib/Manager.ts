@@ -1,4 +1,5 @@
 import Container from './Container';
+import { TPoint } from './Game';
 import GameObject from './GameObject';
 import Graphics from './Graphics';
 import { TPointer } from './InputEvent';
@@ -10,6 +11,7 @@ import VirtualRectangle from './VirtualRectangle';
 export default class Manager{
   scene: Scene;
   gameObjects: (GameObject|Graphics)[] = [];
+  interactiveObjects: GameObject[] = [];
 
   constructor(scene: Scene){
     this.scene = scene;
@@ -44,9 +46,15 @@ export default class Manager{
       for (let i = 0; i < data.length; i++) {
         const obj = data[i];
         this.gameObjects = this.gameObjects.filter(obj2=>obj2.uid!==obj.uid);
+        if(obj instanceof GameObject&&obj.isMouseEvent){
+          this.interactiveObjects = this.interactiveObjects.filter(obj2=>obj2.uid!==obj.uid);
+        }
       }
     }else{
       this.gameObjects = this.gameObjects.filter(obj=>obj.uid!==data.uid);
+      if(data instanceof GameObject&&data.isMouseEvent){
+        this.interactiveObjects = this.interactiveObjects.filter(obj=>obj.uid!==data.uid);
+      }
     }
     //console.log('after del = ', this.gameObjects.length);
   }
@@ -55,10 +63,40 @@ export default class Manager{
     this.gameObjects = [];
   }
 
-  findOnPointerObject(point:TPointer){
+  addInteractiveObj(obj:GameObject){
+    const interObj = this.interactiveObjects.find(o=>o.uid===obj.uid);
+    if(!interObj){
+      this.interactiveObjects.push(obj);
+    }
+  }
+
+  delInteractiveObj(obj:GameObject){
+    this.interactiveObjects = this.interactiveObjects.filter(o=>o.uid!==obj.uid);
+  }
+
+  findOnPointerObject(point:TPoint){
     //console.log('findOnPointerObject');
-    for (let j = 0; j < this.gameObjects.length; j++) {
-      const object = this.gameObjects[j];
+    // for (let j = 0; j < this.gameObjects.length; j++) {
+    //   const object = this.gameObjects[j];
+    //     if(object instanceof GameObject){
+    //       const colligionObj = object.isOnPointer(point);
+    //       if(colligionObj){
+    //         //colligionObj.onPointerDown(point); 
+    //         return colligionObj; 
+    //       }
+    //       //console.log('go next');
+    //       if(object instanceof Container){
+    //         const colligionObj = object.isOnPointer(point);
+    //         if(colligionObj){
+    //           //colligionObj.onPointerDown(point); 
+    //           return colligionObj; 
+    //         }
+    //       }
+    //     }
+    // }
+    console.log('interactiveObjects = ', this.interactiveObjects.length);
+    for (let j = 0; j < this.interactiveObjects.length; j++) {
+      const object = this.interactiveObjects[j];
         if(object instanceof GameObject){
           const colligionObj = object.isOnPointer(point);
           if(colligionObj){
