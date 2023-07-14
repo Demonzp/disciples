@@ -50,6 +50,7 @@ export default class Container extends GameObject{
   isOnPointer(pointer: TPoint): GameObject|undefined{
     let colligionObj = super.isOnPointer(pointer);
     if(colligionObj){
+      //console.log('container isOnPointer');
       return this;
     }
 

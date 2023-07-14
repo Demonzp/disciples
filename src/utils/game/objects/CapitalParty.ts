@@ -60,6 +60,7 @@ export default class CapitalParty{
                 //     console.log('cont i = ', cont.data);
                 // });
                 cont.setZindex(1000);
+                this.conts.push(cont);
             } 
         }
 
@@ -83,8 +84,9 @@ export default class CapitalParty{
     }
 
     dropPortrait(point:TPoint, portret:PartyPortrait){
-        console.log('drop!!!');
+        //console.log('drop!!!');
         this.conts.forEach(cont=>{
+            //console.log(cont.data);
             if(cont.isOnPointer(point)){
                 console.log('on container = ', cont.data);
             }
