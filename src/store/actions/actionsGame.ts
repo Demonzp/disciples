@@ -433,6 +433,23 @@ export const actionInitNewMap = createAsyncThunk<TStoreInitMap, TDataInitMap, { 
   }
 );
 
+export type TDataMoveCitySquadIn = {
+  unitId: string;
+  toIdx: number;
+}
+
+export const actionMoveCitySquadIn = createAsyncThunk<TDataMoveCitySquadIn, TDataMoveCitySquadIn, { state: AppState, rejectWithValue: any }>(
+  'game/actionMoveCitySquadIn',
+  async (data, { rejectWithValue }) => {
+    try {
+      return data;
+    } catch (error) {
+      console.error('error = ', (error as Error).message);
+      return rejectWithValue({ message: (error as Error).message, field: 'nameTable' });
+    }
+  }
+);
+
 export const actionSetEditorMod = createAsyncThunk<TEditorMod, TEditorMod, { state: AppState, rejectWithValue: any }>(
   'game/actionSetEditorMod',
   async (data, { rejectWithValue }) => {

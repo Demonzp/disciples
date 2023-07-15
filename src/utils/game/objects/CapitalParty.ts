@@ -4,8 +4,9 @@ import Container from "utils/gameLib/Container";
 import store from "store/store";
 import { TPoint } from "utils/gameLib/Game";
 import Sprite from "utils/gameLib/Sprite";
-import { portretPartyOneData } from "store/slices/sliceGame";
+import { IUnit, portretPartyOneData } from "store/slices/sliceGame";
 import PartyPortrait from "./PartyPortrait";
+import { actionMoveCitySquadIn } from "store/actions/actionsGame";
 
 export default class CapitalParty{
     conts: Container[] = [];
@@ -13,7 +14,7 @@ export default class CapitalParty{
     contPos: TPoint[] = [
         {
             x:244,
-            y:-133,
+            y:-132,
         },
         {
             x:244,
@@ -21,11 +22,11 @@ export default class CapitalParty{
         },
         {
             x:244,
-            y:79,
+            y:80,
         },
         {
             x:324,
-            y:-133,
+            y:-132,
         },
         {
             x:324,
@@ -33,9 +34,12 @@ export default class CapitalParty{
         },
         {
             x:324,
-            y:79,
+            y:80,
         },
     ];
+    squadIn: IUnit[] = [];
+    idPointUp = '';
+    idPointMove = '';
     scene: Scene;
     constructor(public parent: ModalPropertiesCapitalParty){
         //this.scene = this.parent.scene;
@@ -45,11 +49,11 @@ export default class CapitalParty{
         const capitalData = this.parent.parent.capitalData;
         console.log('capitalData = ', capitalData);
         const units = store.getState().game.units;
-        const squadIn = capitalData.squadIn.map(uid=>{
+        this.squadIn = capitalData.squadIn.map(uid=>{
             return units.find(u=>u.uid===uid);
         });
         for (let i = 0; i < 6; i++) {
-            if(!squadIn.find(u=>u.position===i)){
+            if(!this.squadIn.find(u=>u.position===i)){
                 const cont = this.parent.scene.add.container();
                 
                 cont.x = this.parent.x+this.contPos[i].x;
@@ -64,7 +68,7 @@ export default class CapitalParty{
             } 
         }
 
-        squadIn.forEach(unit=>{
+        this.squadIn.forEach(unit=>{
             const portrait = new PartyPortrait(this, unit, 'right');
             // const portret = this.parent.scene.add.sprite(`portrets-party-one-${unit.fraction}`);
             // portret.setFrame(portretPartyOneData[unit.icon]);
@@ -74,22 +78,46 @@ export default class CapitalParty{
             this.portraits.push(portrait);
         });
 
-        this.parent.scene.input.on('pointermove',(pointer)=>{
+        this.idPointMove = this.parent.scene.input.on('pointermove',(pointer)=>{
             this.portraits.forEach(p=>p.move(pointer));
         });
 
-        this.parent.scene.input.on('pointerup',(pointer)=>{
+        this.idPointUp = this.parent.scene.input.on('pointerup',(pointer)=>{
             this.portraits.forEach(p=>p.drop(pointer));
         });
     }
 
+    hide(){
+        this.conts.forEach(cont=>this.parent.scene.add.remove(cont));
+        this.conts = [];
+        this.portraits.forEach(p=>p.destroy());
+        this.portraits = [];
+
+        this.parent.scene.input.off(this.idPointMove);
+        this.parent.scene.input.off(this.idPointUp);
+    }
+
     dropPortrait(point:TPoint, portret:PartyPortrait){
         //console.log('drop!!!');
-        this.conts.forEach(cont=>{
-            //console.log(cont.data);
+        for (let i = 0; i < this.conts.length; i++) {
+            const cont = this.conts[i];
             if(cont.isOnPointer(point)){
-                console.log('on container = ', cont.data);
+                //console.log('on container = ', cont.data);
+                store.dispatch(actionMoveCitySquadIn({
+                    unitId: portret.unit.id,
+                    toIdx: cont.data,
+                }));
+                return;
             }
-        });
+        }
+
+        portret.toStart();
+        // this.conts.forEach(cont=>{
+        //     //console.log(cont.data);
+        //     if(cont.isOnPointer(point)){
+        //         //console.log('on container = ', cont.data);
+
+        //     }
+        // });
     }
 }

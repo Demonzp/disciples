@@ -218,6 +218,12 @@ export default class ModalPropertiesCapital{
         this.isOpen = true;
     }
 
+    updateUnits(){
+        if(this._modalCityParty.isPartyProps){
+            this._modalCityParty.updateUnits();
+        }
+    }
+
     onCancel(){
         this.allInputs.forEach(input=>{
             input.ofSelect();

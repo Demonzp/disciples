@@ -1,5 +1,5 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { actionAddCapitalCity, actionAddCity, actionChangeCapitalProps, actionDelSelectObj, actionInitNewMap, actionPointerMove, actionPointerUp, actionSetEditorMod } from 'store/actions/actionsGame';
+import { actionAddCapitalCity, actionAddCity, actionChangeCapitalProps, actionDelSelectObj, actionInitNewMap, actionMoveCitySquadIn, actionPointerMove, actionPointerUp, actionSetEditorMod } from 'store/actions/actionsGame';
 import { TPointMatrix } from 'utils/game/scenes/editorScene';
 
 export const portretPartyOneData:{[name: string]: number} = {
@@ -275,6 +275,21 @@ const sliceGame = createSlice({
         }
     },
     extraReducers: (builder) => {
+        builder.addCase(actionMoveCitySquadIn.pending, (state) => {
+            state.errors = [];
+        });
+
+        builder.addCase(actionMoveCitySquadIn.fulfilled, (state, { payload }) => {
+            const unitIdx = state.units.findIndex(u=>u.id===payload.unitId);
+            state.units[unitIdx].position = payload.toIdx;
+        });
+
+        builder.addCase(actionMoveCitySquadIn.rejected, (state, { payload }) => {
+
+            //const payload = action.payload as ICustomError;
+            state.errors.push(payload);
+        });
+
         builder.addCase(actionDelSelectObj.fulfilled, (state, { payload }) => {
             state.selectObj = null;
         });
@@ -542,9 +557,9 @@ const sliceGame = createSlice({
         });
 
         builder.addCase(actionSetEditorMod.fulfilled, (state, { payload }) => {
-            state.editorMod = payload;
+            
             const selectObj = state.selectObj;
-            if(selectObj){
+            if(selectObj&&state.editorMod!=='properties'){
                 if(selectObj.type==='capitalCity'){
                     state.capitalCities = state.capitalCities.filter(c=>c.id!==selectObj.id);
                     state.units = state.units.filter(u=>u.capitalId===selectObj.id);
@@ -552,6 +567,7 @@ const sliceGame = createSlice({
                     state.cities = state.cities.filter(c=>c.id!==selectObj.id);
                 }
             }
+            state.editorMod = payload;
             state.selectObj = null;
         });
     }

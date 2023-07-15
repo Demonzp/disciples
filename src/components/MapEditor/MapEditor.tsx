@@ -8,97 +8,105 @@ import ModalMainCapitalCity from "components/ModalMainCapitalCity";
 import EditorScene from "utils/game/scenes/editorScene";
 
 type Props = {
-    game:Game;
+    game: Game;
 }
 
-const MapEditor:FC<Props> = ({game}) => {
-    const { editorMod, selectObj } = useAppSelector(state=>state.game);
+const MapEditor: FC<Props> = ({ game }) => {
+    const { editorMod, selectObj, units } = useAppSelector(state => state.game);
     const dispatch = useAppDispatch();
     const [showAddRace, setShowAddRace] = useState(false);
-    const onToggle = ()=>{
-        if(showAddRace){
+    const onToggle = () => {
+        if (showAddRace) {
             dispatch(actionSetEditorMod('properties'));
             return;
         }
-        setShowAddRace(true); 
+        setShowAddRace(true);
     };
 
     const [showPropsCapital, setShowPropsCapital] = useState(false);
 
-    const onTogglePropsCapital = ()=>setShowPropsCapital(!showPropsCapital);
+    const onTogglePropsCapital = () => setShowPropsCapital(!showPropsCapital);
 
-    useEffect(()=>{
+    useEffect(() => {
         switch (editorMod) {
             case 'add-race':
                 onToggle();
                 break;
-        
+
             default:
                 setShowAddRace(false);
                 break;
         }
     }, [editorMod]);
 
-    useEffect(()=>{
+    useEffect(() => {
         //if(selectObj){
-            const gameScene = game.scene.getScene<EditorScene>('EditorScene');
-            //console.log('update state capitalCities = ', scene);
-            if(gameScene){
-                gameScene.openProperties();
-            }
-            //onTogglePropsCapital();
+        const gameScene = game.scene.getScene<EditorScene>('EditorScene');
+        //console.log('update state capitalCities = ', scene);
+        if (gameScene) {
+            gameScene.openProperties();
+        }
+        //onTogglePropsCapital();
         //}
     }, [editorMod, selectObj]);
 
-    const onAddRace = ()=>{
+    useEffect(() => {
+        const gameScene = game.scene.getScene<EditorScene>('EditorScene');
+        //console.log('update state capitalCities = ', scene);
+        if (gameScene) {
+            gameScene.updateUnits();
+        }
+    }, [units]);
+
+    const onAddRace = () => {
         dispatch(actionSetEditorMod('add-race'));
     };
 
-    const onMove = ()=>{
+    const onMove = () => {
         dispatch(actionSetEditorMod('move'));
     };
 
-    const onAddCity = ()=>{
+    const onAddCity = () => {
         console.log('onAddCity');
         dispatch(actionAddCity());
     };
 
-    const onProperties = ()=>{
+    const onProperties = () => {
         dispatch(actionSetEditorMod('properties'));
     };
 
     return (
         <>
             {/* <ModalMainCapitalCity game={game} show={showPropsCapital} onToggle={onTogglePropsCapital}/> */}
-            <ModalAddRace show={showAddRace} onToggle={onToggle}/>
+            <ModalAddRace show={showAddRace} onToggle={onToggle} />
             <div className={`content ${classes.cont} row`}>
                 <label>Objects</label>
                 <button>Errase</button>
                 <div className="row">
                     <div className="col">
-                        <button 
-                            disabled={editorMod==='properties'}
+                        <button
+                            disabled={editorMod === 'properties'}
                             onClick={onProperties}
                         >Propertise</button>
-                        <button disabled={editorMod==='add-party'}>Add Party</button>
+                        <button disabled={editorMod === 'add-party'}>Add Party</button>
                     </div>
                     <div className="col">
                         <button
-                            onClick={onMove} 
-                            disabled={editorMod==='move'}
+                            onClick={onMove}
+                            disabled={editorMod === 'move'}
                         >Move</button>
-                        <button disabled={editorMod==='copy-party'}>Copy Party</button>
+                        <button disabled={editorMod === 'copy-party'}>Copy Party</button>
                     </div>
                 </div>
-                <button 
+                <button
                     onClick={onAddRace}
-                    disabled={editorMod==='add-race'}
+                    disabled={editorMod === 'add-race'}
                 >Add Race</button>
                 <div className="row">
                     <div className="col">
                         <button
                             onClick={onAddCity}
-                            disabled={editorMod==='add-city'} 
+                            disabled={editorMod === 'add-city'}
                         >City</button>
                         <button >Mage</button>
                         <button >Trainer</button>
@@ -111,7 +119,7 @@ const MapEditor:FC<Props> = ({game}) => {
                 </div>
             </div>
         </>
-        
+
     );
 };
 

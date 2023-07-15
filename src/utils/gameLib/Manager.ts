@@ -2,7 +2,6 @@ import Container from './Container';
 import { TPoint } from './Game';
 import GameObject from './GameObject';
 import Graphics from './Graphics';
-import { TPointer } from './InputEvent';
 import Scene from './Scene';
 import Sprite from './Sprite';
 import Text from './Text';

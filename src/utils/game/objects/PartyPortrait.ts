@@ -42,29 +42,15 @@ export default class PartyPortrait {
             this.startPoint.y = this.cont.y - pointer.y;
         });
 
-        // this.parent.parent.scene.input.on('pointermove',(pointer)=>{
-        //     if(!this.isCanMove){
-        //         return;
-        //     }
-        //     this.cont.x = pointer.x+this.startPoint.x;
-        //     this.cont.y = pointer.y+this.startPoint.y;
-        // });
+    }
 
-        // this.parent.parent.scene.input.on('pointerup',(pointer)=>{
-        //     if(!this.isCanMove){
-        //         return;
-        //     }
-        //     this.parent.dropPortrait(pointer,this);
-        //     this.isCanMove = false;
-        // });
+    destroy(){
+        this.parent.parent.scene.add.remove(this.cont);
+    }
 
-        // this.cont.on('pointermove', (pointer)=>{
-        //     if(!this.isCanMove){
-        //         return;
-        //     }
-        //     this.cont.x = pointer.x+this.startPoint.x;
-        //     this.cont.y = pointer.y+this.startPoint.y;
-        // });
+    toStart(){
+        this.cont.x = this.parent.parent.x + this.parent.contPos[this.unit.position].x;
+        this.cont.y = this.parent.parent.y + this.parent.contPos[this.unit.position].y;
     }
 
     move(point: TPoint) {

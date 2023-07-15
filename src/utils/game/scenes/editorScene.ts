@@ -330,6 +330,13 @@ export default class EditorScene extends Scene {
         }
     }
 
+    updateUnits(){
+        if(this.modalPropertiesCapital.isOpen
+        ){
+            this.modalPropertiesCapital.updateUnits();
+        }
+    }
+
     // updateProperties(){
     //     const gameState = store.getState().game;
     //     if(gameState.editorMod==='properties'&&gameState.selectObj){
