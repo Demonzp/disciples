@@ -83,7 +83,22 @@ export default class CapitalParty{
         });
 
         this.idPointUp = this.parent.scene.input.on('pointerup',(pointer)=>{
-            this.portraits.forEach(p=>p.drop(pointer));
+            let isNext = true;
+            this.portraits.forEach(p=>{
+                if(p.isCanMove){
+                    isNext = false;
+                }
+                p.drop(pointer);
+            });
+
+            if(isNext){
+                const cont = this.conts.find(c=>c.isOnPointer(pointer));
+                if(cont){
+                    //console.log('add Unit to = ', cont.data);
+                    this.parent.modalAddUnit.show(cont.data);
+                }
+            }
+            
         });
     }
 
@@ -112,12 +127,5 @@ export default class CapitalParty{
         }
 
         portret.toStart();
-        // this.conts.forEach(cont=>{
-        //     //console.log(cont.data);
-        //     if(cont.isOnPointer(point)){
-        //         //console.log('on container = ', cont.data);
-
-        //     }
-        // });
     }
 }

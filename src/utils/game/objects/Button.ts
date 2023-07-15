@@ -37,6 +37,12 @@ export default class Button{
         this.textEl.y = value+this.height-(this.height-this._textEl.height)/2;
     }
 
+    setZindex(value: number){
+        this._fon.setZindex(value);
+        this._textEl.setZindex(value+1);
+        this.cont.setZindex(value);
+    }
+
     init(){
         this._fon = this.scene.add.graphics();
         this._fon.fillStyle('#686f7d');
@@ -53,6 +59,7 @@ export default class Button{
 
         this._fon.fillRect(0,0,this._textEl.width+10,this.height);
         this._cont.setInteractiveRect(this._textEl.width+10,this.height);
+        this.width = this._textEl.width+10;
         this._cont.x = 0+(this._textEl.width+10)/2;
         this._cont.y = 0+this.height/2;
         this._cont.on('pointerup', ()=>{

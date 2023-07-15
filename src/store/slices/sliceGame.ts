@@ -6,6 +6,10 @@ export const portretPartyOneData:{[name: string]: number} = {
     'pegasus':0,
     'archmage':1,
     'myzrael':2,
+    'squire':7,
+    'archer':8,
+    'apprentice':9,
+    'acolyt':10,
 };
 
 export const baseUnits: IBaseUnit[] = [
@@ -14,11 +18,14 @@ export const baseUnits: IBaseUnit[] = [
         level: 1,
         defaultName: 'Myzrael',
         isCanLider: true,
+        isHero: false,
         fraction: 'empire',
         icon: 'myzrael',
         hitPoints: 1200,
         damageName: 'Holy Wrath',
+        chancesHit: 80,
         damage: 250,
+        heal:0,
         sourceDamage: 'life',
         iniative: 80,
         leadership: 3,
@@ -32,11 +39,14 @@ export const baseUnits: IBaseUnit[] = [
         level: 1,
         defaultName: 'Archmage',
         isCanLider: true,
+        isHero: true,
         fraction: 'empire',
         icon: 'archmage',
         hitPoints: 65,
         damageName: 'Lightning',
+        chancesHit: 70,
         damage: 16,
+        heal:0,
         sourceDamage: 'air',
         iniative: 30,
         leadership: 3,
@@ -50,11 +60,14 @@ export const baseUnits: IBaseUnit[] = [
         level: 1,
         defaultName: 'Pegasus Knight',
         isCanLider: true,
+        isHero: true,
         fraction: 'empire',
         icon: 'pegasus',
         hitPoints: 150,
         damageName: 'Long Sword',
+        chancesHit: 80,
         damage: 23,
+        heal:0,
         sourceDamage: 'weapon',
         iniative: 40,
         leadership: 3,
@@ -62,6 +75,90 @@ export const baseUnits: IBaseUnit[] = [
         movePoints: 20,
         discription: '',
         armor:5
+    },
+    {
+        id: '3',
+        level: 1,
+        defaultName: 'Squire',
+        isCanLider: true,
+        isHero: false,
+        fraction: 'empire',
+        icon: 'squire',
+        hitPoints: 110,
+        damageName: 'Sword',
+        chancesHit: 80,
+        damage: 25,
+        heal:0,
+        sourceDamage: 'weapon',
+        iniative: 40,
+        leadership: 2,
+        needExperience: 75,
+        movePoints: 20,
+        discription: '',
+        armor:0
+    },
+    {
+        id: '4',
+        level: 1,
+        defaultName: 'Archer',
+        isCanLider: true,
+        isHero: false,
+        fraction: 'empire',
+        icon: 'archer',
+        hitPoints: 50,
+        damageName: 'Arrow',
+        chancesHit: 70,
+        damage: 25,
+        heal:0,
+        sourceDamage: 'weapon',
+        iniative: 50,
+        leadership: 2,
+        needExperience: 70,
+        movePoints: 20,
+        discription: '',
+        armor:0
+    },
+    {
+        id: '5',
+        level: 1,
+        defaultName: 'Apprentice',
+        isCanLider: true,
+        isHero: false,
+        fraction: 'empire',
+        icon: 'apprentice',
+        hitPoints: 50,
+        damageName: 'Lightning',
+        chancesHit: 70,
+        damage: 15,
+        heal:0,
+        sourceDamage: 'air',
+        iniative: 30,
+        leadership: 2,
+        needExperience: 70,
+        movePoints: 20,
+        discription: '',
+        armor:0
+    },
+    {
+        id: '6',
+        level: 1,
+        defaultName: 'Acolyt',
+        isCanLider: true,
+        isHero: false,
+        fraction: 'empire',
+        icon: 'acolyt',
+        hitPoints: 50,
+        damageName: 'Healing',
+        chancesHit: 100,
+        damage: 0,
+        heal: 22,
+        sourceDamage: 'life',
+        iniative: 10,
+        leadership: 2,
+        needExperience: 70,
+        movePoints: 20,
+        discription: '',
+        armor:0
     }
 ];
 
@@ -75,6 +172,13 @@ export type TSourceDamage = 'weapon' | 'air' | 'life' | 'death' | 'fire' | 'wate
 
 export type TFraction = 'empire' | 'legions';
 export type TRace = 'empire' | 'legions' | 'clans' | 'elves' | 'undead' | 'dragons' | 'greenskins';
+export const arrGlobalRaces = (): TRace[]=>{
+    return [
+        'empire', 
+        'legions', 
+        'clans',
+    ];
+};
 export type TCapitalRace = 'empire' | 'legions' | 'clans' | 'elves' | 'undead';
 export const arrRaces: TCapitalRace[] = ['empire', 'legions'];
 export type TWhatScene = 'loading' | 'mainMenu' | 'mapEditorMenu' | 'mapEditor';
@@ -114,11 +218,14 @@ export interface IBaseUnit {
     level: number;
     defaultName: string;
     isCanLider: boolean;
+    isHero: boolean;
     fraction: TFraction;
     icon: string;
     hitPoints: number;
+    chancesHit: number;
     damageName: string;
     damage: number;
+    heal: number;
     sourceDamage: TSourceDamage;
     iniative: number;
     leadership: number;

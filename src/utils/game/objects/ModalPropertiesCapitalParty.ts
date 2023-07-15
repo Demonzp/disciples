@@ -1,4 +1,3 @@
-import store from "store/store";
 import Graphics from "utils/gameLib/Graphics";
 import Scene from "utils/gameLib/Scene";
 import Sprite from "utils/gameLib/Sprite";
@@ -6,6 +5,7 @@ import Text from "utils/gameLib/Text";
 import ModalPropertiesCapital from "./ModalPropertiesCapital";
 import CapitalParty from "./CapitalParty";
 import Button from "./Button";
+import ModalPropertiesAddUnit from "./ModalPropertiesAddUnit";
 
 export default class ModalPropertiesCapitalParty{
     private _fon: Sprite|undefined;
@@ -13,6 +13,7 @@ export default class ModalPropertiesCapitalParty{
     private _textAddLeader: Text|undefined;
     private _capitalParty = new CapitalParty(this);
     private _btnOk:Button|undefined;
+    modalAddUnit = new ModalPropertiesAddUnit(this);
     isPartyProps = false;
     scene:Scene;
     x = 0;
@@ -44,9 +45,14 @@ export default class ModalPropertiesCapitalParty{
             this._textAddLeader.y = y-185+this._textAddLeader.height+6;
             this._textAddLeader.setZindex(1000);
         }
-        this._btnOk = new Button(this.scene,'Ok');
-        this._btnOk.x = x;
-        this._btnOk.y = y-280;
+        this._btnOk = new Button(this.scene,'Ok', ()=>{
+            this.hide();
+            this.parent.init(this.parent.capitalData);
+        });
+        this._btnOk.init();
+        this._btnOk.x = x-this._btnOk.width/2;
+        this._btnOk.y = y+200;
+        this._btnOk.setZindex(1000);
         this.isPartyProps = true;
     }
 
@@ -56,6 +62,7 @@ export default class ModalPropertiesCapitalParty{
             this.scene.add.remove(this._fonAddLeader);
             this.scene.add.remove(this._textAddLeader);
             this._capitalParty.hide();
+            this._btnOk.destroy();
             this.isPartyProps = false;
         }
     }
