@@ -6,10 +6,10 @@ export const portretPartyOneData:{[name: string]: number} = {
     'pegasus':0,
     'archmage':1,
     'myzrael':2,
-    'squire':7,
-    'archer':8,
-    'apprentice':9,
-    'acolyt':10,
+    'squire':6,
+    'archer':7,
+    'apprentice':8,
+    'acolyt':9,
 };
 
 export const baseUnits: IBaseUnit[] = [
@@ -17,6 +17,7 @@ export const baseUnits: IBaseUnit[] = [
         id: '0',
         level: 1,
         defaultName: 'Myzrael',
+        isCapitalGuard: true,
         isCanLider: true,
         isHero: false,
         fraction: 'empire',
@@ -39,6 +40,7 @@ export const baseUnits: IBaseUnit[] = [
         level: 1,
         defaultName: 'Archmage',
         isCanLider: true,
+        isCapitalGuard: false,
         isHero: true,
         fraction: 'empire',
         icon: 'archmage',
@@ -59,6 +61,7 @@ export const baseUnits: IBaseUnit[] = [
         id: '2',
         level: 1,
         defaultName: 'Pegasus Knight',
+        isCapitalGuard: false,
         isCanLider: true,
         isHero: true,
         fraction: 'empire',
@@ -80,6 +83,7 @@ export const baseUnits: IBaseUnit[] = [
         id: '3',
         level: 1,
         defaultName: 'Squire',
+        isCapitalGuard: false,
         isCanLider: true,
         isHero: false,
         fraction: 'empire',
@@ -101,6 +105,7 @@ export const baseUnits: IBaseUnit[] = [
         id: '4',
         level: 1,
         defaultName: 'Archer',
+        isCapitalGuard: false,
         isCanLider: true,
         isHero: false,
         fraction: 'empire',
@@ -122,6 +127,7 @@ export const baseUnits: IBaseUnit[] = [
         id: '5',
         level: 1,
         defaultName: 'Apprentice',
+        isCapitalGuard: false,
         isCanLider: true,
         isHero: false,
         fraction: 'empire',
@@ -143,6 +149,7 @@ export const baseUnits: IBaseUnit[] = [
         id: '6',
         level: 1,
         defaultName: 'Acolyt',
+        isCapitalGuard: false,
         isCanLider: true,
         isHero: false,
         fraction: 'empire',
@@ -217,6 +224,7 @@ export interface IBaseUnit {
     id: string;
     level: number;
     defaultName: string;
+    isCapitalGuard: boolean;
     isCanLider: boolean;
     isHero: boolean;
     fraction: TFraction;

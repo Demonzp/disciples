@@ -37,6 +37,14 @@ export default class Button{
         this.textEl.y = value+this.height-(this.height-this._textEl.height)/2;
     }
 
+    set disable(value: boolean){
+        if(value){
+            this.fon.fillStyle('#99a2b0');
+        }else{
+            this._fon.fillStyle('#686f7d');
+        }
+    }
+
     setZindex(value: number){
         this._fon.setZindex(value);
         this._textEl.setZindex(value+1);
