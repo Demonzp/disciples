@@ -46,6 +46,9 @@ export default class ModalPropertiesCapitalParty{
             this._textAddLeader.setZindex(1000);
         }
         this._btnOk = new Button(this.scene,'Ok', ()=>{
+            if(this.modalAddUnit.isShow){
+                return;
+            }
             this.hide();
             this.parent.init(this.parent.capitalData);
         });

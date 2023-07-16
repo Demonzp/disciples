@@ -22,6 +22,7 @@ export const baseUnits: IBaseUnit[] = [
         isHero: false,
         fraction: 'empire',
         icon: 'myzrael',
+        numCells: 1,
         hitPoints: 1200,
         damageName: 'Holy Wrath',
         chancesHit: 80,
@@ -44,6 +45,7 @@ export const baseUnits: IBaseUnit[] = [
         isHero: true,
         fraction: 'empire',
         icon: 'archmage',
+        numCells: 1,
         hitPoints: 65,
         damageName: 'Lightning',
         chancesHit: 70,
@@ -66,6 +68,7 @@ export const baseUnits: IBaseUnit[] = [
         isHero: true,
         fraction: 'empire',
         icon: 'pegasus',
+        numCells: 1,
         hitPoints: 150,
         damageName: 'Long Sword',
         chancesHit: 80,
@@ -88,6 +91,7 @@ export const baseUnits: IBaseUnit[] = [
         isHero: false,
         fraction: 'empire',
         icon: 'squire',
+        numCells: 1,
         hitPoints: 110,
         damageName: 'Sword',
         chancesHit: 80,
@@ -110,6 +114,7 @@ export const baseUnits: IBaseUnit[] = [
         isHero: false,
         fraction: 'empire',
         icon: 'archer',
+        numCells: 1,
         hitPoints: 50,
         damageName: 'Arrow',
         chancesHit: 70,
@@ -132,6 +137,7 @@ export const baseUnits: IBaseUnit[] = [
         isHero: false,
         fraction: 'empire',
         icon: 'apprentice',
+        numCells: 1,
         hitPoints: 50,
         damageName: 'Lightning',
         chancesHit: 70,
@@ -154,6 +160,7 @@ export const baseUnits: IBaseUnit[] = [
         isHero: false,
         fraction: 'empire',
         icon: 'acolyt',
+        numCells: 1,
         hitPoints: 50,
         damageName: 'Healing',
         chancesHit: 100,
@@ -229,6 +236,7 @@ export interface IBaseUnit {
     isHero: boolean;
     fraction: TFraction;
     icon: string;
+    numCells: number;
     hitPoints: number;
     chancesHit: number;
     damageName: string;
@@ -249,7 +257,7 @@ export interface IUnit extends IBaseUnit {
     partyId: string|null;
     cityId: string|null;
     capitalId: string|null;
-    position: number;
+    position: [number,number];
     isLider: boolean;
     race: TCapitalRace;
     battlesWon: number;

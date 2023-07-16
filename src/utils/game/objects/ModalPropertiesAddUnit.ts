@@ -40,8 +40,13 @@ export default class ModalPropertiesAddUnit {
             y: 147
         }
     ]
+    private _isShow = false;
     constructor(public parent: ModalPropertiesCapitalParty) {
 
+    }
+
+    get isShow(){
+        return this._isShow;
     }
 
     show(position: number) {
@@ -70,12 +75,27 @@ export default class ModalPropertiesAddUnit {
         });
 
         this._arrowUp = this.parent.scene.add.sprite('arrows', this.parent.x+40, this.parent.y+100);
-        this._arrowUp.on('pointerup', ()=>{});
+        this._arrowUp.on('pointerup', this.onPrev, this);
+        this._arrowUp.setFrame(14);
 
         this._arrowDown = this.parent.scene.add.sprite('arrows', this.parent.x+40, this.parent.y+140);
-        this._arrowDown.on('pointerup', this.onNext.bind(this));
+        this._arrowDown.on('pointerup', this.onNext, this);
 
         this.initListUnits();
+        const btnOk = new Button(this.parent.scene, 'Ok');
+        btnOk.init();
+        btnOk.x = this.parent.x-100;
+        btnOk.y = this.parent.y+203;
+        this.buttons.push(btnOk);
+
+        const btnCancel = new Button(this.parent.scene, 'CANCEL', ()=>{
+            this.hide();
+        });
+        btnCancel.init();
+        btnCancel.x = this.parent.x-20;
+        btnCancel.y = this.parent.y+203;
+        this.buttons.push(btnCancel);
+        this._isShow = true;
     }
 
     initListUnits() {
@@ -86,19 +106,6 @@ export default class ModalPropertiesAddUnit {
             return false;
         });
 
-        // let end = this.selectIdx+this.numItems-1;
-
-        // if(end>this.units.length-1){
-        //     end = this.units.length-1;
-        // }
-        // for (let i = this.selectIdx; i < end; i++) {
-            
-        // }
-        // units.forEach(u=>{
-        //     const item = new ItemSelectUnit(this.parent.scene, u);
-        //     item.init();
-        //     this.itemUnits.push(item);
-        // });
         this.listPos.start = 0;
         this.posPortrets.forEach((pos, i) => {
             if (i < this.units.length) {
@@ -113,13 +120,42 @@ export default class ModalPropertiesAddUnit {
         this.itemUnits[0].setIsSelect(true);
     }
 
+    onPrev(){
+        const prevIdx = this.selectIdx-1;
+        if(prevIdx<0){
+            return;
+        }
+        //console.log(this.listPos.start,'||', prevIdx,'||',this.listPos.end);
+        if(this.listPos.start>prevIdx){
+            this.listPos.start = this.listPos.start-1;
+            this.listPos.end = this.listPos.end-1;
+            if(this.listPos.start<0){
+                this.listPos.start = 0;
+                this.listPos.end = this.listPos.end+1;
+            }
+            this.itemUnits.forEach(item=>item.destroy());
+            this.itemUnits = [];
+            let j = 0;
+            for (let i = this.listPos.start; i <= this.listPos.end; i++) {
+                const unit = this.units[i];
+                const listItem = new ItemSelectUnit(this.parent.scene, unit, this.selectUnit.bind(this));
+                listItem.init();
+                listItem.setPosition(this.parent.x+this.posPortrets[j].x,this.parent.y+this.posPortrets[j].y);
+                this.itemUnits.push(listItem);
+                j++;
+            }
+        }
+
+        this.selectByUnit(this.units[prevIdx]);
+    }
+
     onNext(){
         const nextIdx = this.selectIdx+1;
         if(nextIdx>this.units.length-1){
             return;
         }
-
-        //this.selectIdx = nextIdx;
+        //this._arrowUp.setFrame(22);
+        //console.log(this.listPos.end,'||',nextIdx);
         if(this.listPos.end<nextIdx){
             this.listPos.start = this.listPos.start+1;
             this.listPos.end = this.listPos.end+1;
@@ -129,12 +165,13 @@ export default class ModalPropertiesAddUnit {
             this.itemUnits.forEach(item=>item.destroy());
             this.itemUnits = [];
             let j = 0;
-            for (let i = this.listPos.start; i < this.listPos.end; i++) {
+            for (let i = this.listPos.start; i <= this.listPos.end; i++) {
                 const unit = this.units[i];
                 const listItem = new ItemSelectUnit(this.parent.scene, unit, this.selectUnit.bind(this));
                 listItem.init();
                 listItem.setPosition(this.parent.x+this.posPortrets[j].x,this.parent.y+this.posPortrets[j].y);
                 this.itemUnits.push(listItem);
+                j++;
             }
         } 
 
@@ -151,10 +188,32 @@ export default class ModalPropertiesAddUnit {
         this.itemUnits.forEach(item=>item.setIsSelect(false));
         item.setIsSelect(true);
         this.selectIdx = this.units.findIndex(u=>u.id===item.unit.id);
+        if(this.selectIdx>0){
+            this._arrowUp.setFrame(22);
+        }else{
+            this._arrowUp.setFrame(14);
+        }
+
+        if(this.selectIdx<this.units.length-1){
+            this._arrowDown.setFrame(5);
+        }else{
+            this._arrowDown.setFrame(1);
+        }
         //console.log(unit.defaultName);
     }
 
     hide() {
+        if(this._fon){
+            this.parent.scene.add.remove(this._fon);
+            this.parent.scene.add.remove(this._arrowDown);
+            this.parent.scene.add.remove(this._arrowUp);
+            this.itemUnits.forEach(item=>item.destroy());
+            this.buttons.forEach(btn=>btn.destroy());
+            this._isShow = false;
+        }
+    }
 
+    onOk(){
+        
     }
 }

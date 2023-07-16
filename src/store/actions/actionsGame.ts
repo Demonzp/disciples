@@ -2,7 +2,7 @@ import { createAsyncThunk } from '@reduxjs/toolkit';
 import { AppState } from '../store';
 import Game from 'utils/gameLib/Game';
 import { TPointMatrix } from 'utils/game/scenes/editorScene';
-import { ICapitalCity, ICity, IUnit, TCapitalRace, TCell, TEditorMod, TFieldMatrix, TLordType, TParty, TPartySide, TRectangle, baseUnits, capitalGuards, defaultRect } from 'store/slices/sliceGame';
+import { IBaseUnit, ICapitalCity, ICity, IUnit, TCapitalRace, TCell, TEditorMod, TFieldMatrix, TLordType, TParty, TPartySide, TRectangle, baseUnits, capitalGuards, defaultRect } from 'store/slices/sliceGame';
 import VirtualRect from 'utils/virtualRect';
 
 const isCanPutBuild = (fieldMatrix: TFieldMatrix, point: TPointMatrix, matrix: TPointMatrix) => {
@@ -85,7 +85,7 @@ const getCapitalGuard = (race:TCapitalRace):IUnit=>{
           capitalId: null,
           isLider: false,
           race,
-          position: 1,
+          position: [1,0],
           battlesWon: 0,
       }
     default:
@@ -435,7 +435,7 @@ export const actionInitNewMap = createAsyncThunk<TStoreInitMap, TDataInitMap, { 
 
 export type TDataMoveCitySquadIn = {
   unitId: string;
-  toIdx: number;
+  toIdx: [number,number];
 }
 
 export const actionMoveCitySquadIn = createAsyncThunk<TDataMoveCitySquadIn, TDataMoveCitySquadIn, { state: AppState, rejectWithValue: any }>(
@@ -488,6 +488,24 @@ export type TChangeCapitalProps = {
 
 export const actionChangeCapitalProps = createAsyncThunk<TChangeCapitalProps, TChangeCapitalProps, { state: AppState, rejectWithValue: any }>(
   'game/actionChangeCapitalProps',
+  async (data, { rejectWithValue }) => {
+    try {
+      return data;
+    } catch (error) {
+      console.error('error = ', (error as Error).message);
+      return rejectWithValue({ message: (error as Error).message, field: 'nameTable' });
+    }
+  }
+);
+
+export type TAddUnitToCapital = {
+  capitalId: string;
+  position: [number,number];
+  unit: IBaseUnit;
+};
+
+export const actionAddUnitToCapital = createAsyncThunk<TAddUnitToCapital, TAddUnitToCapital, { state: AppState, rejectWithValue: any }>(
+  'game/actionAddUnitToCapital',
   async (data, { rejectWithValue }) => {
     try {
       return data;

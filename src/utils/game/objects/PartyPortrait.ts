@@ -16,7 +16,7 @@ export default class PartyPortrait {
     }
 
     create() {
-        this.cont = this.parent.parent.scene.add.container(this.parent.parent.x + this.parent.contPos[this.unit.position].x, this.parent.parent.y + this.parent.contPos[this.unit.position].y);
+        this.cont = this.parent.parent.scene.add.container(this.parent.parent.x + this.parent.contPos[this.unit.position[0]][this.unit.position[1]].x, this.parent.parent.y + this.parent.contPos[this.unit.position[0]][this.unit.position[1]].y);
         this.cont.setInteractiveRect(70, 95);
         this.cont.setZindex(1001);
         this.sprite = this.parent.parent.scene.add.sprite(`portrets-party-one-${this.unit.fraction}`);
@@ -49,8 +49,8 @@ export default class PartyPortrait {
     }
 
     toStart(){
-        this.cont.x = this.parent.parent.x + this.parent.contPos[this.unit.position].x;
-        this.cont.y = this.parent.parent.y + this.parent.contPos[this.unit.position].y;
+        this.cont.x = this.parent.parent.x + this.parent.contPos[this.unit.position[0]][this.unit.position[1]].x;
+        this.cont.y = this.parent.parent.y + this.parent.contPos[this.unit.position[0]][this.unit.position[1]].y;
     }
 
     move(point: TPoint) {
