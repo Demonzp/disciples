@@ -1,5 +1,5 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { actionAddCapitalCity, actionAddCity, actionChangeCapitalProps, actionDelSelectObj, actionInitNewMap, actionMoveCitySquadIn, actionPointerMove, actionPointerUp, actionSetEditorMod } from 'store/actions/actionsGame';
+import { actionAddCapitalCity, actionAddCity, actionAddUnitToCapital, actionChangeCapitalProps, actionDelSelectObj, actionDoubleMoveCitySquadIn, actionInitNewMap, actionMoveCitySquadIn, actionPointerMove, actionPointerUp, actionSetEditorMod } from 'store/actions/actionsGame';
 import { TPointMatrix } from 'utils/game/scenes/editorScene';
 
 export const portretPartyOneData:{[name: string]: number} = {
@@ -393,7 +393,7 @@ const sliceGame = createSlice({
         },
 
         addCapitalCity(state, action: PayloadAction<ICapitalCity>) {
-            console.log('add capitalCity to state');
+            //console.log('add capitalCity to state');
             state.capitalCities.push(action.payload);
         }
     },
@@ -403,11 +403,30 @@ const sliceGame = createSlice({
         });
 
         builder.addCase(actionMoveCitySquadIn.fulfilled, (state, { payload }) => {
-            const unitIdx = state.units.findIndex(u=>u.id===payload.unitId);
+            const unitIdx = state.units.findIndex(u=>u.uid===payload.unitId);
             state.units[unitIdx].position = payload.toIdx;
         });
 
         builder.addCase(actionMoveCitySquadIn.rejected, (state, { payload }) => {
+
+            //const payload = action.payload as ICustomError;
+            state.errors.push(payload);
+        });
+
+        builder.addCase(actionDoubleMoveCitySquadIn.pending, (state) => {
+            state.errors = [];
+        });
+
+        builder.addCase(actionDoubleMoveCitySquadIn.fulfilled, (state, { payload }) => {
+            const unitOneIdx = state.units.findIndex(u=>u.uid===payload.unitId);
+            const unitTwoIdx = state.units.findIndex(u=>u.uid===payload.toUnitId);
+            const posOne = state.units[unitTwoIdx].position;
+            const posTwo = state.units[unitOneIdx].position
+            state.units[unitOneIdx].position = posOne;
+            state.units[unitTwoIdx].position = posTwo;
+        });
+
+        builder.addCase(actionDoubleMoveCitySquadIn.rejected, (state, { payload }) => {
 
             //const payload = action.payload as ICustomError;
             state.errors.push(payload);
@@ -481,7 +500,7 @@ const sliceGame = createSlice({
         builder.addCase(actionChangeCapitalProps.fulfilled, (state, { payload }) => {
 
             if (state.capitalCities[state.selectObj.idx]) {
-                console.log('payload.gold = ', payload.gold);
+                //console.log('payload.gold = ', payload.gold);
                 state.capitalCities[state.selectObj.idx] = {
                     ...state.capitalCities[state.selectObj.idx],
                     cityName: payload.cityName,
@@ -505,6 +524,23 @@ const sliceGame = createSlice({
             state.errors.push(payload);
         });
 
+        builder.addCase(actionAddUnitToCapital.pending, (state) => {
+            state.errors = [];
+        });
+
+        builder.addCase(actionAddUnitToCapital.fulfilled, (state, { payload }) => {
+            //console.log('builder actionAddUnitToCapital');
+            state.units.push(payload.unit);
+            const capitalIdx = state.capitalCities.findIndex(c=>c.id===payload.capitalId);
+            state.capitalCities[capitalIdx].squadIn.push(payload.unit.uid);
+        });
+
+        builder.addCase(actionAddUnitToCapital.rejected, (state, { payload }) => {
+
+            //const payload = action.payload as ICustomError;
+            state.errors.push(payload);
+        });
+
         builder.addCase(actionAddCity.pending, (state) => {
             state.errors = [];
         });
@@ -518,7 +554,7 @@ const sliceGame = createSlice({
             }
 
             state.cities.push(payload);
-            console.log('builder actionAddCity');
+            //console.log('builder actionAddCity');
         });
 
         builder.addCase(actionAddCity.rejected, (state, { payload }) => {
@@ -532,7 +568,7 @@ const sliceGame = createSlice({
             const cell = state.fieldMatrix[point[0]][point[1]];
 
             if (state.selectObj) {
-                console.log('isCanPut = ', payload.isCanPut);
+                //console.log('isCanPut = ', payload.isCanPut);
                 if (payload.isCanPut) {
                     let obj: IBaseGameObj | null = null;
                     switch (state.selectObj.type) {

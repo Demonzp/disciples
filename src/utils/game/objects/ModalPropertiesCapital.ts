@@ -13,7 +13,7 @@ import ModalPropertiesCapitalParty from "./ModalPropertiesCapitalParty";
 
 export default class ModalPropertiesCapital{
     private _graphics:Graphics|undefined;
-    private _modalCityParty = new ModalPropertiesCapitalParty(this); 
+    modalCityParty = new ModalPropertiesCapitalParty(this); 
     fon:Sprite|undefined;
     textOwner: Text|undefined;
     inputCapitalName: InputElString|undefined;
@@ -55,6 +55,7 @@ export default class ModalPropertiesCapital{
 
     init(capitalData:ICapitalCity){
         this.capitalData = capitalData;
+        console.log('ModalPropertiesCapital init');
         this.allInputs = [];
         this.allSelects = [];
         this.allBtns = [];
@@ -219,8 +220,9 @@ export default class ModalPropertiesCapital{
     }
 
     updateUnits(){
-        if(this._modalCityParty.isPartyProps){
-            this._modalCityParty.updateUnits();
+        console.log('updateUnits');
+        if(this.modalCityParty.isPartyProps){
+            this.modalCityParty.updateUnits();
         }
     }
 
@@ -270,7 +272,7 @@ export default class ModalPropertiesCapital{
 
     onParty(){
         this._hide();
-        this._modalCityParty.init();
+        this.modalCityParty.init();
     }
 
     hide(){
@@ -289,12 +291,12 @@ export default class ModalPropertiesCapital{
         //     this.allBtns.forEach(btn=>btn.destroy());
         //     this.allErrors.forEach(t=>this.scene.add.remove(t));
         // }
-        this._modalCityParty.hide();
+        this.modalCityParty.hide();
         this._hide();
         this.isOpen = false;
     }
 
-    private _hide(){
+    _hide(){
         if(this.fon){
             this.scene.add.remove(this.fon);
             this.scene.add.remove(this.textOwner);

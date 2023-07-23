@@ -39,7 +39,7 @@ export default class EditorScene extends Scene {
     halfWidthCell = 0;
     halfHeightCell = 0;
     isInit = false;
-    modalPropertiesCapital = new ModalPropertiesCapital(this);
+    modalPropertiesCapital:ModalPropertiesCapital = new ModalPropertiesCapital(this);
 
     pointerDot: Graphics | null;
     //inputs: InputEl[] = [];
@@ -50,7 +50,7 @@ export default class EditorScene extends Scene {
     }
 
     create(): void {
-        console.log('EditorScene');
+        //console.log('EditorScene');
         const rectField = store.getState().game.fieldRect;
         //this.sizeField = store.getState().game.fieldMatrix.length;
         this.vMatrix = store.getState().game.fieldMatrix;
@@ -280,7 +280,7 @@ export default class EditorScene extends Scene {
             if (castle) {
                 castle.updateState(c);
             } else {
-                console.log('add to render new CapitalCity');
+                //console.log('add to render new CapitalCity');
                 const capitalCity = new CapitalCity(
                     this,
                     c.id,
@@ -294,7 +294,7 @@ export default class EditorScene extends Scene {
 
     updateCities() {
         const cities = store.getState().game.cities;
-        console.log('updateCities');
+        //console.log('updateCities');
         if(cities.length<this.cities.length){
             for (let i = 0; i < this.cities.length; i++) {
                 const city = this.cities[i];
@@ -310,7 +310,7 @@ export default class EditorScene extends Scene {
             if (city) {
                 city.updateState(c);
             } else {
-                console.log('add to render new City');
+                //console.log('add to render new City');
                 const newCity = new City(
                     this,
                     c.id,
@@ -331,10 +331,7 @@ export default class EditorScene extends Scene {
     }
 
     updateUnits(){
-        if(this.modalPropertiesCapital.isOpen
-        ){
-            this.modalPropertiesCapital.updateUnits();
-        }
+        this.modalPropertiesCapital.updateUnits();
     }
 
     // updateProperties(){
@@ -350,9 +347,9 @@ export default class EditorScene extends Scene {
         const gameState = store.getState().game;
         if (gameState.editorMod === 'properties' && gameState.selectObj) {
             if (gameState.selectObj.type === 'capitalCity') {
-                console.log('properties of capital');
+                //console.log('properties of capital');
                 const capital = gameState.capitalCities[gameState.selectObj.idx];
-                console.log('gold = ',capital.gold);
+                //console.log('gold = ',capital.gold);
                 this.modalPropertiesCapital.init(capital);
             }
         } else {

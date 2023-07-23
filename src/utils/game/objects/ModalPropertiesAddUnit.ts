@@ -5,6 +5,7 @@ import Button from "./Button";
 import store from "store/store";
 import ItemSelectUnit from "./ItemSelectUnit";
 import { TPoint } from "utils/gameLib/Game";
+import { actionAddUnitToCapital } from "store/actions/actionsGame";
 
 export default class ModalPropertiesAddUnit {
     private _fon: Sprite | undefined;
@@ -21,7 +22,8 @@ export default class ModalPropertiesAddUnit {
     selectIdx = 0;
     itemUnits: ItemSelectUnit[] = [];
     buttons: Button[] = [];
-    position = 0;
+    position:[number, number] = [0, 0];
+    capitalId = '';
     posPortrets: TPoint[] = [
         {
             x: -142,
@@ -49,8 +51,8 @@ export default class ModalPropertiesAddUnit {
         return this._isShow;
     }
 
-    show(position: number) {
-
+    show(position: [number, number], capitalId: string) {
+        this.capitalId = capitalId;
         this._fon = this.parent.scene.add.sprite('modal-add-units');
         this._fon.x = this.parent.x;
         this._fon.y = this.parent.y;
@@ -82,7 +84,7 @@ export default class ModalPropertiesAddUnit {
         this._arrowDown.on('pointerup', this.onNext, this);
 
         this.initListUnits();
-        const btnOk = new Button(this.parent.scene, 'Ok');
+        const btnOk = new Button(this.parent.scene, 'Ok', this.onOk.bind(this));
         btnOk.init();
         btnOk.x = this.parent.x-100;
         btnOk.y = this.parent.y+203;
@@ -214,6 +216,11 @@ export default class ModalPropertiesAddUnit {
     }
 
     onOk(){
-        
+        console.log('add unit onOk');
+        store.dispatch(actionAddUnitToCapital({
+            unitId:this.units[this.selectIdx].id,
+            position: this.position,
+            capitalId: this.capitalId,
+        })).unwrap().then(()=>this.hide());
     }
 }

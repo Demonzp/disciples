@@ -66,11 +66,13 @@ export default class ModalPropertiesCapitalParty{
             this.scene.add.remove(this._textAddLeader);
             this._capitalParty.hide();
             this._btnOk.destroy();
+            //this.modalAddUnit.hide();
             this.isPartyProps = false;
         }
     }
 
     updateUnits(){
+        console.log('updateUnits');
         this._capitalParty.hide();
         this._capitalParty.init();
     }

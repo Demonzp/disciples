@@ -226,7 +226,7 @@ export default class GameObject{
           break;
 
       case 'pointerover':
-        console.log('register pointerover');
+        //console.log('register pointerover');
         this.pointerOverCallbacks.push({
           id,
           handler: handler.bind(context)

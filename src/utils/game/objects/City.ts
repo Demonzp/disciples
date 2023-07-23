@@ -64,7 +64,7 @@ export default class City extends BaseObject{
     }
 
     updateState(data:ICity){
-        console.log('update State!!');
+        //console.log('update State!!');
         this.matrixPoint = data.matrixPoint;
         this.isCanPut = data.isCanPut;
         this.move();

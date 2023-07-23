@@ -12,7 +12,7 @@ type Props = {
 }
 
 const MapEditor: FC<Props> = ({ game }) => {
-    const { editorMod, selectObj, units } = useAppSelector(state => state.game);
+    const { editorMod, selectObj, units, capitalCities } = useAppSelector(state => state.game);
     const dispatch = useAppDispatch();
     const [showAddRace, setShowAddRace] = useState(false);
     const onToggle = () => {
@@ -67,7 +67,7 @@ const MapEditor: FC<Props> = ({ game }) => {
     };
 
     const onAddCity = () => {
-        console.log('onAddCity');
+        //console.log('onAddCity');
         dispatch(actionAddCity());
     };
 

@@ -65,7 +65,7 @@ export default class Sprite extends GameObject{
           }
           
         }
-        console.log('this.framesPos = ', this.framesPos);
+        //console.log('this.framesPos = ', this.framesPos);
         this.sWidth = this.spritesheet.frameWidth;
         this.sHeight = this.spritesheet.frameHeight;
       }else{

@@ -8,7 +8,7 @@ export default class MainScene extends Scene{
     }
 
     create(): void {
-        console.log('mainScene');
+        //console.log('mainScene');
     }
 
     update(_: number): void {

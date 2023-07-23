@@ -82,10 +82,17 @@ export default class CapitalCity extends BaseObject{
     }
 
     updateState(data:ICapitalCity){
-        console.log('update State!!');
+        //console.log('update State!!');
         this.matrixPoint = data.matrixPoint;
         this.isCanPut = data.isCanPut;
         this.move();
+        if(this.scene.modalPropertiesCapital.modalCityParty.isPartyProps){
+            console.log('update party!!');
+            this.scene.modalPropertiesCapital.hide();
+            this.scene.modalPropertiesCapital.init(data);
+            this.scene.modalPropertiesCapital.hide();
+            this.scene.modalPropertiesCapital.modalCityParty.init();
+        }
         if(data.isUp){
             this.sprite.setZindex(1000);
         }else{

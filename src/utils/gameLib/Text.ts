@@ -147,7 +147,7 @@ export default class Text extends GameObject {
                 if (i < idxesSplit[idxesSplit.length - 1]) {
                     numCycles++;
                     if (numCycles === 2) {
-                        console.log('konchit cikl!!!!');
+                        //console.log('konchit cikl!!!!');
                         this._delimiterIdx++;
                         break;
                     }
@@ -173,24 +173,24 @@ export default class Text extends GameObject {
             //prevWidth = width;
         }
         if (numCycles === 2) {
-            console.log('calc over');
+            //console.log('calc over');
             const last = idxesSplit.splice(idxesSplit.length - 1, 1)[0];
             over = arr.slice(last).join(delimiter[this._delimiterIdx]);
         }
 
         idxesSplit.forEach((idx, i) => {
             if (idxesSplit.length > i + 1) {
-                console.log(idx);
+                //console.log(idx);
                 splitedArr.push(arr.slice(idx, idxesSplit[i + 1]).join(' '));
             } else {
-                console.log('last = ', idx);
+                //console.log('last = ', idx);
                 splitedArr.push(arr.slice(idx).join(' '));
             }
         });
         // if(numCycles===2){
         //     over = arr.slice(idxSplit).join(delimiter[this._delimiterIdx])
         // }
-        console.log('splitedArr =', splitedArr);
+        //console.log('splitedArr =', splitedArr);
         return { splitedArr, over, allHeight, widths };
     }
 

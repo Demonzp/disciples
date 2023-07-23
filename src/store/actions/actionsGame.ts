@@ -64,33 +64,49 @@ const isCanPutBuild = (fieldMatrix: TFieldMatrix, point: TPointMatrix, matrix: T
   return true;
 }
 
-const createParty = (side:TPartySide):TParty=>{
+const createParty = (side: TPartySide): TParty => {
   return {
     id: Game.createId(),
     side
   }
 }
 
-const getCapitalGuard = (race:TCapitalRace):IUnit=>{
+const getCapitalGuard = (race: TCapitalRace): IUnit => {
 
   switch (race) {
     case 'empire':
-      const baseUnit = baseUnits.find(u=>u.defaultName===capitalGuards.empire);
+      const baseUnit = baseUnits.find(u => u.defaultName === capitalGuards.empire);
       return {
-          ...baseUnit,
-          uid: Game.createId(),
-          name: baseUnit.defaultName,
-          partyId: null,
-          cityId: null,
-          capitalId: null,
-          isLider: false,
-          race,
-          position: [1,0],
-          battlesWon: 0,
+        ...baseUnit,
+        uid: Game.createId(),
+        name: baseUnit.defaultName,
+        partyId: null,
+        cityId: null,
+        capitalId: null,
+        isLider: false,
+        race,
+        position: [1, 0],
+        battlesWon: 0,
       }
     default:
       break;
-  } 
+  }
+}
+
+const createUnit = (id: string): IUnit => {
+  const baseUnit = baseUnits.find(u=>u.id===id);
+  return {
+    ...baseUnit,
+    uid: Game.createId(),
+    name: baseUnit.defaultName,
+    partyId: null,
+    cityId: null,
+    capitalId: null,
+    isLider: false,
+    race:baseUnit.fraction,
+    position: [0, 0],
+    battlesWon: 0,
+  }
 }
 
 export type TActionPointerMove = {
@@ -146,27 +162,27 @@ export const actionPointerUp = createAsyncThunk<TActionPointerUp, TPointMatrix, 
   'game/actionPointerUp',
   async (point, { getState, rejectWithValue }) => {
     try {
-      console.log('game/actionPointerUp');
+      //console.log('game/actionPointerUp');
       const editorMod = getState().game.editorMod;
       const selectObj = getState().game.selectObj;
-      if(editorMod==='properties'){
-        return {point,isCanPut:false};
+      if (editorMod === 'properties') {
+        return { point, isCanPut: false };
       }
       let isCanPut = true;
       if (selectObj) {
         const fieldMatrix = getState().game.fieldMatrix;
-        if(selectObj.type==='capitalCity'){
+        if (selectObj.type === 'capitalCity') {
           const city = getState().game.capitalCities[selectObj.idx];
           if (city) {
             isCanPut = isCanPutBuild(fieldMatrix, [point[0] - 2, point[1] - 2], [5, 5]);
           }
-        }else if(selectObj.type==='city'){
+        } else if (selectObj.type === 'city') {
           const city = getState().game.cities[selectObj.idx];
           if (city) {
             isCanPut = isCanPutBuild(fieldMatrix, [point[0] - 2, point[1] - 1], [4, 4]);
           }
         }
-        
+
       }
       //const fieldMatrix = getState().game.fieldMatrix;
 
@@ -181,8 +197,8 @@ export const actionPointerUp = createAsyncThunk<TActionPointerUp, TPointMatrix, 
 );
 
 type TActionAddCapital = {
-  capital:ICapitalCity,
-  unit:IUnit
+  capital: ICapitalCity,
+  unit: IUnit
 }
 
 export const actionAddCapitalCity = createAsyncThunk<TActionAddCapital, TCapitalRace, { state: AppState, rejectWithValue: any }>(
@@ -224,7 +240,7 @@ export const actionAddCapitalCity = createAsyncThunk<TActionAddCapital, TCapital
       capitalCity.squadIn.push(unit.uid);
 
       return {
-        capital:capitalCity,
+        capital: capitalCity,
         unit
       };
     } catch (error) {
@@ -248,13 +264,13 @@ export const actionAddCity = createAsyncThunk<ICity, undefined, { state: AppStat
         matrixPoint: [iX, jY],
         prevMatrixPoint: [iX, jY],
         matrix: [4, 4],
-        center:[2, 1],
+        center: [2, 1],
         type: 'city',
         id: Game.createId(),
         squadIn: [],
         isUp: true,
         isCanPut: false,
-        lvl:1,
+        lvl: 1,
       };
 
       return city;
@@ -435,11 +451,28 @@ export const actionInitNewMap = createAsyncThunk<TStoreInitMap, TDataInitMap, { 
 
 export type TDataMoveCitySquadIn = {
   unitId: string;
-  toIdx: [number,number];
+  toIdx: [number, number];
 }
 
 export const actionMoveCitySquadIn = createAsyncThunk<TDataMoveCitySquadIn, TDataMoveCitySquadIn, { state: AppState, rejectWithValue: any }>(
   'game/actionMoveCitySquadIn',
+  async (data, { rejectWithValue }) => {
+    try {
+      return data;
+    } catch (error) {
+      console.error('error = ', (error as Error).message);
+      return rejectWithValue({ message: (error as Error).message, field: 'nameTable' });
+    }
+  }
+);
+
+export type TDataDoubleMoveCitySquadIn = {
+  unitId: string;
+  toUnitId: string;
+}
+
+export const actionDoubleMoveCitySquadIn = createAsyncThunk<TDataDoubleMoveCitySquadIn, TDataDoubleMoveCitySquadIn, { state: AppState, rejectWithValue: any }>(
+  'game/actionDoubleMoveCitySquadIn',
   async (data, { rejectWithValue }) => {
     try {
       return data;
@@ -500,15 +533,26 @@ export const actionChangeCapitalProps = createAsyncThunk<TChangeCapitalProps, TC
 
 export type TAddUnitToCapital = {
   capitalId: string;
-  position: [number,number];
-  unit: IBaseUnit;
+  position: [number, number];
+  unitId: string;
 };
 
-export const actionAddUnitToCapital = createAsyncThunk<TAddUnitToCapital, TAddUnitToCapital, { state: AppState, rejectWithValue: any }>(
+export type TAddUnitToCapitalRes = {
+  capitalId: string;
+  unit: IUnit;
+};
+
+export const actionAddUnitToCapital = createAsyncThunk<TAddUnitToCapitalRes, TAddUnitToCapital, { state: AppState, rejectWithValue: any }>(
   'game/actionAddUnitToCapital',
   async (data, { rejectWithValue }) => {
     try {
-      return data;
+      const unit = createUnit(data.unitId);
+      unit.position = data.position;
+      
+      return {
+        unit,
+        capitalId: data.capitalId
+      };
     } catch (error) {
       console.error('error = ', (error as Error).message);
       return rejectWithValue({ message: (error as Error).message, field: 'nameTable' });

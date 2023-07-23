@@ -87,7 +87,7 @@ export default class SelectLine{
         //this._textEl.color = 'black';
         this.textEl.fontSize = 16;
 
-        console.log('this._arrowUp');
+        //console.log('this._arrowUp');
         this.arrowsIcon();
     }
 

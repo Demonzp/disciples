@@ -6,7 +6,7 @@ import { TPoint } from "utils/gameLib/Game";
 import Sprite from "utils/gameLib/Sprite";
 import { IUnit, portretPartyOneData } from "store/slices/sliceGame";
 import PartyPortrait from "./PartyPortrait";
-import { actionMoveCitySquadIn } from "store/actions/actionsGame";
+import { actionDoubleMoveCitySquadIn, actionMoveCitySquadIn } from "store/actions/actionsGame";
 
 export default class CapitalParty {
     conts: Container[] = [];
@@ -79,7 +79,7 @@ export default class CapitalParty {
 
     init() {
         const capitalData = this.parent.parent.capitalData;
-        console.log('capitalData = ', capitalData);
+        console.log('CapitalParty capitalData = ', capitalData);
         const units = store.getState().game.units;
         this.squadIn = capitalData.squadIn.map(uid => {
             return units.find(u => u.uid === uid);
@@ -139,12 +139,12 @@ export default class CapitalParty {
                 }
                 p.drop(pointer);
             });
-
+            console.log('CapitalParty pointerup');
             if (isNext && !this.parent.modalAddUnit.isShow) {
                 const cont = this.conts.find(c => c.isOnPointer(pointer));
                 if (cont) {
-                    //console.log('add Unit to = ', cont.data);
-                    this.parent.modalAddUnit.show(cont.data);
+                    console.log('add Unit to = ', cont.data);
+                    this.parent.modalAddUnit.show(cont.data, this.parent.parent.capitalData.id);
                 }
             }
 
@@ -162,17 +162,28 @@ export default class CapitalParty {
     }
 
     dropPortrait(point: TPoint, portret: PartyPortrait) {
-        //console.log('drop!!!');
+        console.log('drop!!!');
         for (let i = 0; i < this.conts.length; i++) {
             const cont = this.conts[i];
             if (cont.isOnPointer(point)) {
-                //console.log('on container = ', cont.data);
+                console.log('on container = ', cont.data);
                 store.dispatch(actionMoveCitySquadIn({
-                    unitId: portret.unit.id,
+                    unitId: portret.unit.uid,
                     toIdx: cont.data,
                 }));
                 return;
             }
+        }
+
+        for (let i = 0; i < this.portraits.length; i++) {
+            const p = this.portraits[i];
+            if(p.cont.isOnPointer(point)){
+                store.dispatch(actionDoubleMoveCitySquadIn({
+                    unitId: portret.unit.uid,
+                    toUnitId: p.unit.uid
+                }));
+            }
+            
         }
 
         portret.toStart();
