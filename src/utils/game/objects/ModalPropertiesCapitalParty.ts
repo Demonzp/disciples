@@ -11,7 +11,7 @@ export default class ModalPropertiesCapitalParty{
     private _fon: Sprite|undefined;
     private _fonAddLeader: Graphics|undefined;
     private _textAddLeader: Text|undefined;
-    private _capitalParty = new CapitalParty(this);
+    capitalParty = new CapitalParty(this);
     private _btnOk:Button|undefined;
     modalAddUnit = new ModalPropertiesAddUnit(this);
     isPartyProps = false;
@@ -33,7 +33,7 @@ export default class ModalPropertiesCapitalParty{
         this.y = y;
         this._fon.x = x;
         this._fon.y = y;
-        this._capitalParty.init();
+        this.capitalParty.init();
         if(!capitalData.squadOut){
             this._fonAddLeader = this.scene.add.graphics();
             this._fonAddLeader.fillStyle('#7b786b');
@@ -64,7 +64,7 @@ export default class ModalPropertiesCapitalParty{
             this.scene.add.remove(this._fon);
             this.scene.add.remove(this._fonAddLeader);
             this.scene.add.remove(this._textAddLeader);
-            this._capitalParty.hide();
+            this.capitalParty.hide();
             this._btnOk.destroy();
             //this.modalAddUnit.hide();
             this.isPartyProps = false;
@@ -73,7 +73,7 @@ export default class ModalPropertiesCapitalParty{
 
     updateUnits(){
         console.log('updateUnits');
-        this._capitalParty.hide();
-        this._capitalParty.init();
+        this.capitalParty.hide();
+        this.capitalParty.init();
     }
 }

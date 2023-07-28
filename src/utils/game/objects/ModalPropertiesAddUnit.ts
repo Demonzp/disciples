@@ -217,6 +217,24 @@ export default class ModalPropertiesAddUnit {
 
     onOk(){
         console.log('add unit onOk');
+        //console.log('capitalData = ', this.parent.capitalParty.squadIn);
+        if(this.units[this.selectIdx].numCells===2){
+            const posTwo = this.position[1]===1?0:1;
+            const unit = this.parent.capitalParty.squadIn.find(u=>{
+                if((u.position[0]===this.position[0]&&u.position[1]===this.position[1])
+                    || (u.position[0]===this.position[0]&&u.position[1]===posTwo)
+                ){
+                    return true;
+                }
+                return false;
+            });
+            if(unit){
+                return;
+            }
+            this.position = [this.position[0], posTwo];
+        }
+
+        //this.parent.capitalParty.squadIn
         store.dispatch(actionAddUnitToCapital({
             unitId:this.units[this.selectIdx].id,
             position: this.position,

@@ -17,7 +17,11 @@ export default class ItemSelectUnit{
     init(){
         this._cont = this.scene.add.container();
         this._cont.setInteractiveRect(306,84);
-        this._portret = this.scene.add.sprite(`portrets-party-one-${this.unit.fraction}`, -115,0);
+        if(this.unit.numCells===2){
+            this._portret = this.scene.add.sprite(`portret-units-two`, -80,0);
+        }else{
+            this._portret = this.scene.add.sprite(`portret-units-one-${this.unit.fraction}`, -115,0);
+        }
         this._portret.setFrame(portretPartyOneData[this.unit.icon]);
         this._nameUnit = this.scene.add.text(this.unit.defaultName, 2,-32);
         this._nameUnit.fontSize = 14;

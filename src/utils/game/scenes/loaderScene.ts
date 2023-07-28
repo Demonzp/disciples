@@ -36,7 +36,8 @@ export default class LoaderScene extends Scene{
     this.load.image('modal-capital1', './assets/imgs/modal-capital1.jpg');
     this.load.image('modal-city-party', './assets/imgs/modal-city-party.jpg');
     this.load.image('modal-add-units', './assets/imgs/modal-add-units.jpg');
-    this.load.spritesheet('portrets-party-one-empire', './assets/imgs/portrets-party-one-empire.png', {frameWidth:70, frameHeight:85, endFrame: 10});
+    this.load.spritesheet('portret-units-one-empire', './assets/imgs/portret-units-one-empire.png', {frameWidth:70, frameHeight:85, endFrame: 10});
+    this.load.spritesheet('portret-units-two', './assets/imgs/portret-units-two.png', {frameWidth:140, frameHeight:85, endFrame: 3});
     this.load.spritesheet('grass-water', './assets/imgs/isometric-grass-and-water-64x64.png',{ frameWidth: 64, frameHeight: 64, endFrame: 24 });
     this.load.spritesheet('castle-empire', './assets/imgs/castle-empire.png',{ frameWidth: 314, frameHeight: 300, endFrame: 15 });
   }

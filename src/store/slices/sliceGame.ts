@@ -10,6 +10,7 @@ export const portretPartyOneData:{[name: string]: number} = {
     'archer':7,
     'apprentice':8,
     'acolyt':9,
+    'titan':2,
 };
 
 export const baseUnits: IBaseUnit[] = [
@@ -170,6 +171,29 @@ export const baseUnits: IBaseUnit[] = [
         iniative: 10,
         leadership: 2,
         needExperience: 70,
+        movePoints: 20,
+        discription: '',
+        armor:0
+    },
+    {
+        id: '7',
+        level: 1,
+        defaultName: 'Titan',
+        isCapitalGuard: false,
+        isCanLider: true,
+        isHero: false,
+        fraction: 'empire',
+        icon: 'titan',
+        numCells: 2,
+        hitPoints: 250,
+        damageName: 'Smash',
+        chancesHit: 80,
+        damage: 55,
+        heal: 0,
+        sourceDamage: 'weapon',
+        iniative: 40,
+        leadership: 2,
+        needExperience: 400,
         movePoints: 20,
         discription: '',
         armor:0
