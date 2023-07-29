@@ -19,7 +19,7 @@ export default class PartyPortrait {
 
         
         if(this.unit.numCells===2){
-            this.cont = this.parent.parent.scene.add.container(this.parent.parent.x + this.parent.contPos[this.unit.position[0]][this.unit.position[1]].x+35, this.parent.parent.y + this.parent.contPos[this.unit.position[0]][this.unit.position[1]].y);
+            this.cont = this.parent.parent.scene.add.container(this.parent.parent.x + this.parent.contPos[this.unit.position[0]][this.unit.position[1]].x+40, this.parent.parent.y + this.parent.contPos[this.unit.position[0]][this.unit.position[1]].y);
             this.cont.setInteractiveRect(140, 95);
             this.sprite = this.parent.parent.scene.add.sprite(`portret-units-two`, -80,0);
         }else{
