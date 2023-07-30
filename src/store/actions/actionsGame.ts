@@ -456,8 +456,31 @@ export type TDataMoveCitySquadIn = {
 
 export const actionMoveCitySquadIn = createAsyncThunk<TDataMoveCitySquadIn, TDataMoveCitySquadIn, { state: AppState, rejectWithValue: any }>(
   'game/actionMoveCitySquadIn',
+  async (data, { getState, rejectWithValue }) => {
+    try {
+      const newData:TDataMoveCitySquadIn = {...data,toIdx:[...data.toIdx]};
+      const unit = getState().game.units.find(u=>u.uid===data.unitId);
+      if(unit&&unit.numCells===2){
+        newData.toIdx[1]=0;
+      }
+      return newData;
+    } catch (error) {
+      console.error('error = ', (error as Error).message);
+      return rejectWithValue({ message: (error as Error).message, field: 'nameTable' });
+    }
+  }
+);
+
+export type TDataMoveTwoCellCitySquadIn = {
+  unitId: string;
+  units: string[];
+};
+
+export const actionMoveTwoCellCitySquadIn = createAsyncThunk<TDataMoveTwoCellCitySquadIn, TDataMoveTwoCellCitySquadIn, { state: AppState, rejectWithValue: any }>(
+  'game/actionMoveTwoCellCitySquadIn',
   async (data, { rejectWithValue }) => {
     try {
+      
       return data;
     } catch (error) {
       console.error('error = ', (error as Error).message);

@@ -45,14 +45,16 @@ export default class Manager {
       for (let i = 0; i < data.length; i++) {
         const obj = data[i];
         this.gameObjects = this.gameObjects.filter(obj2 => obj2.uid !== obj.uid);
-        if (obj instanceof GameObject && obj.isMouseEvent) {
-          this.interactiveObjects = this.interactiveObjects.filter(obj2 => obj2.uid !== obj.uid);
+        if (obj instanceof GameObject) {
+          this.delInteractiveObj(obj);
+          //this.interactiveObjects = this.interactiveObjects.filter(obj2 => obj2.uid !== obj.uid);
         }
       }
     } else {
       this.gameObjects = this.gameObjects.filter(obj => obj.uid !== data.uid);
-      if (data instanceof GameObject && data.isMouseEvent) {
-        this.interactiveObjects = this.interactiveObjects.filter(obj => obj.uid !== data.uid);
+      if (data instanceof GameObject) {
+        this.delInteractiveObj(data);
+        //this.interactiveObjects = this.interactiveObjects.filter(obj => obj.uid !== data.uid);
       }
     }
     //console.log('after del = ', this.gameObjects.length);

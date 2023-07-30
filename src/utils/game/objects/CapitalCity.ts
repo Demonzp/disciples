@@ -91,6 +91,7 @@ export default class CapitalCity extends BaseObject{
             this.scene.modalPropertiesCapital.hide();
             this.scene.modalPropertiesCapital.init(data);
             this.scene.modalPropertiesCapital.hide();
+            //this.scene.modalPropertiesCapital.modalCityParty.capitalParty.init;
             this.scene.modalPropertiesCapital.modalCityParty.init();
         }
         if(data.isUp){

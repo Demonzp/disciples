@@ -1,5 +1,5 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { actionAddCapitalCity, actionAddCity, actionAddUnitToCapital, actionChangeCapitalProps, actionDelSelectObj, actionDoubleMoveCitySquadIn, actionInitNewMap, actionMoveCitySquadIn, actionPointerMove, actionPointerUp, actionSetEditorMod } from 'store/actions/actionsGame';
+import { actionAddCapitalCity, actionAddCity, actionAddUnitToCapital, actionChangeCapitalProps, actionDelSelectObj, actionDoubleMoveCitySquadIn, actionInitNewMap, actionMoveCitySquadIn, actionMoveTwoCellCitySquadIn, actionPointerMove, actionPointerUp, actionSetEditorMod } from 'store/actions/actionsGame';
 import { TPointMatrix } from 'utils/game/scenes/editorScene';
 
 export const portretPartyOneData:{[name: string]: number} = {
@@ -451,6 +451,36 @@ const sliceGame = createSlice({
         });
 
         builder.addCase(actionDoubleMoveCitySquadIn.rejected, (state, { payload }) => {
+
+            //const payload = action.payload as ICustomError;
+            state.errors.push(payload);
+        });
+
+        builder.addCase(actionMoveTwoCellCitySquadIn.pending, (state) => {
+            state.errors = [];
+        });
+
+        builder.addCase(actionMoveTwoCellCitySquadIn.fulfilled, (state, { payload }) => {
+            const unitOneIdx = state.units.findIndex(u=>u.uid===payload.unitId);
+            const unitsIdx:number[]=[];
+            payload.units.forEach(uId=>{
+                const idx = state.units.findIndex(u=>u.uid===uId);
+                unitsIdx.push(idx);
+            });
+            //const unitTwoIdx = state.units.findIndex(u=>u.uid===payload.toUnitId);
+            const posOne:[number,number] = [...state.units[unitsIdx[0]].position];
+            posOne[1] = 0;
+            console.log('posOne = ', posOne[0],'||',posOne[1]);
+            console.log('unitOneIdx = ', state.units[unitOneIdx].defaultName);
+            const posTwo:[number,number] = [...state.units[unitOneIdx].position];
+            state.units[unitOneIdx].position = [...posOne];
+            unitsIdx.forEach(idx=>{
+                state.units[idx].position = [posTwo[0],state.units[idx].position[1]];
+            });
+            //state.units[unitTwoIdx].position = posTwo;
+        });
+
+        builder.addCase(actionMoveTwoCellCitySquadIn.rejected, (state, { payload }) => {
 
             //const payload = action.payload as ICustomError;
             state.errors.push(payload);
