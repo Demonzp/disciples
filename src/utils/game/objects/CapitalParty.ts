@@ -10,6 +10,7 @@ import { actionDoubleMoveCitySquadIn, actionMoveCitySquadIn } from "store/action
 
 export default class CapitalParty {
     conts: Container[] = [];
+    borders: Sprite[] = [];
     portraits: PartyPortrait[] = [];
     contPos: TPoint[][] = [
         [
@@ -88,15 +89,36 @@ export default class CapitalParty {
             const row = this.contPos[i];
             for (let j = 0; j < row.length; j++) {
                 const pos = row[j];
-                if (!this.squadIn.find(u => (u.position[0] === i && u.position[1] === j))) {
+                const unit = this.squadIn.find(u => (u.position[0] === i));
+                if (!unit) {
+                    const sprite = this.parent.scene.add.sprite('place-one');
+                    sprite.x = this.parent.x + pos.x + 1;
+                    sprite.y = this.parent.y + pos.y - 1;
+                    sprite.setZindex(1000);
+
                     const cont = this.parent.scene.add.container();
 
                     cont.x = this.parent.x + pos.x;
                     cont.y = this.parent.y + pos.y;
                     cont.setInteractiveRect(70, 102);
-                    cont.data = [i,j];
+                    cont.data = [i, j];
                     cont.setZindex(1000);
                     this.conts.push(cont);
+                    this.borders.push(sprite);
+                } else {
+                    if (unit.numCells === 2&&j===0) {
+                        const sprite = this.parent.scene.add.sprite('place-two');
+                        sprite.x = this.parent.x + pos.x + 41;
+                        sprite.y = this.parent.y + pos.y - 1;
+                        sprite.setZindex(1000);
+                        this.borders.push(sprite);
+                    } else if(unit.numCells === 1){
+                        const sprite = this.parent.scene.add.sprite('place-one');
+                        sprite.x = this.parent.x + pos.x + 1;
+                        sprite.y = this.parent.y + pos.y - 1;
+                        sprite.setZindex(1000);
+                        this.borders.push(sprite);
+                    }
                 }
 
             }
@@ -153,6 +175,8 @@ export default class CapitalParty {
 
     hide() {
         this.conts.forEach(cont => this.parent.scene.add.remove(cont));
+        this.borders.forEach(s=>this.parent.scene.add.remove(s));
+        this.borders = [];
         this.conts = [];
         this.portraits.forEach(p => p.destroy());
         this.portraits = [];
@@ -177,13 +201,13 @@ export default class CapitalParty {
 
         for (let i = 0; i < this.portraits.length; i++) {
             const p = this.portraits[i];
-            if(p.cont.isOnPointer(point)){
+            if (p.cont.isOnPointer(point)) {
                 store.dispatch(actionDoubleMoveCitySquadIn({
                     unitId: portret.unit.uid,
                     toUnitId: p.unit.uid
                 }));
             }
-            
+
         }
 
         portret.toStart();
