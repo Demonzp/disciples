@@ -211,6 +211,9 @@ export default class ModalPropertiesAddUnit {
             this.parent.scene.add.remove(this._arrowUp);
             this.itemUnits.forEach(item => item.destroy());
             this.buttons.forEach(btn => btn.destroy());
+            this.itemUnits = [];
+            this.buttons = [];
+            this.selectIdx = 0;
             this._isShow = false;
         }
     }

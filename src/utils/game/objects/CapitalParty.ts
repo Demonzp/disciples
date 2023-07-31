@@ -8,6 +8,7 @@ import { IUnit, portretPartyOneData } from "store/slices/sliceGame";
 import PartyPortrait from "./PartyPortrait";
 import { actionDoubleMoveCitySquadIn, actionMoveCitySquadIn, actionMoveTwoCellCitySquadIn } from "store/actions/actionsGame";
 
+//invalid position in group
 export default class CapitalParty {
     conts: Container[] = [];
     borders: Sprite[] = [];
