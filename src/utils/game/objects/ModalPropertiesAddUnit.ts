@@ -6,6 +6,8 @@ import store from "store/store";
 import ItemSelectUnit from "./ItemSelectUnit";
 import { TPoint } from "utils/gameLib/Game";
 import { actionAddUnitToCapital } from "store/actions/actionsGame";
+import ModalMessage from "./ModalMessage";
+import { IScene } from "../scenes/IScene";
 
 export default class ModalPropertiesAddUnit {
     private _fon: Sprite | undefined;
@@ -235,6 +237,8 @@ export default class ModalPropertiesAddUnit {
             });
 
             if (unit) {
+                const msg = new ModalMessage(this.parent.scene as IScene, ()=>{});
+                msg.init('');
                 return;
             }
             this.position = [this.position[0], 0];
@@ -250,6 +254,8 @@ export default class ModalPropertiesAddUnit {
             });
 
             if (unit) {
+                const msg = new ModalMessage(this.parent.scene as IScene, ()=>{});
+                msg.init('');
                 return;
             }
         }

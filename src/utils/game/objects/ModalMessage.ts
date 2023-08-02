@@ -12,6 +12,16 @@ export default class ModalMessage{
     }
 
     init(text:string){
-        
+        const cameraPoint = this.scene.game.camera.cameraPoint();
+        const x = 0+this.scene.halfWidth-cameraPoint.x;
+        const y = 0+this.scene.halfHeight-cameraPoint.y;
+        this._fon = this.scene.add.sprite('modal-message');
+        this._fon.x = x;
+        this._fon.y = y;
+        this._fon.setZindex(1500);
+    }
+
+    destroy(){
+        this.scene.add.remove(this._fon);
     }
 }
