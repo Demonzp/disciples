@@ -18,10 +18,19 @@ export default class ModalMessage{
         this._fon = this.scene.add.sprite('modal-message');
         this._fon.x = x;
         this._fon.y = y;
-        this._fon.setZindex(1500);
+        this._btnOk = new Button(this.scene,'Ok',this.destroy.bind(this));
+        this._btnOk.init();
+        this._btnOk.x = x;
+        this._btnOk.y = y+150;
+        this._textElHead = this.scene.add.text('MESSAGE');
+        this._textElHead.x = x-200;
+        this._textElHead.y = y-180;
+        //this._fon.setZindex(1500);
     }
 
     destroy(){
         this.scene.add.remove(this._fon);
+        this.scene.add.remove(this._textElHead);
+        this._btnOk.destroy();
     }
 }
