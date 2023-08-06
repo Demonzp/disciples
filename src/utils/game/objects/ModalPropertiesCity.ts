@@ -7,6 +7,7 @@ import SelectLine from "./SelectLine";
 import Button from "./Button";
 import store from "store/store";
 import { actionChangeCityProps } from "store/actions/actionsGame";
+import ModalPropertiesCityParty from "./ModalPropertiesCityParty";
 
 export default class ModalPropertiesCity{
     cityData:ICity;
@@ -14,6 +15,7 @@ export default class ModalPropertiesCity{
     inputCityName: InputElString|undefined;
     selectLvl: SelectLine|undefined;
     allInputs:(InputEl|InputElString)[]=[];
+    modalCityParty: ModalPropertiesCityParty = new ModalPropertiesCityParty(this);
     btns:Button[] = [];
     isOpen = false;
     constructor(public scene: IScene){}
@@ -44,7 +46,7 @@ export default class ModalPropertiesCity{
         btnOk.y = y+150;
         this.btns.push(btnOk);
 
-        const btnParty = new Button(this.scene,'Party & Reserve',()=>{});
+        const btnParty = new Button(this.scene,'Party & Reserve',this.onParty.bind(this));
         btnParty.init();
         btnParty.x = x-120;
         btnParty.y = y+150;
@@ -54,6 +56,12 @@ export default class ModalPropertiesCity{
     }
 
     onOk(){
+        this.allInputs.forEach(input=>{
+            input.ofSelect();
+        });
+        if(this.inputCityName.value.length<=0){
+            return;
+        }
         store.dispatch(actionChangeCityProps({
             cityName:this.inputCityName.value,
             lvl:Number(this.selectLvl.value)
@@ -62,7 +70,18 @@ export default class ModalPropertiesCity{
             .then(()=>this.hide());
     }
 
+    onParty(){
+        this._hide();
+        this.modalCityParty.init();
+    }
+
     hide(){
+        this.modalCityParty.hide();
+        this._hide();
+        this.isOpen = false;
+    }
+
+    _hide(){
         if(this._fon){
             this.scene.add.remove(this._fon);
             this.allInputs.forEach(input=>input.destroy());

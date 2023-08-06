@@ -36,6 +36,7 @@ export default class LoaderScene extends Scene {
     this.load.image('modal-capital1', './assets/imgs/modal-capital1.jpg');
     this.load.image('modal-city-party', './assets/imgs/modal-city-party1.jpg');
     this.load.image('modal-add-units', './assets/imgs/modal-add-units.jpg');
+    this.load.image('place-plag', './assets/imgs/place-plag.jpg');
     this.load.image('place-one', './assets/imgs/place-one.png');
     this.load.image('place-two', './assets/imgs/place-two.png');
     this.load.image('modal-city', './assets/imgs/modal-city.jpg');
