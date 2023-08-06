@@ -20,20 +20,7 @@ export default class CapitalCity extends BaseObject{
         this._sprite.play();
         //this._sprite.alpha = 0;
         this.move();
-        // const i = this.matrixPoint[0]+2;
-        // const j = this.matrixPoint[1]+2;
-        // const vMatrix = this.scene.vMatrix;
-        // if(i<this.scene.sizeField&&j<this.scene.sizeField){
-            
-        //     const cell = vMatrix[i][j];
-        //     //console.log('render!! = ', cell);
-        //     this._sprite.x = cell.x;
-        //     this._sprite.y = cell.y-35;
-        // }
-        // this._sprite.on('pointerup', ()=>{
-        //     console.log('pointerup');
-        //     this.scene.selectObj = this;
-        // }); 
+ 
     }
 
     move(){

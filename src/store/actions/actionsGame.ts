@@ -4,6 +4,9 @@ import Game from 'utils/gameLib/Game';
 import { TPointMatrix } from 'utils/game/scenes/editorScene';
 import { IBaseUnit, ICapitalCity, ICity, IUnit, TCapitalRace, TCell, TEditorMod, TFieldMatrix, TLordType, TParty, TPartySide, TRectangle, baseUnits, capitalGuards, defaultRect } from 'store/slices/sliceGame';
 import VirtualRect from 'utils/virtualRect';
+import GameMath from 'utils/gameLib/Math';
+
+const cityNames = ['Oceanides','Harun','Modan','Kuzjag'];
 
 const isCanPutBuild = (fieldMatrix: TFieldMatrix, point: TPointMatrix, matrix: TPointMatrix) => {
   const iX = point[0];
@@ -257,9 +260,10 @@ export const actionAddCity = createAsyncThunk<ICity, undefined, { state: AppStat
 
       let iX = 1;
       let jY = 1;
-
+      const idxName = GameMath.between(0,cityNames.length-1);
       const city: ICity = {
         owner: 'neutral',
+        cityName: cityNames[idxName],
         squadOut: null,
         matrixPoint: [iX, jY],
         prevMatrixPoint: [iX, jY],
@@ -272,6 +276,8 @@ export const actionAddCity = createAsyncThunk<ICity, undefined, { state: AppStat
         isCanPut: false,
         lvl: 1,
       };
+
+      cityNames.splice(idxName,1);
 
       return city;
     } catch (error) {

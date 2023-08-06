@@ -38,6 +38,7 @@ export default class LoaderScene extends Scene {
     this.load.image('modal-add-units', './assets/imgs/modal-add-units.jpg');
     this.load.image('place-one', './assets/imgs/place-one.png');
     this.load.image('place-two', './assets/imgs/place-two.png');
+    this.load.image('modal-city', './assets/imgs/modal-city.jpg');
     this.load.image('modal-message', './assets/imgs/modal-message.jpg');
     this.load.spritesheet('portret-units-one-empire', './assets/imgs/portret-units-one-empire.png', { frameWidth: 70, frameHeight: 85, endFrame: 10 });
     this.load.spritesheet('portret-units-two', './assets/imgs/portret-units-two.png', { frameWidth: 150, frameHeight: 85, endFrame: 3 });

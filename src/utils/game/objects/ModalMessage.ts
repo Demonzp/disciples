@@ -25,12 +25,17 @@ export default class ModalMessage{
         this._textElHead = this.scene.add.text('MESSAGE');
         this._textElHead.x = x-200;
         this._textElHead.y = y-180;
+        this._textEl = this.scene.add.text(text);
+        this._textEl.x = x-200;
+        this._textEl.y = y-140;
         //this._fon.setZindex(1500);
     }
 
     destroy(){
+        this.onOK();
         this.scene.add.remove(this._fon);
         this.scene.add.remove(this._textElHead);
+        this.scene.add.remove(this._textEl);
         this._btnOk.destroy();
     }
 }

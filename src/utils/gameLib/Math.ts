@@ -6,7 +6,7 @@ export default class GameMath{
     this.game = game;
   }
 
-  between(min:number, max:number){
+  static between(min:number, max:number){
     return Math.floor(min+Math.random()*(max+1-min));
   }
 

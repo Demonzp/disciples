@@ -320,6 +320,7 @@ export interface ICapitalCity extends IBaseGameObj {
 }
 
 export interface ICity extends IBaseGameObj {
+    cityName: string;
     owner: TTerrain;
     squadOut: string|null;
     lvl: number;

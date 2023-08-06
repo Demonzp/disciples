@@ -10,6 +10,7 @@ import Graphics from "utils/gameLib/Graphics";
 import City from "../objects/City";
 import ModalPropertiesCapital from "../objects/ModalPropertiesCapital";
 import InputEl from "../objects/InputEl";
+import ModalPropertiesCity from "../objects/ModalPropertiesCity";
 
 export type TPointMatrix = [number, number];
 
@@ -40,7 +41,7 @@ export default class EditorScene extends Scene {
     halfHeightCell = 0;
     isInit = false;
     modalPropertiesCapital:ModalPropertiesCapital = new ModalPropertiesCapital(this);
-
+    modalPropertiesCity:ModalPropertiesCity = new ModalPropertiesCity(this);
     pointerDot: Graphics | null;
     //inputs: InputEl[] = [];
 
@@ -133,6 +134,9 @@ export default class EditorScene extends Scene {
             //console.log('isOpen = ', this.modalPropertiesCapital.isOpen);
             if(this.modalPropertiesCapital.isOpen){
                 this.modalPropertiesCapital.keyboardInput(e);
+                return;
+            }else if(this.modalPropertiesCity.isOpen){
+                this.modalPropertiesCity.keyboardInput(e);
                 return;
             }
             switch (e.code) {
@@ -351,9 +355,13 @@ export default class EditorScene extends Scene {
                 const capital = gameState.capitalCities[gameState.selectObj.idx];
                 //console.log('gold = ',capital.gold);
                 this.modalPropertiesCapital.init(capital);
+            }else if(gameState.selectObj.type === 'city'){
+                const city = gameState.cities[gameState.selectObj.idx];
+                this.modalPropertiesCity.init(city);
             }
         } else {
             this.modalPropertiesCapital.hide();
+            this.modalPropertiesCity.hide();
         }
 
     }

@@ -45,6 +45,7 @@ export default class ModalPropertiesAddUnit {
         }
     ]
     private _isShow = false;
+    private _isModalMes = false;
     constructor(public parent: ModalPropertiesCapitalParty) {
 
     }
@@ -93,6 +94,9 @@ export default class ModalPropertiesAddUnit {
         this.buttons.push(btnOk);
 
         const btnCancel = new Button(this.parent.scene, 'CANCEL', () => {
+            if(this._isModalMes){
+                return;
+            }
             this.hide();
         });
         btnCancel.init();
@@ -224,7 +228,9 @@ export default class ModalPropertiesAddUnit {
         console.log('add unit onOk');
         //console.log('capitalData = ', this.parent.capitalParty.squadIn);
 
-
+        if(this._isModalMes){
+            return;
+        }
         if (this.units[this.selectIdx].numCells === 2) {
             const posTwo = this.position[1] === 1 ? 0 : 1;
             const unit = this.parent.capitalParty.squadIn.find(u => {
@@ -237,8 +243,9 @@ export default class ModalPropertiesAddUnit {
             });
 
             if (unit) {
-                const msg = new ModalMessage(this.parent.scene as IScene, ()=>{});
-                msg.init('');
+                const msg = new ModalMessage(this.parent.scene as IScene, ()=>{this._isModalMes=false});
+                this._isModalMes = true;
+                msg.init('Invalid position in group!');
                 return;
             }
             this.position = [this.position[0], 0];
@@ -254,8 +261,9 @@ export default class ModalPropertiesAddUnit {
             });
 
             if (unit) {
-                const msg = new ModalMessage(this.parent.scene as IScene, ()=>{});
-                msg.init('');
+                const msg = new ModalMessage(this.parent.scene as IScene, ()=>{this._isModalMes=false});
+                msg.init('Invalid position in group!');
+                this._isModalMes = true;
                 return;
             }
         }
