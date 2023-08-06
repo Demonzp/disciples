@@ -560,6 +560,23 @@ export const actionChangeCapitalProps = createAsyncThunk<TChangeCapitalProps, TC
   }
 );
 
+export type TChangeCityProps = {
+  cityName: string;
+  lvl: number;
+}
+
+export const actionChangeCityProps = createAsyncThunk<TChangeCityProps, TChangeCityProps, { state: AppState, rejectWithValue: any }>(
+  'game/actionChangeCityProps',
+  async (data, { rejectWithValue }) => {
+    try {
+      return data;
+    } catch (error) {
+      console.error('error = ', (error as Error).message);
+      return rejectWithValue({ message: (error as Error).message, field: 'nameTable' });
+    }
+  }
+);
+
 export type TAddUnitToCapital = {
   capitalId: string;
   position: [number, number];

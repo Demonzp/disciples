@@ -1,5 +1,5 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { actionAddCapitalCity, actionAddCity, actionAddUnitToCapital, actionChangeCapitalProps, actionDelSelectObj, actionDoubleMoveCitySquadIn, actionInitNewMap, actionMoveCitySquadIn, actionMoveTwoCellCitySquadIn, actionPointerMove, actionPointerUp, actionSetEditorMod } from 'store/actions/actionsGame';
+import { actionAddCapitalCity, actionAddCity, actionAddUnitToCapital, actionChangeCapitalProps, actionChangeCityProps, actionDelSelectObj, actionDoubleMoveCitySquadIn, actionInitNewMap, actionMoveCitySquadIn, actionMoveTwoCellCitySquadIn, actionPointerMove, actionPointerUp, actionSetEditorMod } from 'store/actions/actionsGame';
 import { TPointMatrix } from 'utils/game/scenes/editorScene';
 
 export const portretPartyOneData:{[name: string]: number} = {
@@ -367,7 +367,7 @@ export interface IStateGame {
     cellRect: TRectangle,
     pointerMatrix: TPointMatrix;
     capitalCities: ICapitalCity[];
-    cities: any[];
+    cities: ICity[];
     fieldMatrix: TFieldMatrix;
     selectObj: TSelectObj | null;
     isPointerMove: boolean;
@@ -783,6 +783,24 @@ const sliceGame = createSlice({
             }
             state.editorMod = payload;
             state.selectObj = null;
+        });
+
+        builder.addCase(actionChangeCityProps.pending, (state) => {
+            state.errors = [];
+        });
+
+        builder.addCase(actionChangeCityProps.fulfilled, (state, { payload }) => {
+            state.cities[state.selectObj.idx].cityName = payload.cityName;
+            state.cities[state.selectObj.idx].lvl = payload.lvl;
+            state.selectObj = null;
+            //const cityIdx = state.cities.findIndex(c=>c.id===payload.id);
+            //console.log('builder actionAddCity');
+        });
+
+        builder.addCase(actionChangeCityProps.rejected, (state, { payload }) => {
+
+            //const payload = action.payload as ICustomError;
+            state.errors.push(payload);
         });
     }
 });
