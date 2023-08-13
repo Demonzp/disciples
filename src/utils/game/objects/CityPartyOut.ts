@@ -6,6 +6,8 @@ import { TPoint } from "utils/gameLib/Game";
 import Graphics from "utils/gameLib/Graphics";
 import Text from "utils/gameLib/Text";
 import { IScene } from "../scenes/IScene";
+import ModalAddHero from "./ModalAddHero";
+import { ICity } from "store/slices/sliceGame";
 
 export default class CityPartyOut{
     conts: Container[] = [];
@@ -46,19 +48,25 @@ export default class CityPartyOut{
     private _fonAddLeader: Graphics|undefined;
     private _textAddLeader: Text|undefined;
     private _contSelectParty:Container|undefined;
+    cityData:ICity|undefined;
+    modalAddHero:ModalAddHero;
     scene:IScene;
-    constructor(public parent:ModalPropertiesCityParty){}
+    constructor(public parent:ModalPropertiesCityParty){
+        
+    }
 
     init(){
         this.scene = this.parent.scene;
-        const cityData = this.parent.parent.cityData;
-        if(!cityData.squadOut){
-            this._contSelectParty = this.scene.add.container(this.parent.x-182,this.parent.y-30);
+        this.modalAddHero = new ModalAddHero(this.parent.scene);
+        this.cityData = this.parent.parent.cityData;
+        if(!this.cityData.squadOut){
+            this._contSelectParty = this.scene.add.container(this.parent.x-285,this.parent.y-25);
             //this._contSelectParty.x = this.parent.x;
             //this._contSelectParty.y = this.parent.y;
             this._contSelectParty.setInteractiveRect(154,320);
             this._contSelectParty.on('pointerup',()=>{
                 console.log('_contSelectParty');
+                this.modalAddHero.init([1,0],this.parent.parent.cityData.id);
             });
             this._fonAddLeader = this.scene.add.graphics();
             this._fonAddLeader.fillStyle('#7b786b');
@@ -73,6 +81,10 @@ export default class CityPartyOut{
     }
 
     hide(){
-
+        if(this.cityData&&!this.cityData.squadOut&&this._fonAddLeader){
+            this.scene.add.remove(this._fonAddLeader);
+            this.scene.add.remove(this._textAddLeader);
+            this.scene.add.remove(this._contSelectParty);
+        }
     }
 }

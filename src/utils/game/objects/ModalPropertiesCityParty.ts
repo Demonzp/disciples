@@ -2,6 +2,7 @@ import Sprite from "utils/gameLib/Sprite";
 import { IScene } from "../scenes/IScene";
 import ModalPropertiesCity from "./ModalPropertiesCity";
 import CityPartyOut from "./CityPartyOut";
+import Button from "./Button";
 
 export default class ModalPropertiesCityParty{
     private _fon:Sprite|undefined;
@@ -9,6 +10,7 @@ export default class ModalPropertiesCityParty{
     x = 0;
     y = 0;
     cityPartyOut = new CityPartyOut(this);
+    private _btnOk:Button|undefined;
     constructor(public parent:ModalPropertiesCity){
         this.scene = parent.scene;
     }
@@ -21,12 +23,25 @@ export default class ModalPropertiesCityParty{
         this.y = 0+this.scene.halfHeight-cameraPoint.y;
         this._fon.x = this.x;
         this._fon.y = this.y;
+        this._btnOk = new Button(this.scene,'Ok', ()=>{
+            if(this.parent.modalCityParty.cityPartyOut.modalAddHero&&this.parent.modalCityParty.cityPartyOut.modalAddHero.isShow){
+                return;
+            }
+            this.hide();
+            this.parent.init(this.parent.cityData);
+        });
+        this._btnOk.init();
+        this._btnOk.x = this.x-this._btnOk.width/2;
+        this._btnOk.y = this.y+200;
+        this._btnOk.setZindex(1000);
         this.cityPartyOut.init();
     }
 
     hide(){
         if(this._fon){
             this.scene.add.remove(this._fon);
+            this._btnOk.destroy();
+            this.cityPartyOut.hide();
         }
     }
 }
