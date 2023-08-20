@@ -605,3 +605,40 @@ export const actionAddUnitToCapital = createAsyncThunk<TAddUnitToCapitalRes, TAd
     }
   }
 );
+
+export type TAddLeaderToPartyCity = {
+  unitId: string;
+  cityId: string;
+}
+
+export type TAddLeaderToPartyCityRes = {
+  unit: IUnit;
+  cityId: string;
+  party: TParty;
+}
+
+export const actionAddLeaderToPartyCity = createAsyncThunk<TAddLeaderToPartyCityRes, TAddLeaderToPartyCity, { state: AppState, rejectWithValue: any }>(
+  'game/actionAddLeaderToPartyCity',
+  async (data, { rejectWithValue }) => {
+    try {
+      const party = createParty('left');
+
+      const unit = createUnit(data.unitId);
+      if(unit.numCells===2){
+        unit.position = [1,1];
+      }else{
+        unit.position = [1,0];
+        unit.partyId = party.id;
+      }
+      
+      return {
+        unit,
+        cityId: data.cityId,
+        party
+      };
+    } catch (error) {
+      console.error('error = ', (error as Error).message);
+      return rejectWithValue({ message: (error as Error).message, field: 'nameTable' });
+    }
+  }
+);

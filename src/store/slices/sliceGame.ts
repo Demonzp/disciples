@@ -1,5 +1,5 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { actionAddCapitalCity, actionAddCity, actionAddUnitToCapital, actionChangeCapitalProps, actionChangeCityProps, actionDelSelectObj, actionDoubleMoveCitySquadIn, actionInitNewMap, actionMoveCitySquadIn, actionMoveTwoCellCitySquadIn, actionPointerMove, actionPointerUp, actionSetEditorMod } from 'store/actions/actionsGame';
+import { actionAddCapitalCity, actionAddCity, actionAddLeaderToPartyCity, actionAddUnitToCapital, actionChangeCapitalProps, actionChangeCityProps, actionDelSelectObj, actionDoubleMoveCitySquadIn, actionInitNewMap, actionMoveCitySquadIn, actionMoveTwoCellCitySquadIn, actionPointerMove, actionPointerUp, actionSetEditorMod } from 'store/actions/actionsGame';
 import { TPointMatrix } from 'utils/game/scenes/editorScene';
 
 export const portretPartyOneData:{[name: string]: number} = {
@@ -798,6 +798,29 @@ const sliceGame = createSlice({
         });
 
         builder.addCase(actionChangeCityProps.rejected, (state, { payload }) => {
+
+            //const payload = action.payload as ICustomError;
+            state.errors.push(payload);
+        });
+
+        builder.addCase(actionAddLeaderToPartyCity.pending, (state) => {
+            state.errors = [];
+        });
+
+        builder.addCase(actionAddLeaderToPartyCity.fulfilled, (state, { payload }) => {
+            state.parties.push(payload.party);
+            state.units.push(payload.unit);
+            const idxCity = state.cities.findIndex(c=>c.id===payload.cityId)
+            state.cities[idxCity].squadOut = payload.party.id;
+            // const unitOneIdx = state.units.findIndex(u=>u.uid===payload.unitId);
+            // const unitTwoIdx = state.units.findIndex(u=>u.uid===payload.toUnitId);
+            // const posOne = state.units[unitTwoIdx].position;
+            // const posTwo = state.units[unitOneIdx].position
+            // state.units[unitOneIdx].position = posOne;
+            // state.units[unitTwoIdx].position = posTwo;
+        });
+
+        builder.addCase(actionAddLeaderToPartyCity.rejected, (state, { payload }) => {
 
             //const payload = action.payload as ICustomError;
             state.errors.push(payload);

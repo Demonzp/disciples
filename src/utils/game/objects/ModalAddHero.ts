@@ -4,6 +4,8 @@ import { IBaseUnit, TRace, arrGlobalRaces, baseUnits } from "store/slices/sliceG
 import ItemSelectUnit from "./ItemSelectUnit";
 import Button from "./Button";
 import { TPoint } from "utils/gameLib/Game";
+import store from "store/store";
+import { actionAddLeaderToPartyCity } from "store/actions/actionsGame";
 
 export default class ModalAddHero{
     private _fon: Sprite | undefined;
@@ -130,7 +132,7 @@ export default class ModalAddHero{
         this._arrowDown.on('pointerup', this.onNext, this);
 
         this.initListUnits();
-        const btnOk = new Button(this.scene, 'Ok', ()=>{});
+        const btnOk = new Button(this.scene, 'Ok', this.onOk.bind(this));
         btnOk.init();
         btnOk.x = this.x - 100;
         btnOk.y = this.y + 203;
@@ -225,5 +227,12 @@ export default class ModalAddHero{
         }
 
         this.selectByUnit(this.units[nextIdx]);
+    }
+
+    onOk(){
+        store.dispatch(actionAddLeaderToPartyCity({
+            cityId: this.cityId,
+            unitId: this.units[this.selectIdx].id
+        })).unwrap().then(() => this.hide());
     }
 }
