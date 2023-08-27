@@ -74,6 +74,7 @@ export default class CityPartyOut{
                 const cont = this.conts.find(c => c.isOnPointer(pointer));
                 if (cont) {
                     console.log('add Unit to = ', cont.data);
+                    this.parent.modalAddUnit.show(cont.data, this.cityData.id, 'out');
                     //this.parent.modalAddUnit.show(cont.data, this.parent.parent.capitalData.id);
                 }
             }
