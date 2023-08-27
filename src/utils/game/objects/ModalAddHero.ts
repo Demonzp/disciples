@@ -6,6 +6,7 @@ import Button from "./Button";
 import { TPoint } from "utils/gameLib/Game";
 import store from "store/store";
 import { actionAddLeaderToPartyCity } from "store/actions/actionsGame";
+import CityPartyOut from "./CityPartyOut";
 
 export default class ModalAddHero{
     private _fon: Sprite | undefined;
@@ -46,7 +47,7 @@ export default class ModalAddHero{
     private _isModalMes = false;
     x=0;
     y=0;
-    constructor(public scene:IScene){
+    constructor(public scene:IScene, public parent:CityPartyOut){
         
         const cameraPoint = this.scene.game.camera.cameraPoint();
         this.x = 0+this.scene.halfWidth-cameraPoint.x;
@@ -162,6 +163,8 @@ export default class ModalAddHero{
             this.buttons = [];
             this.selectIdx = 0;
             this._isShow = false;
+            this.parent.updateData();
+            this.parent.initSelectHero();
         }
     }
 

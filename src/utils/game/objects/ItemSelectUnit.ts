@@ -31,8 +31,9 @@ export default class ItemSelectUnit{
         this._cont.add([this._portret, this._nameUnit]);
         this._cont.on('pointerup', ()=>{
             this.onClick(this);
-            //console.log('click on unit', this.unit.defaultName);
+            console.log('click on unit', this.unit.defaultName);
         });
+        //this._cont.setZindex(1001);
     }
 
     setIsSelect(value:boolean){

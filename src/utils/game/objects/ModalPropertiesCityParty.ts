@@ -3,6 +3,7 @@ import { IScene } from "../scenes/IScene";
 import ModalPropertiesCity from "./ModalPropertiesCity";
 import CityPartyOut from "./CityPartyOut";
 import Button from "./Button";
+import store from "store/store";
 
 export default class ModalPropertiesCityParty{
     private _fon:Sprite|undefined;
@@ -42,6 +43,7 @@ export default class ModalPropertiesCityParty{
             this.scene.add.remove(this._fon);
             this._btnOk.destroy();
             this.cityPartyOut.hide();
+            //this.parent._hide();
         }
     }
 }

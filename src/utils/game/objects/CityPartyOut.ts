@@ -8,6 +8,7 @@ import Text from "utils/gameLib/Text";
 import { IScene } from "../scenes/IScene";
 import ModalAddHero from "./ModalAddHero";
 import { ICity } from "store/slices/sliceGame";
+import store from "store/store";
 
 export default class CityPartyOut{
     conts: Container[] = [];
@@ -57,17 +58,18 @@ export default class CityPartyOut{
 
     init(){
         this.scene = this.parent.scene;
-        this.modalAddHero = new ModalAddHero(this.parent.scene);
+        this.modalAddHero = new ModalAddHero(this.parent.scene, this);
         this.cityData = this.parent.parent.cityData;
         if(!this.cityData.squadOut){
             this._contSelectParty = this.scene.add.container(this.parent.x-285,this.parent.y-25);
             //this._contSelectParty.x = this.parent.x;
             //this._contSelectParty.y = this.parent.y;
             this._contSelectParty.setInteractiveRect(154,320);
-            this._contSelectParty.on('pointerup',()=>{
-                console.log('_contSelectParty');
-                this.modalAddHero.init([1,0],this.parent.parent.cityData.id);
-            });
+            this.initSelectHero();
+            // const idOn = this._contSelectParty.on('pointerup',()=>{
+            //     this._contSelectParty.off(idOn);
+            //     this.modalAddHero.init([1,0],this.parent.parent.cityData.id);
+            // });
             this._fonAddLeader = this.scene.add.graphics();
             this._fonAddLeader.fillStyle('#7b786b');
             this._fonAddLeader.fillRect(this.parent.x-364,this.parent.y-185,154,320);
@@ -77,7 +79,28 @@ export default class CityPartyOut{
             this._textAddLeader.x = this.parent.x-364+(154-this._textAddLeader.width)/2;
             this._textAddLeader.y = this.parent.y-185+this._textAddLeader.height+6;
             this._textAddLeader.setZindex(1000);
+        }else{
+            const party = store.getState().game.parties.find(p=>p.id===this.cityData.squadOut);
+            const units = store.getState().game.units.filter(u=>u.partyId===party.id);
+            console.log('units = ', units);
         }
+    }
+
+    initSelectHero(){
+        if(this._contSelectParty){
+            const idOn = this._contSelectParty.on('pointerup',()=>{
+                this._contSelectParty.off(idOn);
+                this.modalAddHero.init([1,0],this.parent.parent.cityData.id);
+            });
+        }
+    }
+
+    updateData(){
+        const gameState = store.getState().game;
+        const cityData = gameState.cities[gameState.selectObj.idx];
+        this.parent.parent.cityData = cityData;
+        this.hide();
+        this.init();
     }
 
     hide(){
