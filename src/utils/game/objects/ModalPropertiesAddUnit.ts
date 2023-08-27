@@ -8,6 +8,7 @@ import { TPoint } from "utils/gameLib/Game";
 import { actionAddUnitToCapital } from "store/actions/actionsGame";
 import ModalMessage from "./ModalMessage";
 import { IScene } from "../scenes/IScene";
+import ModalPropertiesCityParty from "./ModalPropertiesCityParty";
 
 export default class ModalPropertiesAddUnit {
     private _fon: Sprite | undefined;
