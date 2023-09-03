@@ -7,7 +7,7 @@ import Graphics from "utils/gameLib/Graphics";
 import Text from "utils/gameLib/Text";
 import { IScene } from "../scenes/IScene";
 import ModalAddHero from "./ModalAddHero";
-import { ICity } from "store/slices/sliceGame";
+import { ICity, IUnit } from "store/slices/sliceGame";
 import store from "store/store";
 import { actionMoveCitySquadIn, actionMoveTwoCellCitySquadIn } from "store/actions/actionsGame";
 
@@ -55,6 +55,7 @@ export default class CityPartyOut{
     cityData:ICity|undefined;
     modalAddHero:ModalAddHero;
     scene:IScene;
+    squad: IUnit[] = [];
     constructor(public parent:ModalPropertiesCityParty){
         
     }
@@ -113,13 +114,13 @@ export default class CityPartyOut{
             this._textAddLeader.setZindex(1000);
         }else{
             const party = store.getState().game.parties.find(p=>p.id===this.cityData.squadOut);
-            const squad = store.getState().game.units.filter(u=>u.partyId===party.id);
-            console.log('units = ', squad);
+            this.squad = store.getState().game.units.filter(u=>u.partyId===party.id);
+            console.log('units = ', this.squad);
             for (let i = 0; i < this.contPos.length; i++) {
                 const row = this.contPos[i];
                 for (let j = 0; j < row.length; j++) {
                     const pos = row[j];
-                    const units = squad.filter(u => (u.position[0] === i));
+                    const units = this.squad.filter(u => (u.position[0] === i));
                     if (units.length===0) {
                         this.addBorderOne(pos);
                         this.addContButtonAdd(pos,i,j);
@@ -143,7 +144,7 @@ export default class CityPartyOut{
                 }
             }
 
-            squad.forEach(unit => {
+            this.squad.forEach(unit => {
                 const portrait = new PartyPortrait(this, unit, 'left');
                 // const portret = this.parent.scene.add.sprite(`portrets-party-one-${unit.fraction}`);
                 // portret.setFrame(portretPartyOneData[unit.icon]);

@@ -28,6 +28,7 @@ export default class ModalPropsAddUnitCity {
     buttons: Button[] = [];
     position: [number, number] = [0, 0];
     cityId = '';
+    side: TSide;
     posPortrets: TPoint[] = [
         {
             x: -142,
@@ -58,6 +59,7 @@ export default class ModalPropsAddUnitCity {
 
     show(position: [number, number], cityId: string, side:TSide) {
         this.cityId = cityId;
+        this.side = side;
         this._fon = this.parent.scene.add.sprite('modal-add-units');
         this._fon.x = this.parent.x;
         this._fon.y = this.parent.y;
@@ -235,42 +237,44 @@ export default class ModalPropsAddUnitCity {
         }
         if (this.units[this.selectIdx].numCells === 2) {
             const posTwo = this.position[1] === 1 ? 0 : 1;
-            // const unit = this.parent.capitalParty.squadIn.find(u => {
-            //     if ((u.position[0] === this.position[0] && u.position[1] === this.position[1])
-            //         || (u.position[0] === this.position[0] && u.position[1] === posTwo)
-            //     ) {
-            //         return true;
-            //     }
-            //     return false;
-            // });
+            const squad = this.parent[`cityParty${this.side==='out'?'Out':'In'}`]
+            const unit = squad.squad.find(u=>{
+                if ((u.position[0] === this.position[0] && u.position[1] === this.position[1])
+                    || (u.position[0] === this.position[0] && u.position[1] === posTwo)
+                ) {
+                    return true;
+                }
+                return false;
+            });
 
-            // if (unit) {
-            //     const msg = new ModalMessage(this.parent.scene as IScene, ()=>{this._isModalMes=false});
-            //     this._isModalMes = true;
-            //     msg.init('Invalid position in group!');
-            //     return;
-            // }
+            if (unit) {
+                const msg = new ModalMessage(this.parent.scene as IScene, ()=>{this._isModalMes=false});
+                this._isModalMes = true;
+                msg.init('Invalid position in group!');
+                return;
+            }
+
             this.position = [this.position[0], 0];
         } else {
             const posTwo = this.position[1] === 1 ? 0 : 1;
-            // const unit = this.parent.capitalParty.squadIn.find(u => {
-            //     if ((u.position[0] === this.position[0] && u.position[1] === this.position[1])
-            //         || (u.numCells === 2 && u.position[0] === this.position[0] && u.position[1] === posTwo)
-            //     ) {
-            //         return true;
-            //     }
-            //     return false;
-            // });
+            const squad = this.parent[`cityParty${this.side==='out'?'Out':'In'}`];
 
-            // if (unit) {
-            //     const msg = new ModalMessage(this.parent.scene as IScene, ()=>{this._isModalMes=false});
-            //     msg.init('Invalid position in group!');
-            //     this._isModalMes = true;
-            //     return;
-            // }
+            const unit = squad.squad.find(u => {
+                if ((u.position[0] === this.position[0] && u.position[1] === this.position[1])
+                    || (u.numCells === 2 && u.position[0] === this.position[0] && u.position[1] === posTwo)
+                ) {
+                    return true;
+                }
+                return false;
+            });
+
+            if (unit) {
+                const msg = new ModalMessage(this.parent.scene as IScene, ()=>{this._isModalMes=false});
+                msg.init('Invalid position in group!');
+                this._isModalMes = true;
+                return;
+            }
         }
-
-        //this.parent.capitalParty.squadIn
         // store.dispatch(actionAddUnitToCapital({
         //     unitId: this.units[this.selectIdx].id,
         //     position: this.position,

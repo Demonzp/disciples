@@ -5,6 +5,7 @@ import CityPartyOut from "./CityPartyOut";
 import Button from "./Button";
 import store from "store/store";
 import ModalPropsAddUnitCity from "./ModalPropsAddUnitCity";
+import CityPartyIn from "./CityPartyIn";
 
 export default class ModalPropertiesCityParty{
     private _fon:Sprite|undefined;
@@ -12,6 +13,7 @@ export default class ModalPropertiesCityParty{
     x = 0;
     y = 0;
     cityPartyOut = new CityPartyOut(this);
+    cityPartyIn = new CityPartyIn(this);
     modalAddUnit = new ModalPropsAddUnitCity(this);
     isPartyProps = false;
     private _btnOk:Button|undefined;

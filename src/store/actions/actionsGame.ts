@@ -606,6 +606,38 @@ export const actionAddUnitToCapital = createAsyncThunk<TAddUnitToCapitalRes, TAd
   }
 );
 
+export type TAddUnitToCity = {
+  cityId: string;
+  squad:TPartySide;
+  position:[number,number];
+  unitId: string;
+};
+
+export type TAddUnitToCityRes = {
+  cityId: string;
+  squad:TPartySide;
+  unit: IUnit;
+};
+
+export const actionAddUnitToCity = createAsyncThunk<TAddUnitToCityRes, TAddUnitToCity, { state: AppState, rejectWithValue: any }>(
+  'game/actionAddUnitToCity',
+  async (data, { rejectWithValue }) => {
+    try {
+      const unit = createUnit(data.unitId);
+      unit.position = data.position;
+      
+      return {
+        unit,
+        cityId: data.cityId,
+        squad: data.squad
+      };
+    } catch (error) {
+      console.error('error = ', (error as Error).message);
+      return rejectWithValue({ message: (error as Error).message, field: 'nameTable' });
+    }
+  }
+);
+
 export type TAddLeaderToPartyCity = {
   unitId: string;
   cityId: string;
