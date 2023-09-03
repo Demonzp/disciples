@@ -93,6 +93,12 @@ export default class ModalPropertiesCity{
         }
     }
 
+    updateUnits(){
+        if(this.modalCityParty.isPartyProps){
+            this.modalCityParty.updateUnits();
+        }
+    }
+
     keyboardInput(e:KeyboardEvent){
         //console.log('keyboardInput');
         this.allInputs.forEach(input=>{

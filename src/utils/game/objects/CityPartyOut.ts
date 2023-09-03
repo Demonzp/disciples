@@ -9,12 +9,14 @@ import { IScene } from "../scenes/IScene";
 import ModalAddHero from "./ModalAddHero";
 import { ICity } from "store/slices/sliceGame";
 import store from "store/store";
+import { actionMoveCitySquadIn, actionMoveTwoCellCitySquadIn } from "store/actions/actionsGame";
 
 export default class CityPartyOut{
     conts: Container[] = [];
     borders: Sprite[] = [];
     portraits: PartyPortrait[] = [];
     idPointUp = '';
+    idPointMove = '';
     contPos: TPoint[][] = [
         [
             {
@@ -61,8 +63,18 @@ export default class CityPartyOut{
         this.scene = this.parent.scene;
         this.modalAddHero = new ModalAddHero(this.parent.scene, this);
         this.cityData = this.parent.parent.cityData;
+        this.idPointMove = this.parent.scene.input.on('pointermove', (pointer) => {
+            if(this.parent.modalAddUnit.isShow){
+                return;
+            }
+            this.portraits.forEach(p => p.move(pointer));
+        });
+
         this.idPointUp = this.scene.input.on('pointerup', (pointer) => {
             let isNext = true;
+            if(this.parent.modalAddUnit.isShow){
+                return;
+            }
             this.portraits.forEach(p => {
                 if (p.isCanMove) {
                     isNext = false;
@@ -145,6 +157,32 @@ export default class CityPartyOut{
 
     dropPortrait(point: TPoint, portret: PartyPortrait) {
         console.log('drop!!!');
+        for (let i = 0; i < this.conts.length; i++) {
+            const cont = this.conts[i];
+            if (cont.isOnPointer(point)) {
+                console.log('on container = ', cont.data);
+                if(portret.unit.numCells===2){
+                    const p = this.portraits.find(p=>p.unit.position[0]===cont.data[0]);
+                    if(p){
+                        console.log(p.unit.defaultName);
+                        store.dispatch(actionMoveTwoCellCitySquadIn({
+                            unitId: portret.unit.uid,
+                            units: [p.unit.uid]
+                        }));
+                        return;
+                    }
+                }
+
+                store.dispatch(actionMoveCitySquadIn({
+                    unitId: portret.unit.uid,
+                    toIdx: cont.data,
+                }));
+
+                return;
+            }
+        }
+
+        portret.toStart();
     }
 
     addBorderOne(pos:TPoint){
@@ -197,7 +235,9 @@ export default class CityPartyOut{
             console.log('destroy _contSelectParty');
         }
         this.scene.input.off(this.idPointUp);
+        this.scene.input.off(this.idPointMove);
         this.borders.forEach(b=>this.scene.add.remove(b));
         this.conts.forEach(c=>this.scene.add.remove(c));
+        this.portraits.forEach(p=>p.destroy());
     }
 }

@@ -13,6 +13,7 @@ export default class ModalPropertiesCityParty{
     y = 0;
     cityPartyOut = new CityPartyOut(this);
     modalAddUnit = new ModalPropsAddUnitCity(this);
+    isPartyProps = false;
     private _btnOk:Button|undefined;
     constructor(public parent:ModalPropertiesCity){
         this.scene = parent.scene;
@@ -30,6 +31,10 @@ export default class ModalPropertiesCityParty{
             if(this.parent.modalCityParty.cityPartyOut.modalAddHero&&this.parent.modalCityParty.cityPartyOut.modalAddHero.isShow){
                 return;
             }
+
+            if(this.modalAddUnit.isShow){
+                return;
+            }
             this.hide();
             this.parent.init(this.parent.cityData);
         });
@@ -37,6 +42,7 @@ export default class ModalPropertiesCityParty{
         this._btnOk.x = this.x-this._btnOk.width/2;
         this._btnOk.y = this.y+200;
         this._btnOk.setZindex(1000);
+        this.isPartyProps = true;
         this.cityPartyOut.init();
     }
 
@@ -47,5 +53,11 @@ export default class ModalPropertiesCityParty{
             this.cityPartyOut.hide();
             //this.parent._hide();
         }
+        this.isPartyProps = false;
+    }
+
+    updateUnits(){
+        this.cityPartyOut.hide();
+        this.cityPartyOut.init();
     }
 }
