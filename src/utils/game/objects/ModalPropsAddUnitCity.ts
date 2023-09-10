@@ -4,7 +4,7 @@ import Button from "./Button";
 import store from "store/store";
 import ItemSelectUnit from "./ItemSelectUnit";
 import { TPoint } from "utils/gameLib/Game";
-import { actionAddUnitToCapital } from "store/actions/actionsGame";
+import { actionAddUnitToCity } from "store/actions/actionsGame";
 import ModalMessage from "./ModalMessage";
 import { IScene } from "../scenes/IScene";
 import ModalPropertiesCityParty from "./ModalPropertiesCityParty";
@@ -28,6 +28,7 @@ export default class ModalPropsAddUnitCity {
     buttons: Button[] = [];
     position: [number, number] = [0, 0];
     cityId = '';
+    partyId='';
     side: TSide;
     posPortrets: TPoint[] = [
         {
@@ -57,8 +58,9 @@ export default class ModalPropsAddUnitCity {
         return this._isShow;
     }
 
-    show(position: [number, number], cityId: string, side:TSide) {
+    show(position: [number, number], cityId: string, side:TSide, partyId?:string) {
         this.cityId = cityId;
+        this.partyId = partyId;
         this.side = side;
         this._fon = this.parent.scene.add.sprite('modal-add-units');
         this._fon.x = this.parent.x;
@@ -275,6 +277,13 @@ export default class ModalPropsAddUnitCity {
                 return;
             }
         }
+        store.dispatch(actionAddUnitToCity({
+            unitId:this.units[this.selectIdx].id,
+            position:this.position,
+            cityId:this.cityId,
+            partyId:this.partyId,
+            squad:this.side==='in'?'right':'left'
+        }));
         // store.dispatch(actionAddUnitToCapital({
         //     unitId: this.units[this.selectIdx].id,
         //     position: this.position,

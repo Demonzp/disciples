@@ -1,5 +1,5 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { actionAddCapitalCity, actionAddCity, actionAddLeaderToPartyCity, actionAddUnitToCapital, actionChangeCapitalProps, actionChangeCityProps, actionDelSelectObj, actionDoubleMoveCitySquadIn, actionInitNewMap, actionMoveCitySquadIn, actionMoveTwoCellCitySquadIn, actionPointerMove, actionPointerUp, actionSetEditorMod } from 'store/actions/actionsGame';
+import { actionAddCapitalCity, actionAddCity, actionAddLeaderToPartyCity, actionAddUnitToCapital, actionAddUnitToCity, actionChangeCapitalProps, actionChangeCityProps, actionDelSelectObj, actionDoubleMoveCitySquadIn, actionInitNewMap, actionMoveCitySquadIn, actionMoveTwoCellCitySquadIn, actionPointerMove, actionPointerUp, actionSetEditorMod } from 'store/actions/actionsGame';
 import { TPointMatrix } from 'utils/game/scenes/editorScene';
 
 export const portretPartyOneData:{[name: string]: number} = {
@@ -798,6 +798,24 @@ const sliceGame = createSlice({
         });
 
         builder.addCase(actionChangeCityProps.rejected, (state, { payload }) => {
+
+            //const payload = action.payload as ICustomError;
+            state.errors.push(payload);
+        });
+
+        builder.addCase(actionAddUnitToCity.pending, (state) => {
+            state.errors = [];
+        });
+
+        builder.addCase(actionAddUnitToCity.fulfilled, (state, { payload }) => {
+            state.units.push(payload.unit);
+            if(payload.squad==='right'){
+                const cityIdx = state.cities.findIndex(c=>c.id===payload.cityId);
+                state.cities[cityIdx].squadIn.push(payload.unit.uid);
+            }
+        });
+
+        builder.addCase(actionAddUnitToCity.rejected, (state, { payload }) => {
 
             //const payload = action.payload as ICustomError;
             state.errors.push(payload);

@@ -6,7 +6,7 @@ import { IBaseUnit, ICapitalCity, ICity, IUnit, TCapitalRace, TCell, TEditorMod,
 import VirtualRect from 'utils/virtualRect';
 import GameMath from 'utils/gameLib/Math';
 
-const cityNames = ['Oceanides','Harun','Modan','Kuzjag'];
+const cityNames = ['Oceanides', 'Harun', 'Modan', 'Kuzjag'];
 
 const isCanPutBuild = (fieldMatrix: TFieldMatrix, point: TPointMatrix, matrix: TPointMatrix) => {
   const iX = point[0];
@@ -97,7 +97,7 @@ const getCapitalGuard = (race: TCapitalRace): IUnit => {
 }
 
 const createUnit = (id: string): IUnit => {
-  const baseUnit = baseUnits.find(u=>u.id===id);
+  const baseUnit = baseUnits.find(u => u.id === id);
   return {
     ...baseUnit,
     uid: Game.createId(),
@@ -106,7 +106,7 @@ const createUnit = (id: string): IUnit => {
     cityId: null,
     capitalId: null,
     isLider: false,
-    race:baseUnit.fraction,
+    race: baseUnit.fraction,
     position: [0, 0],
     battlesWon: 0,
   }
@@ -260,7 +260,7 @@ export const actionAddCity = createAsyncThunk<ICity, undefined, { state: AppStat
 
       let iX = 1;
       let jY = 1;
-      const idxName = GameMath.between(0,cityNames.length-1);
+      const idxName = GameMath.between(0, cityNames.length - 1);
       const city: ICity = {
         owner: 'neutral',
         cityName: cityNames[idxName],
@@ -277,7 +277,7 @@ export const actionAddCity = createAsyncThunk<ICity, undefined, { state: AppStat
         lvl: 1,
       };
 
-      cityNames.splice(idxName,1);
+      cityNames.splice(idxName, 1);
 
       return city;
     } catch (error) {
@@ -464,10 +464,10 @@ export const actionMoveCitySquadIn = createAsyncThunk<TDataMoveCitySquadIn, TDat
   'game/actionMoveCitySquadIn',
   async (data, { getState, rejectWithValue }) => {
     try {
-      const newData:TDataMoveCitySquadIn = {...data,toIdx:[...data.toIdx]};
-      const unit = getState().game.units.find(u=>u.uid===data.unitId);
-      if(unit&&unit.numCells===2){
-        newData.toIdx[1]=0;
+      const newData: TDataMoveCitySquadIn = { ...data, toIdx: [...data.toIdx] };
+      const unit = getState().game.units.find(u => u.uid === data.unitId);
+      if (unit && unit.numCells === 2) {
+        newData.toIdx[1] = 0;
       }
       return newData;
     } catch (error) {
@@ -486,7 +486,7 @@ export const actionMoveTwoCellCitySquadIn = createAsyncThunk<TDataMoveTwoCellCit
   'game/actionMoveTwoCellCitySquadIn',
   async (data, { rejectWithValue }) => {
     try {
-      
+
       return data;
     } catch (error) {
       console.error('error = ', (error as Error).message);
@@ -594,7 +594,7 @@ export const actionAddUnitToCapital = createAsyncThunk<TAddUnitToCapitalRes, TAd
     try {
       const unit = createUnit(data.unitId);
       unit.position = data.position;
-      
+
       return {
         unit,
         capitalId: data.capitalId
@@ -608,14 +608,15 @@ export const actionAddUnitToCapital = createAsyncThunk<TAddUnitToCapitalRes, TAd
 
 export type TAddUnitToCity = {
   cityId: string;
-  squad:TPartySide;
-  position:[number,number];
+  squad: TPartySide;
+  position: [number, number];
   unitId: string;
+  partyId?:string;
 };
 
 export type TAddUnitToCityRes = {
   cityId: string;
-  squad:TPartySide;
+  squad: TPartySide;
   unit: IUnit;
 };
 
@@ -625,7 +626,12 @@ export const actionAddUnitToCity = createAsyncThunk<TAddUnitToCityRes, TAddUnitT
     try {
       const unit = createUnit(data.unitId);
       unit.position = data.position;
-      
+      if (data.squad === 'right') {
+        unit.cityId = data.cityId;
+      } else {
+        unit.partyId = data.partyId;
+      }
+
       return {
         unit,
         cityId: data.cityId,
@@ -656,13 +662,13 @@ export const actionAddLeaderToPartyCity = createAsyncThunk<TAddLeaderToPartyCity
       const party = createParty('left');
 
       const unit = createUnit(data.unitId);
-      if(unit.numCells===2){
-        unit.position = [1,1];
-      }else{
-        unit.position = [1,0];
+      if (unit.numCells === 2) {
+        unit.position = [1, 1];
+      } else {
+        unit.position = [1, 0];
         unit.partyId = party.id;
       }
-      
+
       return {
         unit,
         cityId: data.cityId,
