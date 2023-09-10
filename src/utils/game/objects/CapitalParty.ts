@@ -184,30 +184,6 @@ export default class CapitalParty {
 
     dropPortrait(point: TPoint, portret: PartyPortrait) {
         console.log('drop!!!');
-        for (let i = 0; i < this.conts.length; i++) {
-            const cont = this.conts[i];
-            if (cont.isOnPointer(point)) {
-                console.log('on container = ', cont.data);
-                if(portret.unit.numCells===2){
-                    const p = this.portraits.find(p=>p.unit.position[0]===cont.data[0]);
-                    if(p){
-                        console.log(p.unit.defaultName);
-                        store.dispatch(actionMoveTwoCellCitySquadIn({
-                            unitId: portret.unit.uid,
-                            units: [p.unit.uid]
-                        }));
-                        return;
-                    }
-                }
-                
-                store.dispatch(actionMoveCitySquadIn({
-                    unitId: portret.unit.uid,
-                    toIdx: cont.data,
-                }));
-                return;
-            }
-        }
-
         for (let i = 0; i < this.portraits.length; i++) {
             const p = this.portraits[i];
             if (p.cont.isOnPointer(point)&&p.unit.uid!==portret.unit.uid) {
@@ -234,6 +210,30 @@ export default class CapitalParty {
                 }));
             }
 
+        }
+        
+        for (let i = 0; i < this.conts.length; i++) {
+            const cont = this.conts[i];
+            if (cont.isOnPointer(point)) {
+                console.log('on container = ', cont.data);
+                if(portret.unit.numCells===2){
+                    const p = this.portraits.find(p=>p.unit.position[0]===cont.data[0]);
+                    if(p){
+                        console.log(p.unit.defaultName);
+                        store.dispatch(actionMoveTwoCellCitySquadIn({
+                            unitId: portret.unit.uid,
+                            units: [p.unit.uid]
+                        }));
+                        return;
+                    }
+                }
+                
+                store.dispatch(actionMoveCitySquadIn({
+                    unitId: portret.unit.uid,
+                    toIdx: cont.data,
+                }));
+                return;
+            }
         }
 
         portret.toStart();

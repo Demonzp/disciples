@@ -9,7 +9,7 @@ import ModalMessage from "./ModalMessage";
 import { IScene } from "../scenes/IScene";
 import ModalPropertiesCityParty from "./ModalPropertiesCityParty";
 
-type TSide = 'in'|'out';
+type TSide = 'in' | 'out';
 
 export default class ModalPropsAddUnitCity {
     private _fon: Sprite | undefined;
@@ -28,7 +28,7 @@ export default class ModalPropsAddUnitCity {
     buttons: Button[] = [];
     position: [number, number] = [0, 0];
     cityId = '';
-    partyId='';
+    partyId = '';
     side: TSide;
     posPortrets: TPoint[] = [
         {
@@ -58,7 +58,7 @@ export default class ModalPropsAddUnitCity {
         return this._isShow;
     }
 
-    show(position: [number, number], cityId: string, side:TSide, partyId?:string) {
+    show(position: [number, number], cityId: string, side: TSide, partyId?: string) {
         this.cityId = cityId;
         this.partyId = partyId;
         this.side = side;
@@ -100,7 +100,7 @@ export default class ModalPropsAddUnitCity {
         this.buttons.push(btnOk);
 
         const btnCancel = new Button(this.parent.scene, 'CANCEL', () => {
-            if(this._isModalMes){
+            if (this._isModalMes) {
                 return;
             }
             this.hide();
@@ -234,13 +234,13 @@ export default class ModalPropsAddUnitCity {
         console.log('add unit onOk');
         //console.log('capitalData = ', this.parent.capitalParty.squadIn);
 
-        if(this._isModalMes){
+        if (this._isModalMes) {
             return;
         }
         if (this.units[this.selectIdx].numCells === 2) {
             const posTwo = this.position[1] === 1 ? 0 : 1;
-            const squad = this.parent[`cityParty${this.side==='out'?'Out':'In'}`]
-            const unit = squad.squad.find(u=>{
+            const squad = this.parent[`cityParty${this.side === 'out' ? 'Out' : 'In'}`]
+            const unit = squad.squad.find(u => {
                 if ((u.position[0] === this.position[0] && u.position[1] === this.position[1])
                     || (u.position[0] === this.position[0] && u.position[1] === posTwo)
                 ) {
@@ -250,7 +250,7 @@ export default class ModalPropsAddUnitCity {
             });
 
             if (unit) {
-                const msg = new ModalMessage(this.parent.scene as IScene, ()=>{this._isModalMes=false});
+                const msg = new ModalMessage(this.parent.scene as IScene, () => { this._isModalMes = false });
                 this._isModalMes = true;
                 msg.init('Invalid position in group!');
                 return;
@@ -259,7 +259,7 @@ export default class ModalPropsAddUnitCity {
             this.position = [this.position[0], 0];
         } else {
             const posTwo = this.position[1] === 1 ? 0 : 1;
-            const squad = this.parent[`cityParty${this.side==='out'?'Out':'In'}`];
+            const squad = this.parent[`cityParty${this.side === 'out' ? 'Out' : 'In'}`];
 
             const unit = squad.squad.find(u => {
                 if ((u.position[0] === this.position[0] && u.position[1] === this.position[1])
@@ -271,23 +271,19 @@ export default class ModalPropsAddUnitCity {
             });
 
             if (unit) {
-                const msg = new ModalMessage(this.parent.scene as IScene, ()=>{this._isModalMes=false});
+                const msg = new ModalMessage(this.parent.scene as IScene, () => { this._isModalMes = false });
                 msg.init('Invalid position in group!');
                 this._isModalMes = true;
                 return;
             }
         }
+
         store.dispatch(actionAddUnitToCity({
-            unitId:this.units[this.selectIdx].id,
-            position:this.position,
-            cityId:this.cityId,
-            partyId:this.partyId,
-            squad:this.side==='in'?'right':'left'
-        }));
-        // store.dispatch(actionAddUnitToCapital({
-        //     unitId: this.units[this.selectIdx].id,
-        //     position: this.position,
-        //     capitalId: this.capitalId,
-        // })).unwrap().then(() => this.hide());
+            unitId: this.units[this.selectIdx].id,
+            position: this.position,
+            cityId: this.cityId,
+            partyId: this.partyId,
+            squad: this.side === 'in' ? 'right' : 'left'
+        })).unwrap().then(() => this.hide());
     }
 }

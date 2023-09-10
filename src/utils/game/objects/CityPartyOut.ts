@@ -9,7 +9,7 @@ import { IScene } from "../scenes/IScene";
 import ModalAddHero from "./ModalAddHero";
 import { ICity, IUnit } from "store/slices/sliceGame";
 import store from "store/store";
-import { actionMoveCitySquadIn, actionMoveTwoCellCitySquadIn } from "store/actions/actionsGame";
+import { actionDoubleMoveCitySquadIn, actionMoveCitySquadIn, actionMoveTwoCellCitySquadIn } from "store/actions/actionsGame";
 
 export default class CityPartyOut{
     conts: Container[] = [];
@@ -87,7 +87,7 @@ export default class CityPartyOut{
                 const cont = this.conts.find(c => c.isOnPointer(pointer));
                 if (cont) {
                     console.log('add Unit to = ', cont.data);
-                    this.parent.modalAddUnit.show(cont.data, this.cityData.id, 'out');
+                    this.parent.modalAddUnit.show(cont.data, this.cityData.id, 'out', this.cityData.squadOut);
                     //this.parent.modalAddUnit.show(cont.data, this.parent.parent.capitalData.id);
                 }
             }
@@ -158,6 +158,34 @@ export default class CityPartyOut{
 
     dropPortrait(point: TPoint, portret: PartyPortrait) {
         console.log('drop!!!');
+        for (let i = 0; i < this.portraits.length; i++) {
+            const p = this.portraits[i];
+            if (p.cont.isOnPointer(point)&&p.unit.uid!==portret.unit.uid) {
+                console.log('on portrait', p.unit.defaultName);
+                if(portret.unit.numCells===2){
+                    const portraits = this.portraits.filter(p2=>p2.unit.position[0]===p.unit.position[0]);
+                    console.log(portraits.map(p2=>p2.unit.defaultName));
+                    store.dispatch(actionMoveTwoCellCitySquadIn({
+                        unitId: portret.unit.uid,
+                        units: portraits.map(p2=>p2.unit.uid)
+                    }));
+                    return;
+                }else if(p.unit.numCells===2){
+                    const portraits = this.portraits.filter(p2=>p2.unit.position[0]===portret.unit.position[0]);
+                    store.dispatch(actionMoveTwoCellCitySquadIn({
+                        unitId: p.unit.uid,
+                        units: portraits.map(p2=>p2.unit.uid)
+                    }));
+                    return;
+                }
+                store.dispatch(actionDoubleMoveCitySquadIn({
+                    unitId: portret.unit.uid,
+                    toUnitId: p.unit.uid
+                }));
+            }
+
+        }
+        
         for (let i = 0; i < this.conts.length; i++) {
             const cont = this.conts[i];
             if (cont.isOnPointer(point)) {
