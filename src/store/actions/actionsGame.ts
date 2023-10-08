@@ -86,7 +86,7 @@ const getCapitalGuard = (race: TCapitalRace): IUnit => {
         partyId: null,
         cityId: null,
         capitalId: null,
-        isLider: false,
+        isLeader: false,
         race,
         position: [1, 0],
         battlesWon: 0,
@@ -105,7 +105,7 @@ const createUnit = (id: string): IUnit => {
     partyId: null,
     cityId: null,
     capitalId: null,
-    isLider: false,
+    isLeader: false,
     race: baseUnit.fraction,
     position: [0, 0],
     battlesWon: 0,
@@ -668,6 +668,7 @@ export const actionAddLeaderToPartyCity = createAsyncThunk<TAddLeaderToPartyCity
         unit.position = [1, 0];
         unit.partyId = party.id;
       }
+      unit.isLeader = true;
 
       return {
         unit,

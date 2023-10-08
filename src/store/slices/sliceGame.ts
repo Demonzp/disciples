@@ -19,7 +19,7 @@ export const baseUnits: IBaseUnit[] = [
         level: 1,
         defaultName: 'Myzrael',
         isCapitalGuard: true,
-        isCanLider: true,
+        isCanLeader: true,
         isHero: false,
         fraction: 'empire',
         icon: 'myzrael',
@@ -41,7 +41,7 @@ export const baseUnits: IBaseUnit[] = [
         id: '1',
         level: 1,
         defaultName: 'Archmage',
-        isCanLider: true,
+        isCanLeader: true,
         isCapitalGuard: false,
         isHero: true,
         fraction: 'empire',
@@ -65,7 +65,7 @@ export const baseUnits: IBaseUnit[] = [
         level: 1,
         defaultName: 'Pegasus Knight',
         isCapitalGuard: false,
-        isCanLider: true,
+        isCanLeader: true,
         isHero: true,
         fraction: 'empire',
         icon: 'pegasus',
@@ -88,7 +88,7 @@ export const baseUnits: IBaseUnit[] = [
         level: 1,
         defaultName: 'Squire',
         isCapitalGuard: false,
-        isCanLider: true,
+        isCanLeader: true,
         isHero: false,
         fraction: 'empire',
         icon: 'squire',
@@ -111,7 +111,7 @@ export const baseUnits: IBaseUnit[] = [
         level: 1,
         defaultName: 'Archer',
         isCapitalGuard: false,
-        isCanLider: true,
+        isCanLeader: true,
         isHero: false,
         fraction: 'empire',
         icon: 'archer',
@@ -134,7 +134,7 @@ export const baseUnits: IBaseUnit[] = [
         level: 1,
         defaultName: 'Apprentice',
         isCapitalGuard: false,
-        isCanLider: true,
+        isCanLeader: true,
         isHero: false,
         fraction: 'empire',
         icon: 'apprentice',
@@ -157,7 +157,7 @@ export const baseUnits: IBaseUnit[] = [
         level: 1,
         defaultName: 'Acolyt',
         isCapitalGuard: false,
-        isCanLider: true,
+        isCanLeader: true,
         isHero: false,
         fraction: 'empire',
         icon: 'acolyt',
@@ -180,7 +180,7 @@ export const baseUnits: IBaseUnit[] = [
         level: 1,
         defaultName: 'Titan',
         isCapitalGuard: false,
-        isCanLider: true,
+        isCanLeader: true,
         isHero: false,
         fraction: 'empire',
         icon: 'titan',
@@ -256,7 +256,7 @@ export interface IBaseUnit {
     level: number;
     defaultName: string;
     isCapitalGuard: boolean;
-    isCanLider: boolean;
+    isCanLeader: boolean;
     isHero: boolean;
     fraction: TFraction;
     icon: string;
@@ -282,7 +282,7 @@ export interface IUnit extends IBaseUnit {
     cityId: string|null;
     capitalId: string|null;
     position: [number,number];
-    isLider: boolean;
+    isLeader: boolean;
     race: TCapitalRace;
     battlesWon: number;
 }

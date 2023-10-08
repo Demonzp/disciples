@@ -117,14 +117,17 @@ export default class CityPartyOut{
             const party = store.getState().game.parties.find(p=>p.id===this.cityData.squadOut);
             this.squad = store.getState().game.units.filter(u=>u.partyId===party.id);
             console.log('units = ', this.squad);
+            const lead = this.squad.find(u=>u.isLeader);
             for (let i = 0; i < this.contPos.length; i++) {
                 const row = this.contPos[i];
                 for (let j = 0; j < row.length; j++) {
                     const pos = row[j];
                     const units = this.squad.filter(u => (u.position[0] === i));
                     if (units.length===0) {
-                        this.addBorderOne(pos);
-                        this.addContButtonAdd(pos,i,j);
+                        if(this.squad.length-1<lead.leadership){
+                            this.addBorderOne(pos);
+                            this.addContButtonAdd(pos,i,j);
+                        }
                     } else {
                         if (units.length===1&&units[0].numCells === 2&&j===0) {
                             const sprite = this.parent.scene.add.sprite('place-two');
@@ -137,8 +140,12 @@ export default class CityPartyOut{
                                 //console.log('unit = ', unit.defaultName);
                                 this.addBorderOne(pos);                            
                             }else{
-                                this.addBorderOne(pos);
-                                this.addContButtonAdd(pos,i,j);
+                                if(this.squad.length-1<lead.leadership){
+                                    this.addBorderOne(pos);
+                                    this.addContButtonAdd(pos,i,j);
+                                }
+                                // this.addBorderOne(pos);
+                                // this.addContButtonAdd(pos,i,j);
                             }
                         }
                     }
@@ -158,10 +165,10 @@ export default class CityPartyOut{
     }
 
     dropPortrait(point: TPoint, portret: PartyPortrait) {
-        if(this.parent.modalAddUnit.isShow){
-            console.log('modalAddUnit.isShow');
-            return;
-        }
+        // if(this.parent.modalAddUnit.isShow){
+        //     console.log('modalAddUnit.isShow');
+        //     return;
+        // }
         console.log('drop!!!');
         for (let i = 0; i < this.portraits.length; i++) {
             const p = this.portraits[i];

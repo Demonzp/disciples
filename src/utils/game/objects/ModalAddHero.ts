@@ -60,7 +60,6 @@ export default class ModalAddHero{
 
     initListUnits() {
 
-
         this.units = baseUnits.filter(u => {
             if (u.fraction === this.selectRace && u.isHero && !u.isCapitalGuard) {
                 return true;
