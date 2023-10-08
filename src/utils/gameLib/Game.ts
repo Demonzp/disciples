@@ -94,9 +94,14 @@ export default class Game {
     this.canvas.height = this.height;
   }
 
-  private async preload() {
+  private preload() {
     //console.log('game width = ', this.width);
-    await this.load.preloadImages();
+    //await this.load.preloadImages();
+    this.load.loadFiles(this.loadComplate.bind(this));
+    //this._scenes.initFirstScene();
+  }
+
+  loadComplate(){
     this._scenes.initFirstScene();
   }
 

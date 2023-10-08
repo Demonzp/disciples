@@ -28,7 +28,6 @@ export default class LoaderScene extends Scene {
     this.load.spritesheet('city-1', './assets/imgs/city-1.png', { frameWidth: 314, frameHeight: 300, endFrame: 20 });
     this.load.spritesheet('city-2', './assets/imgs/city-2.png', { frameWidth: 314, frameHeight: 300, endFrame: 20 });
     this.load.image('fon-menu-editor', './assets/imgs/fon-menu-editor.jpg');
-    //this.load.image('castle-empire', './assets/imgs/castle-empire.png');
     this.load.image('origin-field', './assets/imgs/origin-field.jpg');
     this.load.image('map-grid', './assets/imgs/map-grid.jpg');
     this.load.image('fundament5x5', './assets/imgs/fundament5x5.png');

@@ -74,6 +74,7 @@ export default class CityPartyOut{
         this.idPointUp = this.scene.input.on('pointerup', (pointer) => {
             let isNext = true;
             if(this.parent.modalAddUnit.isShow){
+                console.log('modalAddUnit.isShow');
                 return;
             }
             this.portraits.forEach(p => {
@@ -157,10 +158,14 @@ export default class CityPartyOut{
     }
 
     dropPortrait(point: TPoint, portret: PartyPortrait) {
+        if(this.parent.modalAddUnit.isShow){
+            console.log('modalAddUnit.isShow');
+            return;
+        }
         console.log('drop!!!');
         for (let i = 0; i < this.portraits.length; i++) {
             const p = this.portraits[i];
-            if (p.cont.isOnPointer(point)&&p.unit.uid!==portret.unit.uid) {
+            if (p.unit.uid!==portret.unit.uid&&p.cont.isOnPointer(point)) {
                 console.log('on portrait', p.unit.defaultName);
                 if(portret.unit.numCells===2){
                     const portraits = this.portraits.filter(p2=>p2.unit.position[0]===p.unit.position[0]);
@@ -182,6 +187,7 @@ export default class CityPartyOut{
                     unitId: portret.unit.uid,
                     toUnitId: p.unit.uid
                 }));
+                return;
             }
 
         }
@@ -268,5 +274,8 @@ export default class CityPartyOut{
         this.borders.forEach(b=>this.scene.add.remove(b));
         this.conts.forEach(c=>this.scene.add.remove(c));
         this.portraits.forEach(p=>p.destroy());
+        this.borders = [];
+        this.portraits = [];
+        this.conts = [];
     }
 }

@@ -95,6 +95,9 @@ export default class ModalPropertiesCity{
 
     updateUnits(){
         if(this.modalCityParty.isPartyProps){
+            const gameState = store.getState().game;
+            const cityData = gameState.cities[gameState.selectObj.idx];
+            this.cityData = cityData;
             this.modalCityParty.updateUnits();
         }
     }

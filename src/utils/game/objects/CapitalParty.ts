@@ -208,6 +208,7 @@ export default class CapitalParty {
                     unitId: portret.unit.uid,
                     toUnitId: p.unit.uid
                 }));
+                return;
             }
 
         }

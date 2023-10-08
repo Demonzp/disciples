@@ -54,11 +54,16 @@ const imgLoad = (blob: Blob)=>{
 
 export default class Loader{
   private loadImages: ILoadItem[] = [];
+  private numLoaded = 0;
+  private idx = 0;
+  private maxFiles = 10;
+  private i = 0;
   private loadSpritesheet: ILoadSpritesheet[] = [];
   private loadSpritesequence: ILoadSpritesequence[] = [];
   private loadedImages: TLoadedItem[] = [];
   private eventProgressCallbacks: ((value: number)=>void)[] = [];
   private eventComplateCallbacks: ((value: number)=>void)[] = [];
+  private callback:()=>void;
 
   image(key:string, keyScene: string, path:string){
     this.loadImages.push({key, keyScene, path});
@@ -124,6 +129,71 @@ export default class Loader{
       default:
         break;
     }
+  }
+
+  loadFiles(callback:()=>void){
+    this.callback = callback;
+    this.preloadImages2();
+  }
+//22
+  preloadImages2(){
+    const start = this.idx;
+    let end = this.idx+this.maxFiles;
+    if(end>this.loadImages.length){
+      end = this.loadImages.length;
+    }
+    this.idx = end;
+    for (let i = start; i < end; i++) {
+      const el = this.loadImages[i];
+      //console.log(el.key);
+      this.loadImg(el);
+    }
+    //console.log('start = ',start,' end = ', end);
+    //console.log(this.loadImages.length);
+  }
+
+  isLoadNext(){
+    this.numLoaded++;
+    this.i++;
+    
+    
+    if(this.numLoaded===this.loadImages.length-1){
+      
+      this.eventProgressCallbacks = [];
+      this.loadImages = [];
+      this.numLoaded=0;
+      this.eventComplateCallbacks.forEach(callback=>callback(1));
+      this.callback();
+      return;
+    }
+
+    if(this.i===this.maxFiles&&this.numLoaded<this.loadImages.length){
+      this.i = 0;
+      this.preloadImages2();
+    }
+  }
+
+  async loadImg(item:ILoadItem){
+    try{
+      const res = await fetch(item.path);
+      const blob = await res.blob();
+      const img = await imgLoad(blob);
+      //num = (1/100)*(100/(this.loadImages.length/i));
+      this.loadedImages.push({
+        key: item.key, 
+        keyScene: item.keyScene, 
+        file: img,
+        //blob
+      });
+      const num = (1/100)*(100/(this.loadImages.length/this.numLoaded));
+      this.eventProgressCallbacks.forEach(callback=>callback(num));
+      this.isLoadNext();
+      //this.eventProgressCallbacks.forEach(callback=>callback(num));
+    }catch(error){
+      console.error('loadError: ', (error as Error).message);
+      this.isLoadNext();
+    }
+    
   }
 
   async preloadImages(){
