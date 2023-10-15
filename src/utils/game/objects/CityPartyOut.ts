@@ -13,6 +13,7 @@ import { actionDoubleMoveCitySquadIn, actionMoveCitySquadIn, actionMoveTwoCellCi
 
 export default class CityPartyOut{
     conts: Container[] = [];
+    contsMove: Container[] = [];
     borders: Sprite[] = [];
     portraits: PartyPortrait[] = [];
     idPointUp = '';
@@ -127,11 +128,14 @@ export default class CityPartyOut{
                         if(this.squad.length-1<lead.leadership){
                             this.addBorderOne(pos);
                             this.addContButtonAdd(pos,i,j);
+                        }else{
+                            this.addBorderPlag(pos);
+                            this.addContButtonMove(pos,i,j);
                         }
                     } else {
                         if (units.length===1&&units[0].numCells === 2&&j===0) {
                             const sprite = this.parent.scene.add.sprite('place-two');
-                            sprite.x = this.parent.x + pos.x + 41;
+                            sprite.x = this.parent.x + pos.x - 39;
                             sprite.y = this.parent.y + pos.y - 1;
                             sprite.setZindex(1000);
                             this.borders.push(sprite);
@@ -143,6 +147,9 @@ export default class CityPartyOut{
                                 if(this.squad.length-1<lead.leadership){
                                     this.addBorderOne(pos);
                                     this.addContButtonAdd(pos,i,j);
+                                }else{
+                                    this.addBorderPlag(pos);
+                                    this.addContButtonMove(pos,i,j);
                                 }
                                 // this.addBorderOne(pos);
                                 // this.addContButtonAdd(pos,i,j);
@@ -224,7 +231,51 @@ export default class CityPartyOut{
             }
         }
 
+        for (let i = 0; i < this.contsMove.length; i++) {
+            const cont = this.contsMove[i];
+            if (cont.isOnPointer(point)) {
+                console.log('on container contsMove = ', cont.data);
+                if(portret.unit.numCells===2){
+                    const p = this.portraits.find(p=>p.unit.position[0]===cont.data[0]);
+                    if(p){
+                        console.log(p.unit.defaultName);
+                        store.dispatch(actionMoveTwoCellCitySquadIn({
+                            unitId: portret.unit.uid,
+                            units: [p.unit.uid]
+                        }));
+                        return;
+                    }
+                }
+
+                store.dispatch(actionMoveCitySquadIn({
+                    unitId: portret.unit.uid,
+                    toIdx: cont.data,
+                }));
+
+                return;
+            }
+        }
+
         portret.toStart();
+    }
+
+    addBorderPlag(pos:TPoint){
+        const sprite = this.parent.scene.add.sprite('place-plag');
+        sprite.x = this.parent.x + pos.x + 1;
+        sprite.y = this.parent.y + pos.y - 1;
+        sprite.setZindex(1000);
+        this.borders.push(sprite);
+    }
+
+    addContButtonMove(pos:TPoint, i:number, j:number){
+        const cont = this.parent.scene.add.container();
+
+        cont.x = this.parent.x + pos.x;
+        cont.y = this.parent.y + pos.y;
+        cont.setInteractiveRect(70, 102);
+        cont.data = [i, j];
+        cont.setZindex(1000);
+        this.contsMove.push(cont);
     }
 
     addBorderOne(pos:TPoint){
@@ -280,9 +331,11 @@ export default class CityPartyOut{
         this.scene.input.off(this.idPointMove);
         this.borders.forEach(b=>this.scene.add.remove(b));
         this.conts.forEach(c=>this.scene.add.remove(c));
+        this.contsMove.forEach(c=>this.scene.add.remove(c));
         this.portraits.forEach(p=>p.destroy());
         this.borders = [];
         this.portraits = [];
         this.conts = [];
+        this.contsMove = [];
     }
 }

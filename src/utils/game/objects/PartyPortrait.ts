@@ -21,8 +21,11 @@ export default class PartyPortrait {
 
         
         if(this.unit.numCells===2){
-            
-            this.startPos.x =this.parent.parent.x + this.parent.contPos[this.unit.position[0]][this.unit.position[1]].x+40;
+            let corect = 40;
+            if(this.side==='left'){
+                corect = -40;
+            }
+            this.startPos.x =this.parent.parent.x + this.parent.contPos[this.unit.position[0]][this.unit.position[1]].x+corect;
             this.startPos.y =this.parent.parent.y + this.parent.contPos[this.unit.position[0]][this.unit.position[1]].y;  
             this.cont = this.parent.parent.scene.add.container(this.startPos.x, this.startPos.y);
             this.cont.setInteractiveRect(140, 95);
