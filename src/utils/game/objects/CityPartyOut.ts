@@ -119,13 +119,16 @@ export default class CityPartyOut{
             this.squad = store.getState().game.units.filter(u=>u.partyId===party.id);
             console.log('units = ', this.squad);
             const lead = this.squad.find(u=>u.isLeader);
+            const fullSlots = this.squad.reduce((prev,unit)=>{
+                return prev+unit.numCells;
+            },0)-1;
             for (let i = 0; i < this.contPos.length; i++) {
                 const row = this.contPos[i];
                 for (let j = 0; j < row.length; j++) {
                     const pos = row[j];
                     const units = this.squad.filter(u => (u.position[0] === i));
                     if (units.length===0) {
-                        if(this.squad.length-1<lead.leadership){
+                        if(fullSlots<lead.leadership){
                             this.addBorderOne(pos);
                             this.addContButtonAdd(pos,i,j);
                         }else{
@@ -144,7 +147,7 @@ export default class CityPartyOut{
                                 //console.log('unit = ', unit.defaultName);
                                 this.addBorderOne(pos);                            
                             }else{
-                                if(this.squad.length-1<lead.leadership){
+                                if(fullSlots<lead.leadership){
                                     this.addBorderOne(pos);
                                     this.addContButtonAdd(pos,i,j);
                                 }else{

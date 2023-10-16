@@ -3,7 +3,8 @@ import ModalPropertiesCityParty from "./ModalPropertiesCityParty";
 import Sprite from "utils/gameLib/Sprite";
 import PartyPortrait from "./PartyPortrait";
 import { TPoint } from "utils/gameLib/Game";
-import { IUnit } from "store/slices/sliceGame";
+import { ICity, IUnit } from "store/slices/sliceGame";
+import { IScene } from "../scenes/IScene";
 
 export default class CityPartyIn{
     conts: Container[] = [];
@@ -41,11 +42,14 @@ export default class CityPartyIn{
             },
         ]
     ];
+    cityData:ICity|undefined;
+    scene:IScene;
     squad: IUnit[] = [];
     constructor(public parent:ModalPropertiesCityParty){}
 
     init(){
-
+        this.scene = this.parent.scene;
+        this.cityData = this.parent.parent.cityData;
     }
 
     hide(){
