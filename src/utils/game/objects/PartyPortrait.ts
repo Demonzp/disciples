@@ -5,6 +5,7 @@ import Text from "utils/gameLib/Text";
 import Container from "utils/gameLib/Container";
 import { TPoint } from "utils/gameLib/Game";
 import CityPartyOut from "./CityPartyOut";
+import CityPartyIn from "./CityPartyIn";
 
 export default class PartyPortrait {
     sprite: Sprite | undefined;
@@ -13,7 +14,7 @@ export default class PartyPortrait {
     isCanMove = false;
     startPoint: TPoint = { x: 0, y: 0 };
     startPos: TPoint = {x:0,y:0};
-    constructor(public parent: CapitalParty|CityPartyOut, public unit: IUnit, public side: TPartySide) {
+    constructor(public parent: CapitalParty|CityPartyOut|CityPartyIn, public unit: IUnit, public side: TPartySide) {
         this.create();
     }
 

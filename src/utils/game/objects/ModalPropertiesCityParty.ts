@@ -46,6 +46,7 @@ export default class ModalPropertiesCityParty{
         this._btnOk.setZindex(1000);
         this.isPartyProps = true;
         this.cityPartyOut.init();
+        this.cityPartyIn.init();
     }
 
     hide(){
@@ -53,6 +54,7 @@ export default class ModalPropertiesCityParty{
             this.scene.add.remove(this._fon);
             this._btnOk.destroy();
             this.cityPartyOut.hide();
+            this.cityPartyIn.hide();
             //this.parent._hide();
         }
         this.isPartyProps = false;
@@ -61,5 +63,7 @@ export default class ModalPropertiesCityParty{
     updateUnits(){
         this.cityPartyOut.hide();
         this.cityPartyOut.init();
+        this.cityPartyIn.hide();
+        this.cityPartyIn.init();
     }
 }
