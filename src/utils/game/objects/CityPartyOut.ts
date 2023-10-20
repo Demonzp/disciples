@@ -304,6 +304,9 @@ export default class CityPartyOut{
         if(this._contSelectParty){
             console.log('initSelectHero!!!! = ', this._contSelectParty);
             const idOn = this._contSelectParty.on('pointerup',()=>{
+                if(this.parent.modalAddUnit.isShow){
+                    return;
+                }
                 this._contSelectParty.off(idOn);
                 this.modalAddHero.init([1,0],this.parent.parent.cityData.id);
             });

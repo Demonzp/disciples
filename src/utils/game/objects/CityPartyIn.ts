@@ -6,6 +6,7 @@ import { TPoint } from "utils/gameLib/Game";
 import { ICity, IUnit } from "store/slices/sliceGame";
 import { IScene } from "../scenes/IScene";
 import store from "store/store";
+import { actionDoubleMoveCitySquadIn, actionMoveCitySquadIn, actionMoveTwoCellCitySquadIn } from "store/actions/actionsGame";
 
 export default class CityPartyIn{
     conts: Container[] = [];
@@ -91,7 +92,7 @@ export default class CityPartyIn{
         });
 
         this.idPointMove = this.parent.scene.input.on('pointermove', (pointer) => {
-            if(this.parent.modalAddUnit.isShow){
+            if(this.parent.modalAddUnit.isShow||this.parent.cityPartyOut.modalAddHero.isShow){
                 return;
             }
             this.portraits.forEach(p => p.move(pointer));
@@ -99,7 +100,7 @@ export default class CityPartyIn{
 
         this.idPointUp = this.scene.input.on('pointerup', (pointer) => {
             let isNext = true;
-            if(this.parent.modalAddUnit.isShow){
+            if(this.parent.modalAddUnit.isShow||this.parent.cityPartyOut.modalAddHero.isShow){
                 console.log('modalAddUnit.isShow');
                 return;
             }
@@ -123,12 +124,13 @@ export default class CityPartyIn{
     }
 
     hide(){
+        this.scene.input.off(this.idPointUp);
+        this.scene.input.off(this.idPointMove);
         this.portraits.forEach(p=>p.destroy());
         this.borders.forEach(b=>this.scene.add.remove(b));
         this.conts.forEach(c=>this.scene.add.remove(c));
         this.portraits = [];
         this.borders = [];
-        this.portraits = [];
         this.conts = [];
     }
 
@@ -162,6 +164,59 @@ export default class CityPartyIn{
     }
 
     dropPortrait(point: TPoint, portret: PartyPortrait){
+        console.log('drop!!!');
+        for (let i = 0; i < this.portraits.length; i++) {
+            const p = this.portraits[i];
+            if (p.cont.isOnPointer(point)&&p.unit.uid!==portret.unit.uid) {
+                console.log('on portrait', p.unit.defaultName);
+                if(portret.unit.numCells===2){
+                    const portraits = this.portraits.filter(p2=>p2.unit.position[0]===p.unit.position[0]);
+                    console.log(portraits.map(p2=>p2.unit.defaultName));
+                    store.dispatch(actionMoveTwoCellCitySquadIn({
+                        unitId: portret.unit.uid,
+                        units: portraits.map(p2=>p2.unit.uid)
+                    }));
+                    return;
+                }else if(p.unit.numCells===2){
+                    const portraits = this.portraits.filter(p2=>p2.unit.position[0]===portret.unit.position[0]);
+                    store.dispatch(actionMoveTwoCellCitySquadIn({
+                        unitId: p.unit.uid,
+                        units: portraits.map(p2=>p2.unit.uid)
+                    }));
+                    return;
+                }
+                store.dispatch(actionDoubleMoveCitySquadIn({
+                    unitId: portret.unit.uid,
+                    toUnitId: p.unit.uid
+                }));
+                return;
+            }
 
+        }
+        
+        for (let i = 0; i < this.conts.length; i++) {
+            const cont = this.conts[i];
+            if (cont.isOnPointer(point)) {
+                console.log('on container = ', cont.data);
+                if(portret.unit.numCells===2){
+                    const p = this.portraits.find(p=>p.unit.position[0]===cont.data[0]);
+                    if(p){
+                        console.log(p.unit.defaultName);
+                        store.dispatch(actionMoveTwoCellCitySquadIn({
+                            unitId: portret.unit.uid,
+                            units: [p.unit.uid]
+                        }));
+                        return;
+                    }
+                }
+                store.dispatch(actionMoveCitySquadIn({
+                    unitId: portret.unit.uid,
+                    toIdx: cont.data,
+                }));
+                return;
+            }
+        }
+
+        portret.toStart();
     }
 }
