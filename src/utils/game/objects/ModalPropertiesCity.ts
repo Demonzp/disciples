@@ -35,7 +35,7 @@ export default class ModalPropertiesCity{
         this.inputCityName.y = y-120;
         this.allInputs.push(this.inputCityName);
 
-        this.selectLvl = new SelectLine(this.scene,['1','2','3','4'],'1');
+        this.selectLvl = new SelectLine(this.scene,['1','2','3','4','5'],'1');
         this.selectLvl.init();
         this.selectLvl.x = x-30;
         this.selectLvl.y = y-120;

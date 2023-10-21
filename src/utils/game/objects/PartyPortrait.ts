@@ -77,7 +77,6 @@ export default class PartyPortrait {
         if (!this.isCanMove) {
             return;
         }
-
         this.cont.x = point.x + this.startPoint.x;
         this.cont.y = point.y + this.startPoint.y;
     }

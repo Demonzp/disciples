@@ -65,9 +65,16 @@ export default class City extends BaseObject{
 
     updateState(data:ICity){
         //console.log('update State!!');
+
         this.matrixPoint = data.matrixPoint;
         this.isCanPut = data.isCanPut;
-        this.move();
+        if(this.lvl!==data.lvl){
+            this.destroy();
+            this.create();
+        }else{
+            this.move();
+        }
+        //this.move();
         if(data.isUp){
             this.sprite.setZindex(1000);
         }else{

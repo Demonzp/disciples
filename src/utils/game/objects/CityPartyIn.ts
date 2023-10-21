@@ -110,6 +110,13 @@ export default class CityPartyIn{
                 }
                 p.drop(pointer);
             });
+
+            this.parent.cityPartyOut.portraits.forEach(p=>{
+                if (p.isCanMove) {
+                    isNext = false;
+                }
+                p.drop(pointer);
+            });
             //console.log('CapitalParty pointerup');
             if (isNext) {
                 const cont = this.conts.find(c => c.isOnPointer(pointer));
@@ -185,6 +192,36 @@ export default class CityPartyIn{
                     }));
                     return;
                 }
+                store.dispatch(actionDoubleMoveCitySquadIn({
+                    unitId: portret.unit.uid,
+                    toUnitId: p.unit.uid
+                }));
+                return;
+            }
+
+        }
+
+        for (let i = 0; i < this.parent.cityPartyOut.portraits.length; i++) {
+            const p = this.parent.cityPartyOut.portraits[i];
+            if (p.cont.isOnPointer(point)&&p.unit.uid!==portret.unit.uid) {
+                console.log('on portrait', p.unit.defaultName);
+                if(portret.unit.numCells===2){
+                    const portraits = this.portraits.filter(p2=>p2.unit.position[0]===p.unit.position[0]);
+                    console.log(portraits.map(p2=>p2.unit.defaultName));
+                    // store.dispatch(actionMoveTwoCellCitySquadIn({
+                    //     unitId: portret.unit.uid,
+                    //     units: portraits.map(p2=>p2.unit.uid)
+                    // }));
+                    //return;
+                }else if(p.unit.numCells===2){
+                    const portraits = this.portraits.filter(p2=>p2.unit.position[0]===portret.unit.position[0]);
+                    // store.dispatch(actionMoveTwoCellCitySquadIn({
+                    //     unitId: p.unit.uid,
+                    //     units: portraits.map(p2=>p2.unit.uid)
+                    // }));
+                    //return;
+                }
+                console.log('from IN to OUT!!!');
                 store.dispatch(actionDoubleMoveCitySquadIn({
                     unitId: portret.unit.uid,
                     toUnitId: p.unit.uid

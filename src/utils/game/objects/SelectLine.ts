@@ -14,7 +14,7 @@ export default class SelectLine{
     width = 200;
     height = 20;
     index = -1;
-    constructor(public scene: Scene, public data:string[], private _defaultValue?:string){
+    constructor(public scene: Scene, public data:string[], private _defaultValue?:string, private _callback?:(data:any)=>void){
         this.index = data.length;
     }
 
@@ -105,6 +105,9 @@ export default class SelectLine{
         }
         this.index-=1;
         this.textEl.text = this.data[this.index];
+        if(this._callback){
+            this._callback(this.data[this.index]);
+        }
         this.arrowsIcon();
     }
 
@@ -115,6 +118,9 @@ export default class SelectLine{
 
         this.index+=1;
         this.textEl.text = this.data[this.index];
+        if(this._callback){
+            this._callback(this.data[this.index]);
+        }
         this.arrowsIcon();
     }
 
