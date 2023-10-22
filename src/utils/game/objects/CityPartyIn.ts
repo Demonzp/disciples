@@ -6,7 +6,7 @@ import { TPoint } from "utils/gameLib/Game";
 import { ICity, IUnit } from "store/slices/sliceGame";
 import { IScene } from "../scenes/IScene";
 import store from "store/store";
-import { actionDoubleMoveCitySquadIn, actionMoveCitySquadIn, actionMoveTwoCellCitySquadIn, actionMoveUnitInOut } from "store/actions/actionsGame";
+import { actionDoubleMoveCitySquadIn, actionMoveCitySquadIn, actionMoveTwoCellCitySquadIn, actionMoveTwoCellUnitInOut, actionMoveUnitInOut } from "store/actions/actionsGame";
 
 export default class CityPartyIn{
     conts: Container[] = [];
@@ -217,7 +217,12 @@ export default class CityPartyIn{
                 if(portret.unit.numCells===2){
 
                     //const portraits = this.portraits.filter(p2=>p2.unit.position[0]===p.unit.position[0]);
-                    const portraits = this.parent.cityPartyOut.squad.filter(u=>u.position[0]===p.unit.position[0]);
+                    const units = this.parent.cityPartyOut.squad.filter(u=>u.position[0]===p.unit.position[0]);
+                    store.dispatch(actionMoveTwoCellUnitInOut({
+                        unitId: portret.unit.uid,
+                        units: units.map(u=>u.uid)
+                    }));
+                    return;
                     //console.log(portraits.map(p2=>p2.unit.defaultName));
                     // store.dispatch(actionMoveTwoCellCitySquadIn({
                     //     unitId: portret.unit.uid,

@@ -875,13 +875,14 @@ const sliceGame = createSlice({
             const posTwo:[number,number] = [...state.units[unitOneIdx].position];
             state.units[unitOneIdx].position = [...posOne];
             let partyOneId:string|null = null;
-            let partyTwoId:string|null = null;
+            //let partyTwoId:string|null = null;
             if(state.units[unitOneIdx].partyId){
                 partyOneId = state.units[unitOneIdx].partyId;
                 state.units[unitOneIdx].partyId = null;
             }else{
-                partyTwoId = state.units[unitsIdx[0]].partyId;
-                state.units[unitOneIdx].partyId = partyTwoId;
+                console.log('to Out!!! = ', state.units[unitsIdx[0]].partyId);
+                //partyTwoId = state.units[unitsIdx[0]].partyId;
+                state.units[unitOneIdx].partyId = state.units[unitsIdx[0]].partyId;
             }
             unitsIdx.forEach(idx=>{
                 if(partyOneId){
