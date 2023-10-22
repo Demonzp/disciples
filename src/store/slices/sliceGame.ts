@@ -1,5 +1,5 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { actionAddCapitalCity, actionAddCity, actionAddLeaderToPartyCity, actionAddUnitToCapital, actionAddUnitToCity, actionChangeCapitalProps, actionChangeCityProps, actionDelSelectObj, actionDoubleMoveCitySquadIn, actionInitNewMap, actionMoveCitySquadIn, actionMoveTwoCellCitySquadIn, actionPointerMove, actionPointerUp, actionSetEditorMod } from 'store/actions/actionsGame';
+import { actionAddCapitalCity, actionAddCity, actionAddLeaderToPartyCity, actionAddUnitToCapital, actionAddUnitToCity, actionChangeCapitalProps, actionChangeCityProps, actionDelSelectObj, actionDoubleMoveCitySquadIn, actionInitNewMap, actionMoveCitySquadIn, actionMoveTwoCellCitySquadIn, actionMoveTwoCellUnitInOut, actionMoveUnitInOut, actionPointerMove, actionPointerUp, actionSetEditorMod } from 'store/actions/actionsGame';
 import { TPointMatrix } from 'utils/game/scenes/editorScene';
 
 export const portretPartyOneData:{[name: string]: number} = {
@@ -300,7 +300,7 @@ export interface IBaseGameObj {
     center: [number, number];
     type: TObject;
     id: string;
-    squadIn: string[];
+    //squadIn: string[];
     isUp: boolean;
     isCanPut: boolean;
 }
@@ -586,8 +586,8 @@ const sliceGame = createSlice({
         builder.addCase(actionAddUnitToCapital.fulfilled, (state, { payload }) => {
             //console.log('builder actionAddUnitToCapital');
             state.units.push(payload.unit);
-            const capitalIdx = state.capitalCities.findIndex(c=>c.id===payload.capitalId);
-            state.capitalCities[capitalIdx].squadIn.push(payload.unit.uid);
+            //const capitalIdx = state.capitalCities.findIndex(c=>c.id===payload.capitalId);
+            //state.capitalCities[capitalIdx].squadIn.push(payload.unit.uid);
         });
 
         builder.addCase(actionAddUnitToCapital.rejected, (state, { payload }) => {
@@ -809,10 +809,10 @@ const sliceGame = createSlice({
 
         builder.addCase(actionAddUnitToCity.fulfilled, (state, { payload }) => {
             state.units.push(payload.unit);
-            if(payload.squad==='right'){
-                const cityIdx = state.cities.findIndex(c=>c.id===payload.cityId);
-                state.cities[cityIdx].squadIn.push(payload.unit.uid);
-            }
+            // if(payload.squad==='right'){
+            //     const cityIdx = state.cities.findIndex(c=>c.id===payload.cityId);
+            //     state.cities[cityIdx].squadIn.push(payload.unit.uid);
+            // }
         });
 
         builder.addCase(actionAddUnitToCity.rejected, (state, { payload }) => {
@@ -830,17 +830,78 @@ const sliceGame = createSlice({
             state.units.push(payload.unit);
             const idxCity = state.cities.findIndex(c=>c.id===payload.cityId)
             state.cities[idxCity].squadOut = payload.party.id;
-            // const unitOneIdx = state.units.findIndex(u=>u.uid===payload.unitId);
-            // const unitTwoIdx = state.units.findIndex(u=>u.uid===payload.toUnitId);
-            // const posOne = state.units[unitTwoIdx].position;
-            // const posTwo = state.units[unitOneIdx].position
-            // state.units[unitOneIdx].position = posOne;
-            // state.units[unitTwoIdx].position = posTwo;
         });
 
         builder.addCase(actionAddLeaderToPartyCity.rejected, (state, { payload }) => {
+            state.errors.push(payload);
+        });
 
-            //const payload = action.payload as ICustomError;
+        builder.addCase(actionMoveUnitInOut.pending, (state) => {
+            state.errors = [];
+        });
+
+        builder.addCase(actionMoveUnitInOut.fulfilled, (state, { payload }) => {
+            const unitInIdx = state.units.findIndex(u=>u.uid===payload.unitId);
+            const unitOutIdx = state.units.findIndex(u=>u.uid===payload.toUnitId);
+            const posIn = state.units[unitInIdx].position;
+            const posOut = state.units[unitOutIdx].position;
+            state.units[unitOutIdx].position = posIn;
+            state.units[unitInIdx].position = posOut;
+            state.units[unitInIdx].partyId = state.units[unitOutIdx].partyId;
+            state.units[unitOutIdx].partyId = null;
+        });
+
+        builder.addCase(actionMoveUnitInOut.rejected, (state, { payload }) => {
+            state.errors.push(payload);
+        });
+
+        builder.addCase(actionMoveTwoCellUnitInOut.pending, (state) => {
+            state.errors = [];
+        });
+
+        builder.addCase(actionMoveTwoCellUnitInOut.fulfilled, (state, { payload }) => {
+            const unitOneIdx = state.units.findIndex(u=>u.uid===payload.unitId);
+            //const unitOutIdxs = state.units.findIndex(u=>payload.units.find(uId=>uId===u.id));
+            const unitsIdx:number[]=[];
+            payload.units.forEach(uId=>{
+                const idx = state.units.findIndex(u=>u.uid===uId);
+                unitsIdx.push(idx);
+            });
+            //const unitTwoIdx = state.units.findIndex(u=>u.uid===payload.toUnitId);
+            const posOne:[number,number] = [...state.units[unitsIdx[0]].position];
+            posOne[1] = 0;
+            console.log('posOne = ', posOne[0],'||',posOne[1]);
+            console.log('unitOneIdx = ', state.units[unitOneIdx].defaultName);
+            const posTwo:[number,number] = [...state.units[unitOneIdx].position];
+            state.units[unitOneIdx].position = [...posOne];
+            let partyOneId:string|null = null;
+            let partyTwoId:string|null = null;
+            if(state.units[unitOneIdx].partyId){
+                partyOneId = state.units[unitOneIdx].partyId;
+                state.units[unitOneIdx].partyId = null;
+            }else{
+                partyTwoId = state.units[unitsIdx[0]].partyId;
+                state.units[unitOneIdx].partyId = partyTwoId;
+            }
+            unitsIdx.forEach(idx=>{
+                if(partyOneId){
+                    state.units[idx].partyId = partyOneId;
+                }else{
+                    state.units[idx].partyId = '';
+                }
+                state.units[idx].position = [posTwo[0],state.units[idx].position[1]];
+            });
+            //const unitOutIdxs = payload.units.map(uId=>state.units.find(u=>u.uid===uId));
+            // const unitOutIdx = state.units.findIndex(u=>u.uid===payload.toUnitId);
+            // const posIn = state.units[unitInIdx].position;
+            // const posOut = state.units[unitOutIdx].position;
+            // state.units[unitOutIdx].position = posIn;
+            // state.units[unitInIdx].position = posOut;
+            // state.units[unitInIdx].partyId = state.units[unitOutIdx].partyId;
+            // state.units[unitOutIdx].partyId = null;
+        });
+
+        builder.addCase(actionMoveTwoCellUnitInOut.rejected, (state, { payload }) => {
             state.errors.push(payload);
         });
     }

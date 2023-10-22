@@ -83,9 +83,12 @@ export default class CapitalParty {
         const capitalData = this.parent.parent.capitalData;
         console.log('CapitalParty capitalData = ', capitalData);
         const units = store.getState().game.units;
-        this.squadIn = capitalData.squadIn.map(uid => {
-            return units.find(u => u.uid === uid);
-        });
+        
+        // this.squadIn = capitalData.squadIn.map(uid => {
+        //     return units.find(u => u.uid === uid);
+        // });
+
+        this.squadIn = units.filter(u=>u.capitalId===capitalData.id);
         for (let i = 0; i < this.contPos.length; i++) {
             const row = this.contPos[i];
             for (let j = 0; j < row.length; j++) {

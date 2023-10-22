@@ -228,7 +228,7 @@ export const actionAddCapitalCity = createAsyncThunk<TActionAddCapital, TCapital
         lordType: 'mage',
         race,
         squadOut: null,
-        squadIn: [],
+        //squadIn: [],
         isCanPut,
         isUp: isCanPut ? false : true,
         manaLife: 0,
@@ -240,7 +240,8 @@ export const actionAddCapitalCity = createAsyncThunk<TActionAddCapital, TCapital
       }
 
       const unit = getCapitalGuard(race);
-      capitalCity.squadIn.push(unit.uid);
+      unit.capitalId = capitalCity.id;
+      //capitalCity.squadIn.push(unit.uid);
 
       return {
         capital: capitalCity,
@@ -271,7 +272,7 @@ export const actionAddCity = createAsyncThunk<ICity, undefined, { state: AppStat
         center: [2, 1],
         type: 'city',
         id: Game.createId(),
-        squadIn: [],
+        //squadIn: [],
         isUp: true,
         isCanPut: false,
         lvl: 1,
@@ -413,7 +414,7 @@ export const actionInitNewMap = createAsyncThunk<TStoreInitMap, TDataInitMap, { 
           lordType: 'mage',
           race,
           squadOut: null,
-          squadIn: [],
+          //squadIn: [],
           isCanPut,
           isUp: isCanPut ? false : true,
           manaLife: 0,
@@ -437,7 +438,7 @@ export const actionInitNewMap = createAsyncThunk<TStoreInitMap, TDataInitMap, { 
         const unit = getCapitalGuard(race);
         unit.capitalId = capitalCity.id;
         units.push(unit);
-        capitalCity.squadIn.push(unit.uid);
+        //capitalCity.squadIn.push(unit.uid);
         capitalCities.push(capitalCity);
       });
 
@@ -594,7 +595,7 @@ export const actionAddUnitToCapital = createAsyncThunk<TAddUnitToCapitalRes, TAd
     try {
       const unit = createUnit(data.unitId);
       unit.position = data.position;
-
+      unit.capitalId = data.capitalId;
       return {
         unit,
         capitalId: data.capitalId
@@ -626,9 +627,8 @@ export const actionAddUnitToCity = createAsyncThunk<TAddUnitToCityRes, TAddUnitT
     try {
       const unit = createUnit(data.unitId);
       unit.position = data.position;
-      if (data.squad === 'right') {
-        unit.cityId = data.cityId;
-      } else {
+      unit.cityId = data.cityId;
+      if (data.squad === 'left') {
         unit.partyId = data.partyId;
       }
 
@@ -662,11 +662,11 @@ export const actionAddLeaderToPartyCity = createAsyncThunk<TAddLeaderToPartyCity
       const party = createParty('left');
 
       const unit = createUnit(data.unitId);
+      unit.partyId = party.id;
       if (unit.numCells === 2) {
         unit.position = [1, 1];
       } else {
         unit.position = [1, 0];
-        unit.partyId = party.id;
       }
       unit.isLeader = true;
 
@@ -685,29 +685,30 @@ export const actionAddLeaderToPartyCity = createAsyncThunk<TAddLeaderToPartyCity
 type TReqMoveUnitInOut = {
   unitId: string;
   toUnitId: string;
-  partyId: string;
 }
 
-export const actionMoveUnitInOut = createAsyncThunk<TAddLeaderToPartyCityRes, TAddLeaderToPartyCity, { state: AppState, rejectWithValue: any }>(
+export const actionMoveUnitInOut = createAsyncThunk<TReqMoveUnitInOut, TReqMoveUnitInOut, { state: AppState, rejectWithValue: any }>(
   'game/actionMoveUnitInOut',
   async (data, { rejectWithValue }) => {
     try {
-      const party = createParty('left');
+      return data;
+    } catch (error) {
+      console.error('error = ', (error as Error).message);
+      return rejectWithValue({ message: (error as Error).message, field: 'nameTable' });
+    }
+  }
+);
 
-      const unit = createUnit(data.unitId);
-      if (unit.numCells === 2) {
-        unit.position = [1, 1];
-      } else {
-        unit.position = [1, 0];
-        unit.partyId = party.id;
-      }
-      unit.isLeader = true;
+type TReqMoveTwoCellUnitInOut = {
+  unitId: string;
+  units: string[];
+}
 
-      return {
-        unit,
-        cityId: data.cityId,
-        party
-      };
+export const actionMoveTwoCellUnitInOut = createAsyncThunk<TReqMoveTwoCellUnitInOut, TReqMoveTwoCellUnitInOut, { state: AppState, rejectWithValue: any }>(
+  'game/actionMoveTwoCellUnitInOut',
+  async (data, { rejectWithValue }) => {
+    try {
+      return data;
     } catch (error) {
       console.error('error = ', (error as Error).message);
       return rejectWithValue({ message: (error as Error).message, field: 'nameTable' });
