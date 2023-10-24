@@ -57,6 +57,8 @@ export default class CityPartyOut{
     modalAddHero:ModalAddHero;
     scene:IScene;
     squad: IUnit[] = [];
+    leader: IUnit|null;
+    fullSlots:number = 0;
     constructor(public parent:ModalPropertiesCityParty){
         
     }
@@ -65,6 +67,8 @@ export default class CityPartyOut{
         this.scene = this.parent.scene;
         this.modalAddHero = new ModalAddHero(this.parent.scene, this);
         this.cityData = this.parent.parent.cityData;
+        this.leader = null;
+        this.fullSlots = 0;
         this.idPointMove = this.parent.scene.input.on('pointermove', (pointer) => {
             if(this.parent.modalAddUnit.isShow){
                 return;
@@ -118,17 +122,17 @@ export default class CityPartyOut{
             const party = store.getState().game.parties.find(p=>p.id===this.cityData.squadOut);
             this.squad = store.getState().game.units.filter(u=>u.partyId===party.id);
             console.log('units = ', this.squad);
-            const lead = this.squad.find(u=>u.isLeader);
-            const fullSlots = this.squad.reduce((prev,unit)=>{
+            this.leader = this.squad.find(u=>u.isLeader);
+            this.fullSlots = this.squad.reduce((prev,unit)=>{
                 return prev+unit.numCells;
-            },0)-1;
+            },0)-this.leader.numCells;
             for (let i = 0; i < this.contPos.length; i++) {
                 const row = this.contPos[i];
                 for (let j = 0; j < row.length; j++) {
                     const pos = row[j];
                     const units = this.squad.filter(u => (u.position[0] === i));
                     if (units.length===0) {
-                        if(fullSlots<lead.leadership){
+                        if(this.fullSlots<this.leader.leadership){
                             this.addBorderOne(pos);
                             this.addContButtonAdd(pos,i,j);
                         }else{
@@ -147,7 +151,7 @@ export default class CityPartyOut{
                                 //console.log('unit = ', unit.defaultName);
                                 this.addBorderOne(pos);                            
                             }else{
-                                if(fullSlots<lead.leadership){
+                                if(this.fullSlots<this.leader.leadership){
                                     this.addBorderOne(pos);
                                     this.addContButtonAdd(pos,i,j);
                                 }else{
@@ -172,6 +176,10 @@ export default class CityPartyOut{
                 this.portraits.push(portrait);
             });
         }
+    }
+
+    getLeader(){
+        return this.squad.find(u=>u.isLeader);
     }
 
     dropPortrait(point: TPoint, portret: PartyPortrait) {

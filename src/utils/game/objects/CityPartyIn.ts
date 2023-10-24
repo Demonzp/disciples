@@ -214,15 +214,21 @@ export default class CityPartyIn{
             const p = this.parent.cityPartyOut.portraits[i];
             if (!p.unit.isLeader&&p.cont.isOnPointer(point)&&p.unit.uid!==portret.unit.uid) {
                 console.log('on portrait', p.unit.defaultName);
+                //const leader = this.parent.cityPartyOut.getLeader();
                 if(portret.unit.numCells===2){
 
                     //const portraits = this.portraits.filter(p2=>p2.unit.position[0]===p.unit.position[0]);
                     const units = this.parent.cityPartyOut.squad.filter(u=>u.position[0]===p.unit.position[0]);
-                    store.dispatch(actionMoveTwoCellUnitInOut({
-                        unitId: portret.unit.uid,
-                        units: units.map(u=>u.uid)
-                    }));
-                    return;
+                    if(!units.find(u=>u.isLeader)&&(units.length!==2&&this.parent.cityPartyOut.fullSlots+1<this.parent.cityPartyOut.leader.leadership)){
+                        store.dispatch(actionMoveTwoCellUnitInOut({
+                            unitId: portret.unit.uid,
+                            units: units.map(u=>u.uid)
+                        }));
+
+                        return;
+                    }else{
+                        break;
+                    }
                     //console.log(portraits.map(p2=>p2.unit.defaultName));
                     // store.dispatch(actionMoveTwoCellCitySquadIn({
                     //     unitId: portret.unit.uid,
@@ -231,6 +237,11 @@ export default class CityPartyIn{
                     //return;
                 }else if(p.unit.numCells===2){
                     const portraits = this.portraits.filter(p2=>p2.unit.position[0]===portret.unit.position[0]);
+                    store.dispatch(actionMoveTwoCellUnitInOut({
+                        unitId: p.unit.uid,
+                        units: portraits.map(p2=>p2.unit.uid)
+                    }));
+                    return;
                     // store.dispatch(actionMoveTwoCellCitySquadIn({
                     //     unitId: p.unit.uid,
                     //     units: portraits.map(p2=>p2.unit.uid)
