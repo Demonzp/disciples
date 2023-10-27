@@ -219,7 +219,7 @@ export default class CityPartyIn{
 
                     //const portraits = this.portraits.filter(p2=>p2.unit.position[0]===p.unit.position[0]);
                     const units = this.parent.cityPartyOut.squad.filter(u=>u.position[0]===p.unit.position[0]);
-                    if(!units.find(u=>u.isLeader)&&(units.length!==2&&this.parent.cityPartyOut.fullSlots+1<this.parent.cityPartyOut.leader.leadership)){
+                    if(!units.find(u=>u.isLeader)&&this.parent.cityPartyOut.fullSlots-units.length+1<this.parent.cityPartyOut.leader.leadership){
                         store.dispatch(actionMoveTwoCellUnitInOut({
                             unitId: portret.unit.uid,
                             units: units.map(u=>u.uid)
