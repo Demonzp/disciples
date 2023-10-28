@@ -78,7 +78,7 @@ export default class CityPartyOut{
 
         this.idPointUp = this.scene.input.on('pointerup', (pointer) => {
             let isNext = true;
-            if(this.parent.modalAddUnit.isShow){
+            if(this.parent.modalAddUnit.isShow||this.parent.cityPartyIn.portraits.find(p=>p.isCanMove)){
                 console.log('modalAddUnit.isShow');
                 return;
             }

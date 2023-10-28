@@ -1,5 +1,5 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { actionAddCapitalCity, actionAddCity, actionAddLeaderToPartyCity, actionAddUnitToCapital, actionAddUnitToCity, actionChangeCapitalProps, actionChangeCityProps, actionDelSelectObj, actionDoubleMoveCitySquadIn, actionInitNewMap, actionMoveCitySquadIn, actionMoveTwoCellCitySquadIn, actionMoveTwoCellUnitInOut, actionMoveUnitInOut, actionPointerMove, actionPointerUp, actionSetEditorMod } from 'store/actions/actionsGame';
+import { actionAddCapitalCity, actionAddCity, actionAddLeaderToPartyCity, actionAddUnitToCapital, actionAddUnitToCity, actionChangeCapitalProps, actionChangeCityProps, actionDelSelectObj, actionDoubleMoveCitySquadIn, actionInitNewMap, actionMoveCitySquadIn, actionMoveCitySquadInOut, actionMoveTwoCellCitySquadIn, actionMoveTwoCellUnitInOut, actionMoveUnitInOut, actionPointerMove, actionPointerUp, actionSetEditorMod } from 'store/actions/actionsGame';
 import { TPointMatrix } from 'utils/game/scenes/editorScene';
 
 export const portretPartyOneData:{[name: string]: number} = {
@@ -11,6 +11,7 @@ export const portretPartyOneData:{[name: string]: number} = {
     'apprentice':8,
     'acolyt':9,
     'titan':2,
+    'gargoyle':0,
 };
 
 export const baseUnits: IBaseUnit[] = [
@@ -197,6 +198,29 @@ export const baseUnits: IBaseUnit[] = [
         movePoints: 20,
         discription: '',
         armor:0
+    },
+    {
+        id: '8',
+        level: 1,
+        defaultName: 'Gargoyle',
+        isCapitalGuard: false,
+        isCanLeader: true,
+        isHero: false,
+        fraction: 'empire',
+        icon: 'gargoyle',
+        numCells: 2,
+        hitPoints: 90,
+        damageName: 'Rock Shards',
+        chancesHit: 80,
+        damage: 40,
+        heal: 0,
+        sourceDamage: 'earth',
+        iniative: 55,
+        leadership: 2,
+        needExperience: 400,
+        movePoints: 20,
+        discription: '',
+        armor:20
     }
 ];
 
@@ -206,7 +230,7 @@ export const capitalGuards = {
     empire: 'Myzrael'
 };
 
-export type TSourceDamage = 'weapon' | 'air' | 'life' | 'death' | 'fire' | 'water';
+export type TSourceDamage = 'weapon' | 'air' | 'life' | 'death' | 'fire' | 'water' | 'earth';
 
 export type TFraction = 'empire' | 'legions';
 export type TRace = 'empire' | 'legions' | 'clans' | 'elves' | 'undead' | 'dragons' | 'greenskins';
@@ -433,6 +457,23 @@ const sliceGame = createSlice({
         });
 
         builder.addCase(actionMoveCitySquadIn.rejected, (state, { payload }) => {
+
+            //const payload = action.payload as ICustomError;
+            state.errors.push(payload);
+        });
+
+        builder.addCase(actionMoveCitySquadInOut.pending, (state) => {
+            state.errors = [];
+        });
+
+        builder.addCase(actionMoveCitySquadInOut.fulfilled, (state, { payload }) => {
+            const unitIdx = state.units.findIndex(u=>u.uid===payload.unitId);
+            const city = state.cities.find(c=>c.id===state.units[unitIdx].cityId);
+            state.units[unitIdx].position = payload.toIdx;
+            state.units[unitIdx].partyId = city.squadOut;
+        });
+
+        builder.addCase(actionMoveCitySquadInOut.rejected, (state, { payload }) => {
 
             //const payload = action.payload as ICustomError;
             state.errors.push(payload);

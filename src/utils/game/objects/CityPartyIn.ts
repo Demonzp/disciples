@@ -6,7 +6,7 @@ import { TPoint } from "utils/gameLib/Game";
 import { ICity, IUnit } from "store/slices/sliceGame";
 import { IScene } from "../scenes/IScene";
 import store from "store/store";
-import { actionDoubleMoveCitySquadIn, actionMoveCitySquadIn, actionMoveTwoCellCitySquadIn, actionMoveTwoCellUnitInOut, actionMoveUnitInOut } from "store/actions/actionsGame";
+import { actionDoubleMoveCitySquadIn, actionMoveCitySquadIn, actionMoveCitySquadInOut, actionMoveTwoCellCitySquadIn, actionMoveTwoCellUnitInOut, actionMoveUnitInOut } from "store/actions/actionsGame";
 
 export default class CityPartyIn{
     conts: Container[] = [];
@@ -215,7 +215,18 @@ export default class CityPartyIn{
             if (!p.unit.isLeader&&p.cont.isOnPointer(point)&&p.unit.uid!==portret.unit.uid) {
                 console.log('on portrait', p.unit.defaultName);
                 //const leader = this.parent.cityPartyOut.getLeader();
-                if(portret.unit.numCells===2){
+                if(portret.unit.numCells===2&&p.unit.numCells===2){
+                    if(!p.unit.isLeader){
+                        store.dispatch(actionMoveTwoCellUnitInOut({
+                            unitId: portret.unit.uid,
+                            units: [p.unit.uid]
+                        }));
+
+                        return;
+                    }else{
+                        break;
+                    }
+                }else if(portret.unit.numCells===2){
 
                     //const portraits = this.portraits.filter(p2=>p2.unit.position[0]===p.unit.position[0]);
                     const units = this.parent.cityPartyOut.squad.filter(u=>u.position[0]===p.unit.position[0]);
@@ -229,12 +240,6 @@ export default class CityPartyIn{
                     }else{
                         break;
                     }
-                    //console.log(portraits.map(p2=>p2.unit.defaultName));
-                    // store.dispatch(actionMoveTwoCellCitySquadIn({
-                    //     unitId: portret.unit.uid,
-                    //     units: portraits.map(p2=>p2.unit.uid)
-                    // }));
-                    //return;
                 }else if(p.unit.numCells===2){
                     const portraits = this.portraits.filter(p2=>p2.unit.position[0]===portret.unit.position[0]);
                     store.dispatch(actionMoveTwoCellUnitInOut({
@@ -242,11 +247,6 @@ export default class CityPartyIn{
                         units: portraits.map(p2=>p2.unit.uid)
                     }));
                     return;
-                    // store.dispatch(actionMoveTwoCellCitySquadIn({
-                    //     unitId: p.unit.uid,
-                    //     units: portraits.map(p2=>p2.unit.uid)
-                    // }));
-                    //return;
                 }
                 console.log('from IN to OUT!!!');
                 store.dispatch(actionMoveUnitInOut({
@@ -274,6 +274,29 @@ export default class CityPartyIn{
                     }
                 }
                 store.dispatch(actionMoveCitySquadIn({
+                    unitId: portret.unit.uid,
+                    toIdx: cont.data,
+                }));
+                return;
+            }
+        }
+
+        for (let i = 0; i < this.parent.cityPartyOut.conts.length; i++) {
+            const cont = this.parent.cityPartyOut.conts[i];
+            if (cont.isOnPointer(point)) {
+                console.log('on container = ', cont.data);
+                if(portret.unit.numCells===2){
+                    const p = this.parent.cityPartyOut.portraits.find(p=>p.unit.position[0]===cont.data[0]);
+                    if(p){
+                        console.log(p.unit.defaultName);
+                        store.dispatch(actionMoveTwoCellUnitInOut({
+                            unitId: portret.unit.uid,
+                            units: [p.unit.uid]
+                        }));
+                        return;
+                    }
+                }
+                store.dispatch(actionMoveCitySquadInOut({
                     unitId: portret.unit.uid,
                     toIdx: cont.data,
                 }));

@@ -478,6 +478,24 @@ export const actionMoveCitySquadIn = createAsyncThunk<TDataMoveCitySquadIn, TDat
   }
 );
 
+export const actionMoveCitySquadInOut = createAsyncThunk<TDataMoveCitySquadIn, TDataMoveCitySquadIn, { state: AppState, rejectWithValue: any }>(
+  'game/actionMoveCitySquadInOut',
+  async (data, { getState, rejectWithValue }) => {
+    try {
+      const newData: TDataMoveCitySquadIn = { ...data, toIdx: [...data.toIdx] };
+      const unit = getState().game.units.find(u => u.uid === data.unitId);
+      
+      if (unit && unit.numCells === 2) {
+        newData.toIdx[1] = 0;
+      }
+      return newData;
+    } catch (error) {
+      console.error('error = ', (error as Error).message);
+      return rejectWithValue({ message: (error as Error).message, field: 'nameTable' });
+    }
+  }
+);
+
 export type TDataMoveTwoCellCitySquadIn = {
   unitId: string;
   units: string[];
