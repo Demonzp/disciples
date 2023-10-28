@@ -10,6 +10,7 @@ import { actionDoubleMoveCitySquadIn, actionMoveCitySquadIn, actionMoveCitySquad
 
 export default class CityPartyIn{
     conts: Container[] = [];
+    contsMove: Container[] = [];
     borders: Sprite[] = [];
     portraits: PartyPortrait[] = [];
     idPointUp = '';
@@ -49,6 +50,7 @@ export default class CityPartyIn{
     cityData:ICity|undefined;
     scene:IScene;
     squad: IUnit[] = [];
+    fullSlots:number = 0;
     constructor(public parent:ModalPropertiesCityParty){}
 
     init(){
@@ -67,6 +69,7 @@ export default class CityPartyIn{
 
             return false;
         });
+        this.fullSlots = this.squad.reduce((prev, u)=>prev+u.numCells,0);
         console.log('squadIn = ', this.squad);
         for (let i = 0; i < this.contPos.length; i++) {
             const row = this.contPos[i];
@@ -74,8 +77,14 @@ export default class CityPartyIn{
                 const pos = row[j];
                 const units = this.squad.filter(u => (u.position[0] === i));
                 if (units.length===0) {
-                    this.addBorderOne(pos);
-                    this.addContButtonAdd(pos,i,j);
+                    if(this.fullSlots===this.cityData.lvl){
+                        this.addBorderPlag(pos);
+                        this.addContButtonMove(pos,i,j);
+                    }else{
+                        this.addBorderOne(pos);
+                        this.addContButtonAdd(pos,i,j);
+                    }
+
                 } else {
                     if (units.length===1&&units[0].numCells === 2&&j===0) {
                         const sprite = this.parent.scene.add.sprite('place-two');
@@ -87,8 +96,13 @@ export default class CityPartyIn{
                         if(units.find(u=>u.position[1]===j)){
                             this.addBorderOne(pos);                            
                         }else{
-                            this.addBorderOne(pos);
-                            this.addContButtonAdd(pos,i,j);
+                            if(this.fullSlots===this.cityData.lvl){
+                                this.addBorderPlag(pos);
+                                this.addContButtonMove(pos,i,j);     
+                            }else{
+                                this.addBorderOne(pos);
+                                this.addContButtonAdd(pos,i,j);
+                            }
                         }
                     }
                 }
@@ -158,6 +172,25 @@ export default class CityPartyIn{
         this.hide();
         this.parent.parent.cityData = cityData;
         this.init();
+    }
+
+    addBorderPlag(pos:TPoint){
+        const sprite = this.parent.scene.add.sprite('place-plag');
+        sprite.x = this.parent.x + pos.x + 1;
+        sprite.y = this.parent.y + pos.y - 1;
+        sprite.setZindex(1000);
+        this.borders.push(sprite);
+    }
+
+    addContButtonMove(pos:TPoint, i:number, j:number){
+        const cont = this.parent.scene.add.container();
+
+        cont.x = this.parent.x + pos.x;
+        cont.y = this.parent.y + pos.y;
+        cont.setInteractiveRect(70, 102);
+        cont.data = [i, j];
+        cont.setZindex(1000);
+        this.contsMove.push(cont);
     }
 
     addBorderOne(pos:TPoint){
@@ -277,6 +310,31 @@ export default class CityPartyIn{
                     unitId: portret.unit.uid,
                     toIdx: cont.data,
                 }));
+                return;
+            }
+        }
+
+        for (let i = 0; i < this.contsMove.length; i++) {
+            const cont = this.contsMove[i];
+            if (cont.isOnPointer(point)) {
+                console.log('on container contsMove = ', cont.data);
+                if(portret.unit.numCells===2){
+                    const p = this.portraits.find(p=>p.unit.position[0]===cont.data[0]);
+                    if(p){
+                        console.log(p.unit.defaultName);
+                        store.dispatch(actionMoveTwoCellCitySquadIn({
+                            unitId: portret.unit.uid,
+                            units: [p.unit.uid]
+                        }));
+                        return;
+                    }
+                }
+
+                store.dispatch(actionMoveCitySquadIn({
+                    unitId: portret.unit.uid,
+                    toIdx: cont.data,
+                }));
+
                 return;
             }
         }

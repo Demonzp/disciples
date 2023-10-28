@@ -8,6 +8,8 @@ import { actionAddUnitToCity } from "store/actions/actionsGame";
 import ModalMessage from "./ModalMessage";
 import { IScene } from "../scenes/IScene";
 import ModalPropertiesCityParty from "./ModalPropertiesCityParty";
+import CityPartyOut from "./CityPartyOut";
+import CityPartyIn from "./CityPartyIn";
 
 type TSide = 'in' | 'out';
 
@@ -256,6 +258,22 @@ export default class ModalPropsAddUnitCity {
                 return;
             }
 
+            if(this.side==='out'){
+                if((squad as CityPartyOut).fullSlots+this.units[this.selectIdx].numCells>(squad as CityPartyOut).leader.leadership){
+                    const msg = new ModalMessage(this.parent.scene as IScene, () => { this._isModalMes = false });
+                    this._isModalMes = true;
+                    msg.init('You can`t hire this unit!');
+                    return;
+                }
+            }else{
+                if((squad as CityPartyIn).fullSlots+this.units[this.selectIdx].numCells>(squad as CityPartyIn).cityData.lvl){
+                    const msg = new ModalMessage(this.parent.scene as IScene, () => { this._isModalMes = false });
+                    this._isModalMes = true;
+                    msg.init('You can`t hire this unit!');
+                    return;
+                } 
+            }
+
             this.position = [this.position[0], 0];
         } else {
             const posTwo = this.position[1] === 1 ? 0 : 1;
@@ -275,6 +293,22 @@ export default class ModalPropsAddUnitCity {
                 msg.init('Invalid position in group!');
                 this._isModalMes = true;
                 return;
+            }
+
+            if(this.side==='out'){
+                if((squad as CityPartyOut).fullSlots+this.units[this.selectIdx].numCells>(squad as CityPartyOut).leader.leadership){
+                    const msg = new ModalMessage(this.parent.scene as IScene, () => { this._isModalMes = false });
+                    this._isModalMes = true;
+                    msg.init('You can`t hire this unit!');
+                    return;
+                }
+            }else{
+                if((squad as CityPartyIn).fullSlots+this.units[this.selectIdx].numCells>(squad as CityPartyIn).cityData.lvl){
+                    const msg = new ModalMessage(this.parent.scene as IScene, () => { this._isModalMes = false });
+                    this._isModalMes = true;
+                    msg.init('You can`t hire this unit!');
+                    return;
+                } 
             }
         }
 

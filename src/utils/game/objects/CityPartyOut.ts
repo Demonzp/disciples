@@ -312,7 +312,7 @@ export default class CityPartyOut{
         if(this._contSelectParty){
             console.log('initSelectHero!!!! = ', this._contSelectParty);
             const idOn = this._contSelectParty.on('pointerup',()=>{
-                if(this.parent.modalAddUnit.isShow){
+                if(this.parent.modalAddUnit.isShow||this.parent.cityPartyIn.portraits.find(p=>p.isCanMove)){
                     return;
                 }
                 this._contSelectParty.off(idOn);
