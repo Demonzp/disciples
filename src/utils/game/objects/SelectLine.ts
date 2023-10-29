@@ -14,7 +14,7 @@ export default class SelectLine{
     width = 200;
     height = 20;
     index = -1;
-    constructor(public scene: Scene, public data:string[], private _defaultValue?:string, private _callback?:(data:any)=>void){
+    constructor(public scene: Scene, public data:string[], private _defaultValue?:string, private _callback?:(data:string)=>void){
         this.index = data.length;
     }
 

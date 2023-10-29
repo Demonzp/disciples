@@ -1,4 +1,4 @@
-import { ICity } from "store/slices/sliceGame";
+import { ICity, setCityLvl } from "store/slices/sliceGame";
 import { IScene } from "../scenes/IScene";
 import Sprite from "utils/gameLib/Sprite";
 import InputElString from "./InputElString";
@@ -35,7 +35,7 @@ export default class ModalPropertiesCity{
         this.inputCityName.y = y-120;
         this.allInputs.push(this.inputCityName);
 
-        this.selectLvl = new SelectLine(this.scene,['1','2','3','4','5'],'1');
+        this.selectLvl = new SelectLine(this.scene,['1','2','3','4','5'],String(cityData.lvl),this.changeLvl.bind(this));
         this.selectLvl.init();
         this.selectLvl.x = x-30;
         this.selectLvl.y = y-120;
@@ -70,6 +70,11 @@ export default class ModalPropertiesCity{
             .then(()=>this.hide());
     }
 
+    changeLvl(data: string){
+        store.dispatch(setCityLvl({cityId:this.cityData.id, lvl: Number(data)}));
+        //this.hide();
+    }
+
     onParty(){
         this._hide();
         this.modalCityParty.init();
@@ -78,7 +83,7 @@ export default class ModalPropertiesCity{
     hide(){
         this.modalCityParty.hide();
         this._hide();
-        this.isOpen = false;
+        //this.isOpen = false;
     }
 
     _hide(){

@@ -444,7 +444,14 @@ const sliceGame = createSlice({
         addCapitalCity(state, action: PayloadAction<ICapitalCity>) {
             //console.log('add capitalCity to state');
             state.capitalCities.push(action.payload);
-        }
+        },
+
+        setCityLvl(state, action: PayloadAction<{cityId:string, lvl:number}>){
+            const cityIdx = state.selectObj.idx;
+            if(state.cities[cityIdx].id===action.payload.cityId){
+                state.cities[cityIdx].lvl = action.payload.lvl;
+            }
+        },
     },
     extraReducers: (builder) => {
         builder.addCase(actionMoveCitySquadIn.pending, (state) => {
@@ -954,6 +961,7 @@ export const {
     setScene,
     setPointerMatrix,
     addCapitalCity,
+    setCityLvl,
 } = sliceGame.actions;
 
 export default sliceGame;

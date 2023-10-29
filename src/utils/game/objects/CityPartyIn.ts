@@ -274,12 +274,16 @@ export default class CityPartyIn{
                         break;
                     }
                 }else if(p.unit.numCells===2){
-                    const portraits = this.portraits.filter(p2=>p2.unit.position[0]===portret.unit.position[0]);
-                    store.dispatch(actionMoveTwoCellUnitInOut({
-                        unitId: p.unit.uid,
-                        units: portraits.map(p2=>p2.unit.uid)
-                    }));
-                    return;
+                    if(this.cityData.lvl>=this.fullSlots+1){
+                        const portraits = this.portraits.filter(p2=>p2.unit.position[0]===portret.unit.position[0]);
+                        store.dispatch(actionMoveTwoCellUnitInOut({
+                            unitId: p.unit.uid,
+                            units: portraits.map(p2=>p2.unit.uid)
+                        }));
+                        return;
+                    }else{
+                        break;
+                    }
                 }
                 console.log('from IN to OUT!!!');
                 store.dispatch(actionMoveUnitInOut({
