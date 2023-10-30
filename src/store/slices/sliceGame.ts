@@ -706,7 +706,7 @@ const sliceGame = createSlice({
                     }
                 }
             } else {
-
+                console.log('up!!!!! = ', cell.typeObject);
                 if (cell.objId) {
                     let obj: IBaseGameObj | null = null;
                     let idx = -1;
