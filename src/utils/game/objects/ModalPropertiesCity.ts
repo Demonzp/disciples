@@ -31,6 +31,7 @@ export default class ModalPropertiesCity{
         this._fon = this.scene.add.sprite('modal-city');
         this._fon.x = x;
         this._fon.y = y;
+        //this._fon.setZindex(1001);
         this.inputCityName = new InputElString(this.scene,cityData.cityName,16,()=>{
 
         });
@@ -75,7 +76,7 @@ export default class ModalPropertiesCity{
 
     changeLvl(data: string){
         console.log('changeLvl');
-        this._hide();
+        //this._hide();
         store.dispatch(setCityLvl({cityId:this.cityData.id, lvl: Number(data)}));
         //this.hide();
     }

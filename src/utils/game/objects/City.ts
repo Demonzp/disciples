@@ -71,7 +71,9 @@ export default class City extends BaseObject{
         if(this.lvl!==data.lvl){
             this.destroy();
             this.create();
+            this.scene.modalPropertiesCity.hide();
             this.scene.modalPropertiesCity.init(data);
+            this.lvl=data.lvl;
         }else{
             this.move();
         }
