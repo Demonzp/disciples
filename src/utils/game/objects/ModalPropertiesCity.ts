@@ -24,6 +24,7 @@ export default class ModalPropertiesCity{
         if(this.isOpen){
             return;
         }
+        //console.log('init ModalPropertiesCity');
         this.cityData = cityData;
         const cameraPoint = this.scene.game.camera.cameraPoint();
         const x = 0+this.scene.halfWidth-cameraPoint.x;
@@ -75,8 +76,8 @@ export default class ModalPropertiesCity{
     }
 
     changeLvl(data: string){
-        console.log('changeLvl');
-        //this._hide();
+        //console.log('changeLvl');
+        this._hide();
         store.dispatch(setCityLvl({cityId:this.cityData.id, lvl: Number(data)}));
         //this.hide();
     }

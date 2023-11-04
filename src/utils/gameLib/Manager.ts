@@ -117,6 +117,7 @@ export default class Manager {
   }
 
   registerGameObject(obj: GameObject | Graphics) {
+    //console.log('registerGameObject');
     this.gameObjects.push(obj);
   }
 }

@@ -21,6 +21,7 @@ export default class City extends BaseObject{
         //this._sprite.x = 300;
         //this._sprite.y = 300;
         this.move();
+        this.sprite.setZindex(200+(this.matrixPoint[0]+this.matrixPoint[1]-4));
     }
 
     get sprite(){
@@ -64,25 +65,25 @@ export default class City extends BaseObject{
     }
 
     updateState(data:ICity){
-        //console.log('update State!!');
+        //console.log('update State!! City!');
 
         this.matrixPoint = data.matrixPoint;
         this.isCanPut = data.isCanPut;
         if(this.lvl!==data.lvl){
+            this.lvl=data.lvl;
             this.destroy();
             this.create();
-            this.scene.modalPropertiesCity.hide();
             this.scene.modalPropertiesCity.init(data);
-            this.lvl=data.lvl;
+            return;
         }else{
             this.move();
+            if(data.isUp){
+                this.sprite.setZindex(1000);
+            }else{
+                this.sprite.setZindex(200+(data.matrixPoint[0]+data.matrixPoint[1]-4));
+            }
         }
         //this.move();
-        if(data.isUp){
-            this.sprite.setZindex(1000);
-        }else{
-            this.sprite.setZindex(200+(data.matrixPoint[0]+data.matrixPoint[1]-4));
-        }
     }
 
     update(){

@@ -73,15 +73,7 @@ export default class Scene{
   }
 
   sortByZindex(){
-    // this.add.gameObjects.sort((a,b)=>{
-    //   if((a as GameObject).zIndex>(b as GameObject).zIndex){
-    //     return 1;
-    //   }
-    //   if((a as GameObject).zIndex<(b as GameObject).zIndex){
-    //     return -1;
-    //   }
-    //   return 0;
-    // });
+    //console.log('sort gameObjects');
     this.add.gameObjects.sort((a,b)=>{
       if((a as GameObject).zIndex>(b as GameObject).zIndex){
         return 1;

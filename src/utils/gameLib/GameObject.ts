@@ -173,6 +173,7 @@ export default class GameObject{
   }
 
   setZindex(val:number){
+    //console.log('this.name = ',this.key,'||',this.name);
     this.zIndex = val;
     this.scene.sortByZindex();
   }
