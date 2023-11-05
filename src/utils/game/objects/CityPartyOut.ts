@@ -191,7 +191,7 @@ export default class CityPartyOut{
         //     console.log('modalAddUnit.isShow');
         //     return;
         // }
-        console.log('drop!!! = ', portret.unit.name);
+        console.log('CityPartyOut drop!!! = ', portret.unit.name);
         for (let i = 0; i < this.portraits.length; i++) {
             const p = this.portraits[i];
             if (p.unit.uid!==portret.unit.uid&&p.cont.isOnPointer(point)) {

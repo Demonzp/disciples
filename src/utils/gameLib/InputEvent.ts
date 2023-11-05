@@ -45,7 +45,7 @@ export default class InputEvent{
   }
 
   on(event: TInputEvents, sceneId: string, handler: (pointer:TPointer)=>void, context?:any): string{
-    console.log('pointerUpCallbacks = ', this.pointerUpCallbacks.length);
+    console.log('pointerUpCallbacks on = ', this.pointerUpCallbacks.length);
     const id = Game.createId();
     switch (event) {
       case 'pointerdown':
@@ -87,6 +87,7 @@ export default class InputEvent{
     this.pointerDownCallbacks = this.pointerDownCallbacks.filter(callFn=>callFn.id!==id);
     this.pointerUpCallbacks = this.pointerUpCallbacks.filter(callFn=>callFn.id!==id);
     this.pointerMoveCallbacks = this.pointerMoveCallbacks.filter(callFn=>callFn.id!==id);
+    console.log('pointerUpCallbacks off = ', this.pointerUpCallbacks.length);
   }
 
   private pointerMove(event: PointerEvent){
