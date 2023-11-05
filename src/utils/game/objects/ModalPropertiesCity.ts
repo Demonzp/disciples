@@ -8,6 +8,7 @@ import Button from "./Button";
 import store from "store/store";
 import { actionChangeCityProps } from "store/actions/actionsGame";
 import ModalPropertiesCityParty from "./ModalPropertiesCityParty";
+import ModalMessage from "./ModalMessage";
 
 export default class ModalPropertiesCity{
     cityData:ICity;
@@ -18,6 +19,7 @@ export default class ModalPropertiesCity{
     modalCityParty: ModalPropertiesCityParty = new ModalPropertiesCityParty(this);
     btns:Button[] = [];
     isOpen = false;
+    private _isModalMes = false;
     constructor(public scene: IScene){}
 
     init(cityData:ICity){
@@ -40,7 +42,7 @@ export default class ModalPropertiesCity{
         this.inputCityName.y = y-120;
         this.allInputs.push(this.inputCityName);
 
-        this.selectLvl = new SelectLine(this.scene,['1','2','3','4','5'],String(cityData.lvl),this.changeLvl.bind(this));
+        this.selectLvl = new SelectLine(this.scene,['5','4','3','2','1'],String(cityData.lvl),this.changeLvl.bind(this));
         this.selectLvl.init();
         this.selectLvl.x = x-30;
         this.selectLvl.y = y-120;
@@ -77,17 +79,31 @@ export default class ModalPropertiesCity{
 
     changeLvl(data: string){
         //console.log('changeLvl');
+        const unitsIn = store.getState().game.units.filter(u=>u.cityId===this.cityData.id&&!u.partyId);
+        if(unitsIn.reduce((prev, u)=>prev+u.numCells,0)>Number(data)){
+            const msg = new ModalMessage(this.scene as IScene, () => { this._isModalMes = false });
+            this._isModalMes = true;
+            msg.init('remove units before reducing the city level');
+            this.selectLvl.value = String(Number(data)+1);
+            return;
+        }
         this._hide();
         store.dispatch(setCityLvl({cityId:this.cityData.id, lvl: Number(data)}));
         //this.hide();
     }
 
     onParty(){
+        if(this._isModalMes){
+            return;
+        }
         this._hide();
         this.modalCityParty.init();
     }
 
     hide(){
+        if(this._isModalMes){
+            return;
+        }
         this.modalCityParty.hide();
         this._hide();
         //this.isOpen = false;

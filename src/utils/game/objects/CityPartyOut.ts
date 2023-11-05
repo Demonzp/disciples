@@ -64,6 +64,7 @@ export default class CityPartyOut{
     }
 
     init(){
+        console.log('init CityPartyOut');
         this.scene = this.parent.scene;
         this.modalAddHero = new ModalAddHero(this.parent.scene, this);
         this.cityData = this.parent.parent.cityData;
@@ -77,15 +78,18 @@ export default class CityPartyOut{
         });
 
         this.idPointUp = this.scene.input.on('pointerup', (pointer) => {
+            console.log('CityPartyOut pointerup');
             let isNext = true;
             if(this.parent.modalAddUnit.isShow||this.parent.cityPartyIn.portraits.find(p=>p.isCanMove)){
-                console.log('modalAddUnit.isShow');
+                console.log('modalAddUnit.isShow = ', this.parent.modalAddUnit.isShow);
                 return;
             }
             this.portraits.forEach(p => {
                 if (p.isCanMove) {
+                    console.log('isCanMove call drop = ', p.unit.name);
                     isNext = false;
                 }
+                console.log('call drop = ', p.unit.name);
                 p.drop(pointer);
             });
             //console.log('CapitalParty pointerup');
@@ -187,7 +191,7 @@ export default class CityPartyOut{
         //     console.log('modalAddUnit.isShow');
         //     return;
         // }
-        console.log('drop!!!');
+        console.log('drop!!! = ', portret.unit.name);
         for (let i = 0; i < this.portraits.length; i++) {
             const p = this.portraits[i];
             if (p.unit.uid!==portret.unit.uid&&p.cont.isOnPointer(point)) {
@@ -332,6 +336,7 @@ export default class CityPartyOut{
     }
 
     hide(){
+        console.log('hide CityPartyOut');
         if(this.cityData&&!this.cityData.squadOut&&this._fonAddLeader){
             this.scene.add.remove(this._fonAddLeader);
             this.scene.add.remove(this._textAddLeader);

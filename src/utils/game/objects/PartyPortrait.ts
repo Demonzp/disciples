@@ -71,6 +71,7 @@ export default class PartyPortrait {
     toStart(){
         this.cont.x = this.startPos.x;
         this.cont.y = this.startPos.y;
+        this.isCanMove = false;
     }
 
     move(point: TPoint) {

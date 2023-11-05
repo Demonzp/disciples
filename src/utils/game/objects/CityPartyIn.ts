@@ -122,6 +122,7 @@ export default class CityPartyIn{
         });
 
         this.idPointUp = this.scene.input.on('pointerup', (pointer) => {
+            console.log('CityPartyIn pointerup');
             let isNext = true;
             if(this.parent.modalAddUnit.isShow||this.parent.cityPartyOut.modalAddHero.isShow){
                 console.log('modalAddUnit.isShow');
@@ -131,6 +132,7 @@ export default class CityPartyIn{
                 if (p.isCanMove) {
                     isNext = false;
                 }
+                console.log('CityPartyIn drop = ', p.unit.name);
                 p.drop(pointer);
             });
 
@@ -144,7 +146,7 @@ export default class CityPartyIn{
             if (isNext) {
                 const cont = this.conts.find(c => c.isOnPointer(pointer));
                 if (cont) {
-                    console.log('add Unit to = ', cont.data);
+                    console.log('add Unit to partyIn = ', cont.data);
                     this.parent.modalAddUnit.show(cont.data, this.cityData.id, 'in');
                     //this.parent.modalAddUnit.show(cont.data, this.parent.parent.capitalData.id);
                 }

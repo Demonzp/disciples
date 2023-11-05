@@ -38,6 +38,15 @@ export default class SelectLine{
         return this._textEl!;
     }
 
+    set value(data:string){
+        //console.log('set value = ',data);
+        const textIdx = this.data.findIndex(t=>t===data);
+        if(textIdx!==-1){
+            this.index = textIdx;
+            this.textEl.text = this.data[this.index];
+        }
+    }
+
     set x(value: number){
         this._arrowUp.x = value+237;
         this._arrowDown.x = value+215;

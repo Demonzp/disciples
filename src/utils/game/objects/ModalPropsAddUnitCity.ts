@@ -61,6 +61,7 @@ export default class ModalPropsAddUnitCity {
     }
 
     show(position: [number, number], cityId: string, side: TSide, partyId?: string) {
+        console.log('show ModalPropsAddUnitCity');
         this.cityId = cityId;
         this.partyId = partyId;
         this.side = side;
