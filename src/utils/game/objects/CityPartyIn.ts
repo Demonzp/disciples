@@ -70,7 +70,7 @@ export default class CityPartyIn{
             return false;
         });
         this.fullSlots = this.squad.reduce((prev, u)=>prev+u.numCells,0);
-        console.log('squadIn = ', this.squad);
+        //console.log('squadIn = ', this.squad);
         for (let i = 0; i < this.contPos.length; i++) {
             const row = this.contPos[i];
             for (let j = 0; j < row.length; j++) {
@@ -122,31 +122,32 @@ export default class CityPartyIn{
         });
 
         this.idPointUp = this.scene.input.on('pointerup', (pointer) => {
-            console.log('CityPartyIn pointerup');
+            //console.log('CityPartyIn pointerup');
             let isNext = true;
-            if(this.parent.modalAddUnit.isShow||this.parent.cityPartyOut.modalAddHero.isShow){
-                console.log('modalAddUnit.isShow');
+            //||this.parent.cityPartyOut.portraits.find(p=>p.isCanMove)
+            if(this.parent.modalAddUnit.isShow||this.parent.cityPartyOut.modalAddHero.isShow||this.parent.cityPartyOut.portraits.find(p=>p.isCanMove)){
+                console.log('return PointUp In');
                 return;
             }
             this.portraits.forEach(p => {
                 if (p.isCanMove) {
                     isNext = false;
                 }
-                console.log('CityPartyIn drop = ', p.unit.name);
+                //console.log('CityPartyIn drop = ', p.unit.name);
                 p.drop(pointer);
             });
 
-            this.parent.cityPartyOut.portraits.forEach(p=>{
-                if (p.isCanMove) {
-                    isNext = false;
-                }
-                p.drop(pointer);
-            });
+            // this.parent.cityPartyOut.portraits.forEach(p=>{
+            //     if (p.isCanMove) {
+            //         isNext = false;
+            //     }
+            //     p.drop(pointer);
+            // });
             //console.log('CapitalParty pointerup');
             if (isNext) {
                 const cont = this.conts.find(c => c.isOnPointer(pointer));
                 if (cont) {
-                    console.log('add Unit to partyIn = ', cont.data);
+                    //console.log('add Unit to partyIn = ', cont.data);
                     this.parent.modalAddUnit.show(cont.data, this.cityData.id, 'in');
                     //this.parent.modalAddUnit.show(cont.data, this.parent.parent.capitalData.id);
                 }
@@ -167,7 +168,7 @@ export default class CityPartyIn{
     }
 
     updateData(){
-        console.log('updateData CityPartyIn');
+        //console.log('updateData CityPartyIn');
         const gameState = store.getState().game;
         const cityData = gameState.cities[gameState.selectObj.idx];
         
@@ -215,14 +216,14 @@ export default class CityPartyIn{
     }
 
     dropPortrait(point: TPoint, portret: PartyPortrait){
-        console.log('drop!!!');
+        //console.log('drop!!!');
         for (let i = 0; i < this.portraits.length; i++) {
             const p = this.portraits[i];
             if (p.cont.isOnPointer(point)&&p.unit.uid!==portret.unit.uid) {
-                console.log('on portrait', p.unit.defaultName);
+                //console.log('on portrait', p.unit.defaultName);
                 if(portret.unit.numCells===2){
                     const portraits = this.portraits.filter(p2=>p2.unit.position[0]===p.unit.position[0]);
-                    console.log(portraits.map(p2=>p2.unit.defaultName));
+                    //console.log(portraits.map(p2=>p2.unit.defaultName));
                     store.dispatch(actionMoveTwoCellCitySquadIn({
                         unitId: portret.unit.uid,
                         units: portraits.map(p2=>p2.unit.uid)
@@ -248,7 +249,7 @@ export default class CityPartyIn{
         for (let i = 0; i < this.parent.cityPartyOut.portraits.length; i++) {
             const p = this.parent.cityPartyOut.portraits[i];
             if (!p.unit.isLeader&&p.cont.isOnPointer(point)&&p.unit.uid!==portret.unit.uid) {
-                console.log('on portrait', p.unit.defaultName);
+                //console.log('on portrait', p.unit.defaultName);
                 //const leader = this.parent.cityPartyOut.getLeader();
                 if(portret.unit.numCells===2&&p.unit.numCells===2){
                     if(!p.unit.isLeader){
@@ -287,7 +288,7 @@ export default class CityPartyIn{
                         break;
                     }
                 }
-                console.log('from IN to OUT!!!');
+                //console.log('from IN to OUT!!!');
                 store.dispatch(actionMoveUnitInOut({
                     unitId: portret.unit.uid,
                     toUnitId: p.unit.uid
@@ -300,11 +301,11 @@ export default class CityPartyIn{
         for (let i = 0; i < this.conts.length; i++) {
             const cont = this.conts[i];
             if (cont.isOnPointer(point)) {
-                console.log('on container = ', cont.data);
+                //console.log('on container = ', cont.data);
                 if(portret.unit.numCells===2){
                     const p = this.portraits.find(p=>p.unit.position[0]===cont.data[0]);
                     if(p){
-                        console.log(p.unit.defaultName);
+                        //console.log(p.unit.defaultName);
                         store.dispatch(actionMoveTwoCellCitySquadIn({
                             unitId: portret.unit.uid,
                             units: [p.unit.uid]
@@ -323,11 +324,11 @@ export default class CityPartyIn{
         for (let i = 0; i < this.contsMove.length; i++) {
             const cont = this.contsMove[i];
             if (cont.isOnPointer(point)) {
-                console.log('on container contsMove = ', cont.data);
+                //console.log('on container contsMove = ', cont.data);
                 if(portret.unit.numCells===2){
                     const p = this.portraits.find(p=>p.unit.position[0]===cont.data[0]);
                     if(p){
-                        console.log(p.unit.defaultName);
+                        //console.log(p.unit.defaultName);
                         store.dispatch(actionMoveTwoCellCitySquadIn({
                             unitId: portret.unit.uid,
                             units: [p.unit.uid]
@@ -348,11 +349,11 @@ export default class CityPartyIn{
         for (let i = 0; i < this.parent.cityPartyOut.conts.length; i++) {
             const cont = this.parent.cityPartyOut.conts[i];
             if (cont.isOnPointer(point)) {
-                console.log('on container = ', cont.data);
+                //console.log('on container = ', cont.data);
                 if(portret.unit.numCells===2){
                     const p = this.parent.cityPartyOut.portraits.find(p=>p.unit.position[0]===cont.data[0]);
                     if(p){
-                        console.log(p.unit.defaultName);
+                        //console.log(p.unit.defaultName);
                         store.dispatch(actionMoveTwoCellUnitInOut({
                             unitId: portret.unit.uid,
                             units: [p.unit.uid]

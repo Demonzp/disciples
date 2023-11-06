@@ -61,7 +61,7 @@ export default class ModalPropsAddUnitCity {
     }
 
     show(position: [number, number], cityId: string, side: TSide, partyId?: string) {
-        console.log('show ModalPropsAddUnitCity');
+        //console.log('show ModalPropsAddUnitCity');
         this.cityId = cityId;
         this.partyId = partyId;
         this.side = side;
@@ -234,7 +234,7 @@ export default class ModalPropsAddUnitCity {
     }
 
     onOk() {
-        console.log('add unit onOk');
+        //console.log('add unit onOk');
         //console.log('capitalData = ', this.parent.capitalParty.squadIn);
 
         if (this._isModalMes) {
@@ -242,7 +242,8 @@ export default class ModalPropsAddUnitCity {
         }
         if (this.units[this.selectIdx].numCells === 2) {
             const posTwo = this.position[1] === 1 ? 0 : 1;
-            const squad = this.parent[`cityParty${this.side === 'out' ? 'Out' : 'In'}`]
+            const squad = this.parent[`cityParty${this.side === 'out' ? 'Out' : 'In'}`];
+            //const squad = this.parent.cityPartyOut;
             const unit = squad.squad.find(u => {
                 if ((u.position[0] === this.position[0] && u.position[1] === this.position[1])
                     || (u.position[0] === this.position[0] && u.position[1] === posTwo)
@@ -279,6 +280,7 @@ export default class ModalPropsAddUnitCity {
         } else {
             const posTwo = this.position[1] === 1 ? 0 : 1;
             const squad = this.parent[`cityParty${this.side === 'out' ? 'Out' : 'In'}`];
+            //const squad = this.parent.cityPartyOut;
 
             const unit = squad.squad.find(u => {
                 if ((u.position[0] === this.position[0] && u.position[1] === this.position[1])

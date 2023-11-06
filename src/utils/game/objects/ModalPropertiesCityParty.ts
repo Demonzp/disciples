@@ -55,7 +55,6 @@ export default class ModalPropertiesCityParty{
             this._btnOk.destroy();
             this.cityPartyOut.hide();
             this.cityPartyIn.hide();
-            //this.parent._hide();
         }
         this.isPartyProps = false;
     }
