@@ -13,6 +13,7 @@ type Props = {
 
 const MapEditor: FC<Props> = ({ game }) => {
     const { editorMod, selectObj, units, capitalCities } = useAppSelector(state => state.game);
+    const { isOpen } = useAppSelector(s=>s.cityParty);
     const dispatch = useAppDispatch();
     const [showAddRace, setShowAddRace] = useState(false);
     const onToggle = () => {
@@ -57,6 +58,17 @@ const MapEditor: FC<Props> = ({ game }) => {
             gameScene.updateUnits();
         }
     }, [units]);
+
+    useEffect(()=>{
+        if(game){
+            const gameScene = game.scene.getScene<EditorScene>('EditorScene');
+            //console.log('update state cities = ',gameScene.isInit);
+            if(gameScene){
+                
+                gameScene.updateCityParty();
+            }
+        }
+    }, [isOpen]);
 
     const onAddRace = () => {
         dispatch(actionSetEditorMod('add-race'));

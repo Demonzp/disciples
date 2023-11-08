@@ -422,7 +422,7 @@ const initialState: IStateGame = {
 };
 
 const sliceGame = createSlice({
-    name: 'selectTable',
+    name: 'sliceGame',
     initialState,
     reducers: {
         // selectObj(state, action:PayloadAction<string>){

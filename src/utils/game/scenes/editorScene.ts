@@ -339,6 +339,15 @@ export default class EditorScene extends Scene {
         this.modalPropertiesCity.updateUnits();
     }
 
+    updateCityParty(){
+        const cityParty = store.getState().cityParty;
+        if(cityParty.isOpen){
+            const gameState = store.getState().game;
+            const city = gameState.cities[gameState.selectObj.idx];
+            this.modalPropertiesCity.init(city);
+        }
+    }
+
     // updateProperties(){
     //     const gameState = store.getState().game;
     //     if(gameState.editorMod==='properties'&&gameState.selectObj){
