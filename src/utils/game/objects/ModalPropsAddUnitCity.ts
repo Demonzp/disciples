@@ -8,6 +8,7 @@ import { actionAddUnitToCity } from "store/actions/actionsGame";
 import ModalMessage from "./ModalMessage";
 import { IScene } from "../scenes/IScene";
 import ModalPropertiesCityParty from "./ModalPropertiesCityParty";
+import ModalPropertiesCityParty2 from "./ModalPropertiesCityParty2";
 import CityPartyOut from "./CityPartyOut";
 import CityPartyIn from "./CityPartyIn";
 
@@ -52,7 +53,7 @@ export default class ModalPropsAddUnitCity {
     ]
     private _isShow = false;
     private _isModalMes = false;
-    constructor(public parent: ModalPropertiesCityParty) {
+    constructor(public parent: ModalPropertiesCityParty|ModalPropertiesCityParty2) {
 
     }
 

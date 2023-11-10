@@ -17,7 +17,12 @@ const sliceCityParty = createSlice({
     name: 'sliceCityParty',
     initialState,
     reducers: {
-
+        openCityParty(state){
+            state.isOpen = true;
+        },
+        closeCityParty(start){
+            start.isOpen = false;
+        }
     },
     extraReducers: (builder) => {
 
@@ -25,6 +30,8 @@ const sliceCityParty = createSlice({
 });
 
 export const {
+    openCityParty,
+    closeCityParty
 } = sliceCityParty.actions;
 
 export default sliceCityParty;

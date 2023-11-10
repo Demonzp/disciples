@@ -7,8 +7,9 @@ import SelectLine from "./SelectLine";
 import Button from "./Button";
 import store from "store/store";
 import { actionChangeCityProps } from "store/actions/actionsGame";
-import ModalPropertiesCityParty from "./ModalPropertiesCityParty";
+import ModalPropertiesCityParty2 from "./ModalPropertiesCityParty";
 import ModalMessage from "./ModalMessage";
+import { openCityParty } from "store/slices/cityParty";
 
 export default class ModalPropertiesCity{
     cityData:ICity;
@@ -16,7 +17,7 @@ export default class ModalPropertiesCity{
     inputCityName: InputElString|undefined;
     selectLvl: SelectLine|undefined;
     allInputs:(InputEl|InputElString)[]=[];
-    modalCityParty: ModalPropertiesCityParty = new ModalPropertiesCityParty(this);
+    modalCityParty: ModalPropertiesCityParty2 = new ModalPropertiesCityParty2(this);
     btns:Button[] = [];
     isOpen = false;
     private _isModalMes = false;
@@ -53,7 +54,10 @@ export default class ModalPropertiesCity{
         btnOk.y = y+150;
         this.btns.push(btnOk);
 
-        const btnParty = new Button(this.scene,'Party & Reserve',this.onParty.bind(this));
+        //const btnParty = new Button(this.scene,'Party & Reserve',this.onParty.bind(this));
+        const btnParty = new Button(this.scene,'Party & Reserve',()=>{
+            store.dispatch(openCityParty());
+        });
         btnParty.init();
         btnParty.x = x-120;
         btnParty.y = y+150;
