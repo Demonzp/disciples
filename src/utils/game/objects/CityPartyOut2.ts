@@ -67,7 +67,7 @@ export default class CityPartyOut{
         //console.log('init CityPartyOut');
         this.scene = this.parent.scene;
         this.modalAddHero = new ModalAddHero2(this.parent.scene, this);
-        this.cityData = this.parent.parent.cityData;
+        this.cityData = this.parent.cityData;
         this.leader = null;
         this.fullSlots = 0;
         this.idPointMove = this.parent.scene.input.on('pointermove', (pointer) => {
@@ -322,7 +322,7 @@ export default class CityPartyOut{
                     return;
                 }
                 this._contSelectParty.off(idOn);
-                this.modalAddHero.init([1,0],this.parent.parent.cityData.id);
+                this.modalAddHero.init([1,0],this.parent.cityData.id);
             });
         }
     }
@@ -333,7 +333,7 @@ export default class CityPartyOut{
         const cityData = gameState.cities[gameState.selectObj.idx];
         
         this.hide();
-        this.parent.parent.cityData = cityData;
+        this.parent.cityData = cityData;
         this.init();
     }
 

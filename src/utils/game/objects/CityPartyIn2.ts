@@ -55,7 +55,7 @@ export default class CityPartyIn{
 
     init(){
         this.scene = this.parent.scene;
-        this.cityData = this.parent.parent.cityData;
+        this.cityData = this.parent.cityData;
         const units = store.getState().game.units;
         
         // this.squad = this.cityData.squadIn.map(uid => {
@@ -173,7 +173,7 @@ export default class CityPartyIn{
         const cityData = gameState.cities[gameState.selectObj.idx];
         
         this.hide();
-        this.parent.parent.cityData = cityData;
+        this.parent.cityData = cityData;
         this.init();
     }
 

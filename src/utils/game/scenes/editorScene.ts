@@ -341,10 +341,13 @@ export default class EditorScene extends Scene {
 
     updateCityParty(){
         const cityParty = store.getState().cityParty;
+        console.log('switch CityParty');
         if(cityParty.isOpen){
-            const gameState = store.getState().game;
-            const city = gameState.cities[gameState.selectObj.idx];
-            this.modalPropertiesCity.init(city);
+            //const gameState = store.getState().game;
+            //const city = gameState.cities[gameState.selectObj.idx];
+            this.modalPropertiesCity.modalCityParty.init();
+        }else{
+            this.modalPropertiesCity.modalCityParty.hide();
         }
     }
 

@@ -1,27 +1,29 @@
 import Sprite from "utils/gameLib/Sprite";
 import { IScene } from "../scenes/IScene";
-import ModalPropertiesCity from "./ModalPropertiesCity";
 import CityPartyOut2 from "./CityPartyOut2";
 import Button from "./Button";
 import store from "store/store";
 import ModalPropsAddUnitCity from "./ModalPropsAddUnitCity";
 import CityPartyIn2 from "./CityPartyIn2";
+import { closeCityParty } from "store/slices/cityParty";
+import { ICity } from "store/slices/sliceGame";
 
 export default class ModalPropertiesCityParty{
     private _fon:Sprite|undefined;
-    scene: IScene;
     x = 0;
     y = 0;
     cityPartyOut = new CityPartyOut2(this);
     cityPartyIn = new CityPartyIn2(this);
     modalAddUnit = new ModalPropsAddUnitCity(this);
     isPartyProps = false;
+    cityData:ICity|null=null;
     private _btnOk:Button|undefined;
-    constructor(public parent:ModalPropertiesCity){
-        this.scene = parent.scene;
+    constructor(public scene:IScene){
+        this.scene = scene;
     }
 
-    init(){
+    init(cityData:ICity){
+        this.cityData = cityData;
         const cameraPoint = this.scene.game.camera.cameraPoint();
         this._fon = this.scene.add.sprite('modal-city-party');
         this._fon.setZindex(1000);
@@ -30,15 +32,16 @@ export default class ModalPropertiesCityParty{
         this._fon.x = this.x;
         this._fon.y = this.y;
         this._btnOk = new Button(this.scene,'Ok', ()=>{
-            if(this.parent.modalCityParty.cityPartyOut.modalAddHero&&this.parent.modalCityParty.cityPartyOut.modalAddHero.isShow){
+            if(this.cityPartyOut.modalAddHero.isShow&&this.cityPartyOut.modalAddHero.isShow){
                 return;
             }
 
             if(this.modalAddUnit.isShow){
                 return;
             }
-            this.hide();
-            this.parent.init(this.parent.cityData);
+            //this.hide();
+            store.dispatch(closeCityParty());
+            //this.parent.init(this.parent.cityData);
         });
         this._btnOk.init();
         this._btnOk.x = this.x-this._btnOk.width/2;
