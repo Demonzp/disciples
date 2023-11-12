@@ -11,6 +11,7 @@ import City from "../objects/City";
 import ModalPropertiesCapital from "../objects/ModalPropertiesCapital";
 import InputEl from "../objects/InputEl";
 import ModalPropertiesCity2 from "../objects/ModalPropertiesCity2";
+import ModalPropertiesCityParty2 from "../objects/ModalPropertiesCityParty2";
 
 export type TPointMatrix = [number, number];
 
@@ -42,6 +43,7 @@ export default class EditorScene extends Scene {
     isInit = false;
     modalPropertiesCapital:ModalPropertiesCapital = new ModalPropertiesCapital(this);
     modalPropertiesCity:ModalPropertiesCity2 = new ModalPropertiesCity2(this);
+    modalCityParty:ModalPropertiesCityParty2 = new ModalPropertiesCityParty2(this);
     pointerDot: Graphics | null;
     //inputs: InputEl[] = [];
 
@@ -345,9 +347,9 @@ export default class EditorScene extends Scene {
         if(cityParty.isOpen){
             //const gameState = store.getState().game;
             //const city = gameState.cities[gameState.selectObj.idx];
-            //this.modalPropertiesCity.modalCityParty.init();
+            //this.modalCityParty.init();
         }else{
-            //this.modalPropertiesCity.modalCityParty.hide();
+            this.modalCityParty.hide();
         }
     }
 

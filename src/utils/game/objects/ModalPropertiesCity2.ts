@@ -55,6 +55,7 @@ export default class ModalPropertiesCity2{
 
         //const btnParty = new Button(this.scene,'Party & Reserve',this.onParty.bind(this));
         const btnParty = new Button(this.scene,'Party & Reserve',()=>{
+            this.hide();
             store.dispatch(openCityParty());
         });
         btnParty.init();
@@ -111,7 +112,7 @@ export default class ModalPropertiesCity2{
             this.btns.forEach(btn=>btn.destroy());
             this.btns = [];
             this.allInputs = [];
-            this.isOpen = false;
+            //this.isOpen = false;
         }
     }
 

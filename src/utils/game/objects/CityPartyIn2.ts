@@ -115,9 +115,9 @@ export default class CityPartyIn{
         });
 
         this.idPointMove = this.parent.scene.input.on('pointermove', (pointer) => {
-            if(this.parent.modalAddUnit.isShow||this.parent.cityPartyOut.modalAddHero.isShow){
-                return;
-            }
+            // if(this.parent.modalAddUnit.isShow||this.parent.cityPartyOut.modalAddHero.isShow){
+            //     return;
+            // }
             this.portraits.forEach(p => p.move(pointer));
         });
 
@@ -125,7 +125,7 @@ export default class CityPartyIn{
             //console.log('CityPartyIn pointerup');
             let isNext = true;
             //||this.parent.cityPartyOut.portraits.find(p=>p.isCanMove)
-            if(this.parent.modalAddUnit.isShow||this.parent.cityPartyOut.modalAddHero.isShow||this.parent.cityPartyOut.portraits.find(p=>p.isCanMove)){
+            if(this.parent.modalAddUnit.isShow||this.parent.cityPartyOut.modalAddHero.isShow||store.getState().cityParty.isUpPortret){
                 console.log('return PointUp In');
                 return;
             }

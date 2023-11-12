@@ -71,9 +71,9 @@ export default class CityPartyOut{
         this.leader = null;
         this.fullSlots = 0;
         this.idPointMove = this.parent.scene.input.on('pointermove', (pointer) => {
-            if(this.parent.modalAddUnit.isShow){
-                return;
-            }
+            // if(this.parent.modalAddUnit.isShow){
+            //     return;
+            // }
             this.portraits.forEach(p => p.move(pointer));
         });
 

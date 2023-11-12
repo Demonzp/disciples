@@ -32,7 +32,8 @@ export default class ModalPropertiesCityParty{
         this._fon.x = this.x;
         this._fon.y = this.y;
         this._btnOk = new Button(this.scene,'Ok', ()=>{
-            if(this.cityPartyOut.modalAddHero.isShow&&this.cityPartyOut.modalAddHero.isShow){
+            //console.log();
+            if(this.cityPartyOut.modalAddHero.isShow){
                 return;
             }
 
