@@ -12,7 +12,7 @@ type Props = {
 }
 
 const MapEditor: FC<Props> = ({ game }) => {
-    const { editorMod, selectObj, units, capitalCities } = useAppSelector(state => state.game);
+    const { editorMod, selectObj, units, capitalCities, cities } = useAppSelector(state => state.game);
     const { isOpen } = useAppSelector(s=>s.cityParty);
     const dispatch = useAppDispatch();
     const [showAddRace, setShowAddRace] = useState(false);
@@ -45,7 +45,23 @@ const MapEditor: FC<Props> = ({ game }) => {
         const gameScene = game.scene.getScene<EditorScene>('EditorScene');
         //console.log('update state capitalCities = ', scene);
         if (gameScene) {
-            gameScene.openProperties();
+            if(selectObj){
+                switch (editorMod) {
+                    case 'properties':
+                        if(selectObj.type === 'city'){
+                            const city = cities[selectObj.idx];
+                            gameScene.modalPropertiesCity.init(city);
+                        }
+                        break;
+                
+                    default:
+                        break;
+                }
+            }else{
+                
+            }
+            
+            //gameScene.openProperties();
         }
         //onTogglePropsCapital();
         //}

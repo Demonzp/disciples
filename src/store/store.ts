@@ -1,12 +1,14 @@
 import { configureStore, ThunkAction, Action } from '@reduxjs/toolkit';
 import sliceGame from './slices/sliceGame';
 import sliceCityParty from './slices/cityParty';
+import sliceCityProps from './slices/cityProps';
 
 export function makeStore(){
     return configureStore({
         reducer: {
             game: sliceGame.reducer,
             cityParty: sliceCityParty.reducer,
+            cityProps: sliceCityProps.reducer
         }
     });
 }
