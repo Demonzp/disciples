@@ -81,8 +81,8 @@ export default class CityPartyOut{
             //console.log('CityPartyOut pointerup');
             let isNext = true;
             //||this.parent.cityPartyIn.portraits.find(p=>p.isCanMove)
-            if(this.parent.modalAddUnit.isShow||this.parent.cityPartyIn.portraits.find(p=>p.isCanMove)){
-                //console.log('modalAddUnit.isShow = ', this.parent.modalAddUnit.isShow);
+            const {isOpenModal, isUpPortret, sidePortret} = store.getState().cityParty
+            if(isOpenModal||(isUpPortret&&sidePortret==='left')){
                 return;
             }
             this.portraits.forEach(p => {

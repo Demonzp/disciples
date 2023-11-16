@@ -5,10 +5,12 @@ type InitState = {
     isOpen:boolean;
     isUpPortret: boolean;
     sidePortret: TPartySide;
+    isOpenModal: boolean;
 }
 
 const initialState:InitState = {
     isOpen:false,
+    isOpenModal: false,
     isUpPortret:false,
     sidePortret:'left'
 };
