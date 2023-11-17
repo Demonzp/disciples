@@ -7,6 +7,7 @@ import ModalPropsAddUnitCity from "./ModalPropsAddUnitCity";
 import CityPartyIn2 from "./CityPartyIn2";
 import { closeCityParty } from "store/slices/cityParty";
 import { ICity } from "store/slices/sliceGame";
+import { TPointer } from "utils/gameLib/InputEvent";
 
 export default class ModalPropertiesCityParty{
     private _fon:Sprite|undefined;
@@ -16,6 +17,7 @@ export default class ModalPropertiesCityParty{
     cityPartyIn = new CityPartyIn2(this);
     modalAddUnit = new ModalPropsAddUnitCity(this);
     isPartyProps = false;
+    idInputUp = '';
     cityData:ICity|null=null;
     private _btnOk:Button|undefined;
     constructor(public scene:IScene){
@@ -48,9 +50,22 @@ export default class ModalPropertiesCityParty{
         this._btnOk.x = this.x-this._btnOk.width/2;
         this._btnOk.y = this.y+200;
         this._btnOk.setZindex(1000);
+        this.idInputUp = this.scene.input.on('pointerup', this.onPointerUp, this);
         this.isPartyProps = true;
         this.cityPartyOut.init();
         this.cityPartyIn.init();
+    }
+
+    onPointerUp(pointer:TPointer){
+        const {isUpPortret, sidePortret} = store.getState().cityParty;
+        if(!isUpPortret){
+            this.cityPartyOut.onContainer(pointer);
+        }else{
+            if(sidePortret==='left'){
+
+            }
+        }
+
     }
 
     hide(){
@@ -64,6 +79,9 @@ export default class ModalPropertiesCityParty{
     }
 
     updateUnits(){
+        if(!store.getState().cityParty.isOpen){
+            return;
+        }
         this.cityPartyOut.hide();
         this.cityPartyOut.init();
         this.cityPartyIn.hide();

@@ -8,6 +8,8 @@ import CityPartyOut from "./CityPartyOut";
 import CityPartyIn from "./CityPartyIn";
 import CityPartyOut2 from "./CityPartyOut2";
 import CityPartyIn2 from "./CityPartyIn2";
+import store from "store/store";
+import { upCityPortret } from "store/slices/cityParty";
 
 export default class PartyPortrait {
     sprite: Sprite | undefined;
@@ -62,6 +64,7 @@ export default class PartyPortrait {
             this.isCanMove = true;
             this.startPoint.x = this.cont.x - pointer.x;
             this.startPoint.y = this.cont.y - pointer.y;
+            store.dispatch(upCityPortret(this.side));
         });
 
     }

@@ -112,7 +112,7 @@ export default class ModalPropertiesCity2{
             this.btns.forEach(btn=>btn.destroy());
             this.btns = [];
             this.allInputs = [];
-            //this.isOpen = false;
+            this.isOpen = false;
         }
     }
 

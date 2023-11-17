@@ -338,6 +338,7 @@ export default class EditorScene extends Scene {
 
     updateUnits(){
         this.modalPropertiesCapital.updateUnits();
+        this.modalCityParty.updateUnits();
         //this.modalPropertiesCity.updateUnits();
     }
 

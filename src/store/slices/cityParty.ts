@@ -22,8 +22,15 @@ const sliceCityParty = createSlice({
         openCityParty(state){
             state.isOpen = true;
         },
-        closeCityParty(start){
-            start.isOpen = false;
+        closeCityParty(state){
+            state.isOpen = false;
+        },
+        upCityPortret(state, action:PayloadAction<TPartySide>){
+            state.isUpPortret = true;
+            state.sidePortret = action.payload;
+        },
+        dropCityPortret(state){
+            state.isUpPortret = false;
         }
     },
     extraReducers: (builder) => {
@@ -33,7 +40,9 @@ const sliceCityParty = createSlice({
 
 export const {
     openCityParty,
-    closeCityParty
+    closeCityParty,
+    upCityPortret,
+    dropCityPortret
 } = sliceCityParty.actions;
 
 export default sliceCityParty;

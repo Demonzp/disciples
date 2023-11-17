@@ -81,12 +81,15 @@ const MapEditor: FC<Props> = ({ game }) => {
             //console.log('update state cities = ',gameScene.isInit);
             if(gameScene){
                 if(selectObj){
+                    const city = cities[selectObj.idx];
                     if(isOpen){
-                        const city = cities[selectObj.idx];
-                        //gameScene.modalPropertiesCity.hide();
+                        //const city = cities[selectObj.idx];
+                        gameScene.modalPropertiesCity.hide();
                         gameScene.modalCityParty.init(city);
                     }else{
+                        
                         gameScene.modalCityParty.hide();
+                        gameScene.modalPropertiesCity.init(city);
                     }
                     
                 }
