@@ -62,7 +62,7 @@ export default class ModalPropertiesCityParty{
             this.cityPartyOut.onContainer(pointer);
         }else{
             if(sidePortret==='left'){
-
+                this.cityPartyOut.onPortretToAny(pointer);
             }
         }
 

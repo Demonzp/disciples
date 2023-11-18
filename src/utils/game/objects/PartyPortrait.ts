@@ -91,7 +91,7 @@ export default class PartyPortrait {
         if (!this.isCanMove) {
             return;
         }
-        this.parent.dropPortrait(point, this);
+        //this.parent.dropPortrait(point, this);
         this.isCanMove = false;
     }
 }

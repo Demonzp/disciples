@@ -11,6 +11,7 @@ import { ICity, IUnit } from "store/slices/sliceGame";
 import store from "store/store";
 import { actionDoubleMoveCitySquadIn, actionMoveCitySquadIn, actionMoveTwoCellCitySquadIn } from "store/actions/actionsGame";
 import { TPointer } from "utils/gameLib/InputEvent";
+import { dropCityPortret } from "store/slices/cityParty";
 
 export default class CityPartyOut {
     conts: Container[] = [];
@@ -188,12 +189,70 @@ export default class CityPartyOut {
         return this.squad.find(u => u.isLeader);
     }
 
-    onContainer(pointer:TPointer) {
+    onContainer(pointer: TPointer) {
         const cont = this.conts.find(c => c.isOnPointer(pointer));
         if (cont) {
             //console.log('add Unit to = ', cont.data);
             this.parent.modalAddUnit.show(cont.data, this.cityData.id, 'out', this.cityData.squadOut);
             //this.parent.modalAddUnit.show(cont.data, this.parent.parent.capitalData.id);
+        }
+    }
+
+    onPortretToAny(pointer: TPointer) {
+        const cont = this.conts.find(c => c.isOnPointer(pointer));
+        const portret = this.portraits.find(p => p.isCanMove);
+        const anotherPortret = this.portraits.find(p => {
+            if (p.unit.uid !== portret.unit.uid && p.sprite.isOnPointer(pointer)) {
+                return true;
+            }
+            return false;
+        });
+        const contMove = this.contsMove.find(c=>c.isOnPointer(pointer));
+
+        if (cont) {
+            if (portret) {
+                if (portret.unit.numCells === 2) {
+                    const p = this.portraits.find(p => p.unit.position[0] === cont.data[0]);
+                    if (p) {
+                        store.dispatch(actionMoveTwoCellCitySquadIn({
+                            unitId: portret.unit.uid,
+                            units: [p.unit.uid]
+                        }))
+                            .then(() => portret.drop(pointer));
+                        return;
+                    }
+                }
+                store.dispatch(actionMoveCitySquadIn({
+                    unitId: portret.unit.uid,
+                    toIdx: cont.data,
+                }))
+                    .then(() => portret.drop(pointer));
+            }
+        } else if (anotherPortret) {
+            store.dispatch(actionDoubleMoveCitySquadIn({
+                unitId: portret.unit.uid,
+                toUnitId: anotherPortret.unit.uid
+            }));
+        }else if (contMove){
+            if (portret.unit.numCells === 2) {
+                const p = this.portraits.find(p => p.unit.position[0] === contMove.data[0]);
+                if (p) {
+                    //console.log(p.unit.defaultName);
+                    store.dispatch(actionMoveTwoCellCitySquadIn({
+                        unitId: portret.unit.uid,
+                        units: [p.unit.uid]
+                    }));
+                    return;
+                }
+            }
+
+            store.dispatch(actionMoveCitySquadIn({
+                unitId: portret.unit.uid,
+                toIdx: contMove.data,
+            }));
+        } else {
+            store.dispatch(dropCityPortret());
+            portret.toStart();
         }
     }
 
