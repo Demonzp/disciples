@@ -198,6 +198,28 @@ export default class CityPartyOut {
         }
     }
 
+    onPortretToCont(pointer:TPointer,portret:PartyPortrait,cont:Container){
+        if(!portret){
+            return;
+        }
+        if (portret.unit.numCells === 2) {
+            const p = this.portraits.find(p => p.unit.position[0] === cont.data[0]);
+            if (p) {
+                store.dispatch(actionMoveTwoCellCitySquadIn({
+                    unitId: portret.unit.uid,
+                    units: [p.unit.uid]
+                }))
+                    .then(() => portret.drop(pointer));
+                return;
+            }
+        }
+        store.dispatch(actionMoveCitySquadIn({
+            unitId: portret.unit.uid,
+            toIdx: cont.data,
+        }))
+            .then(() => portret.drop(pointer));
+    }
+
     onPortretToAny(pointer: TPointer) {
         const cont = this.conts.find(c => c.isOnPointer(pointer));
         const portret = this.portraits.find(p => p.isCanMove);
@@ -210,46 +232,48 @@ export default class CityPartyOut {
         const contMove = this.contsMove.find(c=>c.isOnPointer(pointer));
 
         if (cont) {
-            if (portret) {
-                if (portret.unit.numCells === 2) {
-                    const p = this.portraits.find(p => p.unit.position[0] === cont.data[0]);
-                    if (p) {
-                        store.dispatch(actionMoveTwoCellCitySquadIn({
-                            unitId: portret.unit.uid,
-                            units: [p.unit.uid]
-                        }))
-                            .then(() => portret.drop(pointer));
-                        return;
-                    }
-                }
-                store.dispatch(actionMoveCitySquadIn({
-                    unitId: portret.unit.uid,
-                    toIdx: cont.data,
-                }))
-                    .then(() => portret.drop(pointer));
-            }
+            this.onPortretToCont(pointer,portret,cont);
+            // if (portret) {
+            //     if (portret.unit.numCells === 2) {
+            //         const p = this.portraits.find(p => p.unit.position[0] === cont.data[0]);
+            //         if (p) {
+            //             store.dispatch(actionMoveTwoCellCitySquadIn({
+            //                 unitId: portret.unit.uid,
+            //                 units: [p.unit.uid]
+            //             }))
+            //                 .then(() => portret.drop(pointer));
+            //             return;
+            //         }
+            //     }
+            //     store.dispatch(actionMoveCitySquadIn({
+            //         unitId: portret.unit.uid,
+            //         toIdx: cont.data,
+            //     }))
+            //         .then(() => portret.drop(pointer));
+            // }
         } else if (anotherPortret) {
             store.dispatch(actionDoubleMoveCitySquadIn({
                 unitId: portret.unit.uid,
                 toUnitId: anotherPortret.unit.uid
             }));
         }else if (contMove){
-            if (portret.unit.numCells === 2) {
-                const p = this.portraits.find(p => p.unit.position[0] === contMove.data[0]);
-                if (p) {
-                    //console.log(p.unit.defaultName);
-                    store.dispatch(actionMoveTwoCellCitySquadIn({
-                        unitId: portret.unit.uid,
-                        units: [p.unit.uid]
-                    }));
-                    return;
-                }
-            }
+            this.onPortretToCont(pointer,portret,contMove);
+            // if (portret.unit.numCells === 2) {
+            //     const p = this.portraits.find(p => p.unit.position[0] === contMove.data[0]);
+            //     if (p) {
+            //         //console.log(p.unit.defaultName);
+            //         store.dispatch(actionMoveTwoCellCitySquadIn({
+            //             unitId: portret.unit.uid,
+            //             units: [p.unit.uid]
+            //         }));
+            //         return;
+            //     }
+            // }
 
-            store.dispatch(actionMoveCitySquadIn({
-                unitId: portret.unit.uid,
-                toIdx: contMove.data,
-            }));
+            // store.dispatch(actionMoveCitySquadIn({
+            //     unitId: portret.unit.uid,
+            //     toIdx: contMove.data,
+            // }));
         } else {
             store.dispatch(dropCityPortret());
             portret.toStart();
