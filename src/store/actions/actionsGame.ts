@@ -717,6 +717,23 @@ export const actionMoveUnitInOut = createAsyncThunk<TReqMoveUnitInOut, TReqMoveU
   }
 );
 
+type TReqMoveUnitOutIn = {
+  unitId: string;
+  toUnitId: string;
+}
+
+export const actionMoveUnitOutIn = createAsyncThunk<TReqMoveUnitOutIn, TReqMoveUnitOutIn, { state: AppState, rejectWithValue: any }>(
+  'game/actionMoveUnitOutIn',
+  async (data, { rejectWithValue }) => {
+    try {
+      return data;
+    } catch (error) {
+      console.error('error = ', (error as Error).message);
+      return rejectWithValue({ message: (error as Error).message, field: 'nameTable' });
+    }
+  }
+);
+
 type TReqMoveTwoCellUnitInOut = {
   unitId: string;
   units: string[];
@@ -724,6 +741,23 @@ type TReqMoveTwoCellUnitInOut = {
 
 export const actionMoveTwoCellUnitInOut = createAsyncThunk<TReqMoveTwoCellUnitInOut, TReqMoveTwoCellUnitInOut, { state: AppState, rejectWithValue: any }>(
   'game/actionMoveTwoCellUnitInOut',
+  async (data, { rejectWithValue }) => {
+    try {
+      return data;
+    } catch (error) {
+      console.error('error = ', (error as Error).message);
+      return rejectWithValue({ message: (error as Error).message, field: 'nameTable' });
+    }
+  }
+);
+
+type TReqMoveTwoCellUnitOutIn = {
+  unitId: string;
+  units: string[];
+}
+
+export const actionMoveTwoCellUnitOutIn = createAsyncThunk<TReqMoveTwoCellUnitOutIn, TReqMoveTwoCellUnitOutIn, { state: AppState, rejectWithValue: any }>(
+  'game/actionMoveTwoCellUnitOutIn',
   async (data, { rejectWithValue }) => {
     try {
       return data;

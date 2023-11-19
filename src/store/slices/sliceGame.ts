@@ -1,5 +1,5 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { actionAddCapitalCity, actionAddCity, actionAddLeaderToPartyCity, actionAddUnitToCapital, actionAddUnitToCity, actionChangeCapitalProps, actionChangeCityProps, actionDelSelectObj, actionDoubleMoveCitySquadIn, actionInitNewMap, actionMoveCitySquadIn, actionMoveCitySquadInOut, actionMoveTwoCellCitySquadIn, actionMoveTwoCellUnitInOut, actionMoveUnitInOut, actionPointerMove, actionPointerUp, actionSetEditorMod } from 'store/actions/actionsGame';
+import { actionAddCapitalCity, actionAddCity, actionAddLeaderToPartyCity, actionAddUnitToCapital, actionAddUnitToCity, actionChangeCapitalProps, actionChangeCityProps, actionDelSelectObj, actionDoubleMoveCitySquadIn, actionInitNewMap, actionMoveCitySquadIn, actionMoveCitySquadInOut, actionMoveTwoCellCitySquadIn, actionMoveTwoCellUnitInOut, actionMoveTwoCellUnitOutIn, actionMoveUnitInOut, actionPointerMove, actionPointerUp, actionSetEditorMod } from 'store/actions/actionsGame';
 import { TPointMatrix } from 'utils/game/scenes/editorScene';
 
 export const portretPartyOneData:{[name: string]: number} = {
@@ -932,13 +932,52 @@ const sliceGame = createSlice({
                 if(partyOneId){
                     state.units[idx].partyId = partyOneId;
                 }else{
-                    state.units[idx].partyId = '';
+                    state.units[idx].partyId = null;
                 }
                 state.units[idx].position = [posTwo[0],state.units[idx].position[1]];
             });
         });
 
         builder.addCase(actionMoveTwoCellUnitInOut.rejected, (state, { payload }) => {
+            state.errors.push(payload);
+        });
+
+        builder.addCase(actionMoveTwoCellUnitOutIn.pending, (state) => {
+            state.errors = [];
+        });
+
+        builder.addCase(actionMoveTwoCellUnitOutIn.fulfilled, (state, { payload }) => {
+            const unitOneIdx = state.units.findIndex(u=>u.uid===payload.unitId);
+            const unitsIdx:number[]=[];
+            payload.units.forEach(uId=>{
+                const idx = state.units.findIndex(u=>u.uid===uId);
+                unitsIdx.push(idx);
+            });
+            const posOne:[number,number] = [...state.units[unitsIdx[0]].position];
+            posOne[1] = 0;
+            //console.log('posOne = ', posOne[0],'||',posOne[1]);
+            //console.log('unitOneIdx = ', state.units[unitOneIdx].defaultName);
+            const posTwo:[number,number] = [...state.units[unitOneIdx].position];
+            state.units[unitOneIdx].position = [...posOne];
+            let partyOneId:string|null = null;
+            if(!state.units[unitOneIdx].partyId){
+                partyOneId = state.units[unitOneIdx].partyId;
+                state.units[unitOneIdx].partyId = null;
+            }else{
+                //console.log('to Out!!! = ', state.units[unitsIdx[0]].partyId);
+                state.units[unitOneIdx].partyId = state.units[unitsIdx[0]].partyId;
+            }
+            unitsIdx.forEach(idx=>{
+                if(partyOneId){
+                    state.units[idx].partyId = partyOneId;
+                }else{
+                    state.units[idx].partyId = null;
+                }
+                state.units[idx].position = [posTwo[0],state.units[idx].position[1]];
+            });
+        });
+
+        builder.addCase(actionMoveTwoCellUnitOutIn.rejected, (state, { payload }) => {
             state.errors.push(payload);
         });
     }

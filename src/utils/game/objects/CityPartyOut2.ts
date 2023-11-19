@@ -9,7 +9,7 @@ import { IScene } from "../scenes/IScene";
 import ModalAddHero2 from "./ModalAddHero2";
 import { ICity, IUnit } from "store/slices/sliceGame";
 import store from "store/store";
-import { actionDoubleMoveCitySquadIn, actionMoveCitySquadIn, actionMoveTwoCellCitySquadIn } from "store/actions/actionsGame";
+import { actionDoubleMoveCitySquadIn, actionMoveCitySquadIn, actionMoveTwoCellCitySquadIn, actionMoveTwoCellUnitOutIn, actionMoveUnitOutIn } from "store/actions/actionsGame";
 import { TPointer } from "utils/gameLib/InputEvent";
 import { dropCityPortret } from "store/slices/cityParty";
 
@@ -260,7 +260,22 @@ export default class CityPartyOut {
             if(portret.unit.isLeader){
                 return;
             }
-
+            if (portret.unit.numCells === 2) {
+                const p = this.portraits.find(p => p.unit.position[0] === contIn.data[0]);
+                if (p) {
+                    store.dispatch(actionMoveTwoCellUnitOutIn({
+                        unitId: portret.unit.uid,
+                        units: [p.unit.uid]
+                    }))
+                        .then(() => portret.drop(pointer));
+                    return;
+                }
+            }
+            store.dispatch(actionMoveCitySquadIn({
+                unitId: portret.unit.uid,
+                toIdx: contIn.data,
+            }))
+                .then(() => portret.drop(pointer));
         } else {
             store.dispatch(dropCityPortret());
             portret.toStart();
