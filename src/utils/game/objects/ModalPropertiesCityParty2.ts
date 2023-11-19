@@ -60,6 +60,7 @@ export default class ModalPropertiesCityParty{
         const {isUpPortret, sidePortret} = store.getState().cityParty;
         if(!isUpPortret){
             this.cityPartyOut.onContainer(pointer);
+            this.cityPartyIn.onContainer(pointer);
         }else{
             if(sidePortret==='left'){
                 this.cityPartyOut.onPortretToAny(pointer);
@@ -75,6 +76,7 @@ export default class ModalPropertiesCityParty{
             this.cityPartyOut.hide();
             this.cityPartyIn.hide();
         }
+        this.scene.input.off(this.idInputUp);
         this.isPartyProps = false;
     }
 

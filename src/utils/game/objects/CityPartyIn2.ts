@@ -7,6 +7,7 @@ import { ICity, IUnit } from "store/slices/sliceGame";
 import { IScene } from "../scenes/IScene";
 import store from "store/store";
 import { actionDoubleMoveCitySquadIn, actionMoveCitySquadIn, actionMoveCitySquadInOut, actionMoveTwoCellCitySquadIn, actionMoveTwoCellUnitInOut, actionMoveUnitInOut } from "store/actions/actionsGame";
+import { TPointer } from "utils/gameLib/InputEvent";
 
 export default class CityPartyIn{
     conts: Container[] = [];
@@ -121,39 +122,46 @@ export default class CityPartyIn{
             this.portraits.forEach(p => p.move(pointer));
         });
 
-        this.idPointUp = this.scene.input.on('pointerup', (pointer) => {
-            //console.log('CityPartyIn pointerup');
-            let isNext = true;
-            //||this.parent.cityPartyOut.portraits.find(p=>p.isCanMove)
-            if(this.parent.modalAddUnit.isShow||this.parent.cityPartyOut.modalAddHero.isShow||store.getState().cityParty.isUpPortret){
-                console.log('return PointUp In');
-                return;
-            }
-            this.portraits.forEach(p => {
-                if (p.isCanMove) {
-                    isNext = false;
-                }
-                //console.log('CityPartyIn drop = ', p.unit.name);
-                p.drop(pointer);
-            });
+        // this.idPointUp = this.scene.input.on('pointerup', (pointer) => {
+        //     //console.log('CityPartyIn pointerup');
+        //     let isNext = true;
+        //     //||this.parent.cityPartyOut.portraits.find(p=>p.isCanMove)
+        //     if(this.parent.modalAddUnit.isShow||this.parent.cityPartyOut.modalAddHero.isShow||store.getState().cityParty.isUpPortret){
+        //         console.log('return PointUp In');
+        //         return;
+        //     }
+        //     this.portraits.forEach(p => {
+        //         if (p.isCanMove) {
+        //             isNext = false;
+        //         }
+        //         //console.log('CityPartyIn drop = ', p.unit.name);
+        //         p.drop(pointer);
+        //     });
 
-            // this.parent.cityPartyOut.portraits.forEach(p=>{
-            //     if (p.isCanMove) {
-            //         isNext = false;
-            //     }
-            //     p.drop(pointer);
-            // });
-            //console.log('CapitalParty pointerup');
-            if (isNext) {
-                const cont = this.conts.find(c => c.isOnPointer(pointer));
-                if (cont) {
-                    //console.log('add Unit to partyIn = ', cont.data);
-                    this.parent.modalAddUnit.show(cont.data, this.cityData.id, 'in');
-                    //this.parent.modalAddUnit.show(cont.data, this.parent.parent.capitalData.id);
-                }
-            }
+        //     // this.parent.cityPartyOut.portraits.forEach(p=>{
+        //     //     if (p.isCanMove) {
+        //     //         isNext = false;
+        //     //     }
+        //     //     p.drop(pointer);
+        //     // });
+        //     //console.log('CapitalParty pointerup');
+        //     if (isNext) {
+        //         const cont = this.conts.find(c => c.isOnPointer(pointer));
+        //         if (cont) {
+        //             //console.log('add Unit to partyIn = ', cont.data);
+        //             this.parent.modalAddUnit.show(cont.data, this.cityData.id, 'in');
+        //             //this.parent.modalAddUnit.show(cont.data, this.parent.parent.capitalData.id);
+        //         }
+        //     }
 
-        });
+        // });
+    }
+
+    onContainer(pointer: TPointer) {
+        const cont = this.conts.find(c => c.isOnPointer(pointer));
+        if (cont) {
+            this.parent.modalAddUnit.show(cont.data, this.cityData.id, 'in');
+        }
     }
 
     hide(){

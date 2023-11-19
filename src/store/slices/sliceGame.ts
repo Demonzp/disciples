@@ -909,27 +909,23 @@ const sliceGame = createSlice({
 
         builder.addCase(actionMoveTwoCellUnitInOut.fulfilled, (state, { payload }) => {
             const unitOneIdx = state.units.findIndex(u=>u.uid===payload.unitId);
-            //const unitOutIdxs = state.units.findIndex(u=>payload.units.find(uId=>uId===u.id));
             const unitsIdx:number[]=[];
             payload.units.forEach(uId=>{
                 const idx = state.units.findIndex(u=>u.uid===uId);
                 unitsIdx.push(idx);
             });
-            //const unitTwoIdx = state.units.findIndex(u=>u.uid===payload.toUnitId);
             const posOne:[number,number] = [...state.units[unitsIdx[0]].position];
             posOne[1] = 0;
-            console.log('posOne = ', posOne[0],'||',posOne[1]);
-            console.log('unitOneIdx = ', state.units[unitOneIdx].defaultName);
+            //console.log('posOne = ', posOne[0],'||',posOne[1]);
+            //console.log('unitOneIdx = ', state.units[unitOneIdx].defaultName);
             const posTwo:[number,number] = [...state.units[unitOneIdx].position];
             state.units[unitOneIdx].position = [...posOne];
             let partyOneId:string|null = null;
-            //let partyTwoId:string|null = null;
             if(state.units[unitOneIdx].partyId){
                 partyOneId = state.units[unitOneIdx].partyId;
                 state.units[unitOneIdx].partyId = null;
             }else{
-                console.log('to Out!!! = ', state.units[unitsIdx[0]].partyId);
-                //partyTwoId = state.units[unitsIdx[0]].partyId;
+                //console.log('to Out!!! = ', state.units[unitsIdx[0]].partyId);
                 state.units[unitOneIdx].partyId = state.units[unitsIdx[0]].partyId;
             }
             unitsIdx.forEach(idx=>{
@@ -940,14 +936,6 @@ const sliceGame = createSlice({
                 }
                 state.units[idx].position = [posTwo[0],state.units[idx].position[1]];
             });
-            //const unitOutIdxs = payload.units.map(uId=>state.units.find(u=>u.uid===uId));
-            // const unitOutIdx = state.units.findIndex(u=>u.uid===payload.toUnitId);
-            // const posIn = state.units[unitInIdx].position;
-            // const posOut = state.units[unitOutIdx].position;
-            // state.units[unitOutIdx].position = posIn;
-            // state.units[unitInIdx].position = posOut;
-            // state.units[unitInIdx].partyId = state.units[unitOutIdx].partyId;
-            // state.units[unitOutIdx].partyId = null;
         });
 
         builder.addCase(actionMoveTwoCellUnitInOut.rejected, (state, { payload }) => {
