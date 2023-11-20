@@ -477,7 +477,13 @@ const sliceGame = createSlice({
             const unitIdx = state.units.findIndex(u=>u.uid===payload.unitId);
             const city = state.cities.find(c=>c.id===state.units[unitIdx].cityId);
             state.units[unitIdx].position = payload.toIdx;
-            state.units[unitIdx].partyId = city.squadOut;
+            if(!state.units[unitIdx].partyId){
+                //state.units[unitIdx].position = payload.toIdx;
+                state.units[unitIdx].partyId = city.squadOut;
+            }else{
+                state.units[unitIdx].partyId = null;
+            }
+            
         });
 
         builder.addCase(actionMoveCitySquadInOut.rejected, (state, { payload }) => {
