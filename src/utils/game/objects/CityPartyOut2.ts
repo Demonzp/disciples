@@ -128,7 +128,7 @@ export default class CityPartyOut {
         } else {
             const party = store.getState().game.parties.find(p => p.id === this.cityData.squadOut);
             this.squad = store.getState().game.units.filter(u => u.partyId === party.id);
-            console.log('units = ', this.squad);
+            console.log('units Out init = ', this.squad);
             this.leader = this.squad.find(u => u.isLeader);
             this.fullSlots = this.squad.reduce((prev, unit) => {
                 return prev + unit.numCells;
@@ -263,8 +263,8 @@ export default class CityPartyOut {
                 return;
             }
             if (portret.unit.numCells === 2) {
-                const p = this.portraits.find(p => p.unit.position[0] === contIn.data[0]);
-                if (p) {
+                const p = this.parent.cityPartyIn.portraits.find(p => p.unit.position[0] === contIn.data[0]);
+                if (p&&this.parent.cityData.lvl) {
                     store.dispatch(actionMoveTwoCellUnitOutIn({
                         unitId: portret.unit.uid,
                         units: [p.unit.uid]

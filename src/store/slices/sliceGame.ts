@@ -966,7 +966,7 @@ const sliceGame = createSlice({
             const posTwo:[number,number] = [...state.units[unitOneIdx].position];
             state.units[unitOneIdx].position = [...posOne];
             let partyOneId:string|null = null;
-            if(!state.units[unitOneIdx].partyId){
+            if(state.units[unitOneIdx].partyId){
                 partyOneId = state.units[unitOneIdx].partyId;
                 state.units[unitOneIdx].partyId = null;
             }else{
@@ -974,6 +974,7 @@ const sliceGame = createSlice({
                 state.units[unitOneIdx].partyId = state.units[unitsIdx[0]].partyId;
             }
             unitsIdx.forEach(idx=>{
+                console.log('defaultName = ', state.units[idx].defaultName);
                 if(partyOneId){
                     state.units[idx].partyId = partyOneId;
                 }else{
