@@ -235,7 +235,7 @@ export default class CityPartyOut {
             this.onPortretToCont(pointer, portret, cont);
         } else if (anotherPortret) {
             if (portret.unit.numCells === 2) {
-                const portraits = this.portraits.filter(p2 => p2.unit.position[0] === anotherPortret.unit.position[0]);
+                const portraits = this.parent.cityPartyIn.portraits.filter(p2 => p2.unit.position[0] === portret.unit.position[0]);
                 //console.log(portraits.map(p2=>p2.unit.defaultName));
                 store.dispatch(actionMoveTwoCellCitySquadIn({
                     unitId: portret.unit.uid,
