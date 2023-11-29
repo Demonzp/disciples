@@ -230,19 +230,20 @@ export default class CityPartyOut {
             return false;
         });
         const contMove = this.contsMove.find(c => c.isOnPointer(pointer));
+        const inPortret = this.parent.cityPartyIn.portraits.find(p=>p.cont.isOnPointer(pointer));
         const contIn = this.parent.cityPartyIn.conts.find(c => c.isOnPointer(pointer));
         if (cont) {
             this.onPortretToCont(pointer, portret, cont);
         } else if (anotherPortret) {
             if (portret.unit.numCells === 2) {
-                const portraits = this.parent.cityPartyIn.portraits.filter(p2 => p2.unit.position[0] === portret.unit.position[0]);
+                const portraits = this.portraits.filter(p2 => p2.unit.position[0] === anotherPortret.unit.position[0]);
                 //console.log(portraits.map(p2=>p2.unit.defaultName));
                 store.dispatch(actionMoveTwoCellCitySquadIn({
                     unitId: portret.unit.uid,
                     units: portraits.map(p2 => p2.unit.uid)
                 }));
             } else if (anotherPortret.unit.numCells === 2) {
-                const portraits = this.portraits.filter(p2 => p2.unit.position[0] === anotherPortret.unit.position[0]);
+                const portraits = this.portraits.filter(p2 => p2.unit.position[0] === portret.unit.position[0]);
                 store.dispatch(actionMoveTwoCellCitySquadIn({
                     unitId: anotherPortret.unit.uid,
                     units: portraits.map(p2 => p2.unit.uid)
@@ -256,6 +257,15 @@ export default class CityPartyOut {
 
         } else if (contMove) {
             this.onPortretToCont(pointer, portret, contMove);
+        } else if(inPortret){
+            if(portret.unit.numCells===2){
+                const portraits = this.parent.cityPartyIn.portraits.filter(p2 => p2.unit.position[0] === portret.unit.position[0]);
+
+                store.dispatch(actionMoveTwoCellUnitOutIn({
+                    unitId: portret.unit.uid,
+                    units: portraits.map(p2 => p2.unit.uid)
+                }));
+            }
         } else if (contIn) {
             if(portret.unit.isLeader){
                 store.dispatch(dropCityPortret());
