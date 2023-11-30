@@ -259,10 +259,18 @@ export default class CityPartyOut {
             this.onPortretToCont(pointer, portret, contMove);
         } else if(inPortret){
             if(portret.unit.numCells===2){
-                const portraits = this.parent.cityPartyIn.portraits.filter(p2 => p2.unit.position[0] === portret.unit.position[0]);
+                const portraits = this.parent.cityPartyIn.portraits.filter(p2 => p2.unit.position[0] === inPortret.unit.position[0]);
 
                 store.dispatch(actionMoveTwoCellUnitOutIn({
                     unitId: portret.unit.uid,
+                    units: portraits.map(p2 => p2.unit.uid)
+                }));
+            }else if(inPortret.unit.numCells===2){
+                console.log('inPortret.unit.numCells===2');
+                const portraits = this.portraits.filter(p2 => p2.unit.position[0] === portret.unit.position[0]);
+                
+                store.dispatch(actionMoveTwoCellUnitOutIn({
+                    unitId: inPortret.unit.uid,
                     units: portraits.map(p2 => p2.unit.uid)
                 }));
             }
