@@ -1,6 +1,6 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { TPartySide } from './sliceGame';
-import { actionDoubleMoveCitySquadIn, actionMoveCitySquadIn, actionMoveCitySquadInOut, actionMoveTwoCellCitySquadIn } from 'store/actions/actionsGame';
+import { actionDoubleMoveCitySquadIn, actionMoveCitySquadIn, actionMoveCitySquadInOut, actionMoveTwoCellCitySquadIn, actionMoveTwoCellUnitOutIn } from 'store/actions/actionsGame';
 
 type InitState = {
     isOpen:boolean;
@@ -76,6 +76,17 @@ const sliceCityParty = createSlice({
         });
 
         builder.addCase(actionMoveCitySquadInOut.rejected, (state, { payload }) => {
+
+        });
+
+        builder.addCase(actionMoveTwoCellUnitOutIn.pending, (state) => {
+        });
+
+        builder.addCase(actionMoveTwoCellUnitOutIn.fulfilled, (state, { payload }) => {
+            state.isUpPortret = false;
+        });
+
+        builder.addCase(actionMoveTwoCellUnitOutIn.rejected, (state, { payload }) => {
 
         });
 

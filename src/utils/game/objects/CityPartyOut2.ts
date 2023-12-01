@@ -268,7 +268,11 @@ export default class CityPartyOut {
             }else if(inPortret.unit.numCells===2){
                 console.log('inPortret.unit.numCells===2');
                 const portraits = this.portraits.filter(p2 => p2.unit.position[0] === portret.unit.position[0]);
-                
+                if(this.fullSlots-portraits.length+2>this.leader.leadership){
+                    store.dispatch(dropCityPortret());
+                    portret.toStart();
+                    return;
+                }
                 store.dispatch(actionMoveTwoCellUnitOutIn({
                     unitId: inPortret.unit.uid,
                     units: portraits.map(p2 => p2.unit.uid)
