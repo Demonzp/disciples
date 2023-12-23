@@ -1,5 +1,5 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { actionAddCapitalCity, actionAddCity, actionAddLeaderToPartyCity, actionAddUnitToCapital, actionAddUnitToCity, actionChangeCapitalProps, actionChangeCityProps, actionDelSelectObj, actionDoubleMoveCitySquadIn, actionInitNewMap, actionMoveCitySquadIn, actionMoveCitySquadInOut, actionMoveTwoCellCitySquadIn, actionMoveTwoCellUnitInOut, actionMoveTwoCellUnitOutIn, actionMoveUnitInOut, actionPointerMove, actionPointerUp, actionSetEditorMod } from 'store/actions/actionsGame';
+import { actionAddCapitalCity, actionAddCity, actionAddLeaderToPartyCity, actionAddUnitToCapital, actionAddUnitToCity, actionChangeCapitalProps, actionChangeCityProps, actionDelSelectObj, actionDoubleMoveCitySquadIn, actionInitNewMap, actionMoveCitySquadIn, actionMoveCitySquadInOut, actionMoveTwoCellCitySquadIn, actionMoveTwoCellUnitInOut, actionMoveTwoCellUnitOutIn, actionMoveUnitInOut, actionMoveUnitOutIn, actionPointerMove, actionPointerUp, actionSetEditorMod } from 'store/actions/actionsGame';
 import { TPointMatrix } from 'utils/game/scenes/editorScene';
 
 export const portretPartyOneData:{[name: string]: number} = {
@@ -984,7 +984,27 @@ const sliceGame = createSlice({
             });
         });
 
-        builder.addCase(actionMoveTwoCellUnitOutIn.rejected, (state, { payload }) => {
+        builder.addCase(actionMoveUnitOutIn.pending, (state, { payload }) => {
+            state.errors = [];
+        });
+
+        builder.addCase(actionMoveUnitOutIn.fulfilled, (state, { payload }) => {
+            const outUnitIdx = state.units.findIndex(u=>u.uid===payload.unitId);
+            const inUnitIdx = state.units.findIndex(u=>u.uid===payload.toUnitId);
+            const partyId = state.units[outUnitIdx].partyId;
+            const posOut = state.units[outUnitIdx].position;
+            const posIn = state.units[inUnitIdx].position;
+            state.units[outUnitIdx].partyId = null;
+            state.units[outUnitIdx].position = posIn;
+            state.units[inUnitIdx].partyId = partyId;
+            state.units[inUnitIdx].position = posOut;
+            //const cityIdx = state.cities.findIndex(c=>c.id===payload.id);
+            //console.log('builder actionAddCity');
+        });
+
+        builder.addCase(actionMoveUnitOutIn.rejected, (state, { payload }) => {
+
+            //const payload = action.payload as ICustomError;
             state.errors.push(payload);
         });
     }

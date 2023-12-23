@@ -230,7 +230,7 @@ export default class CityPartyOut {
             return false;
         });
         const contMove = this.contsMove.find(c => c.isOnPointer(pointer));
-        const inPortret = this.parent.cityPartyIn.portraits.find(p=>p.cont.isOnPointer(pointer));
+        const inPortret = this.parent.cityPartyIn.portraits.find(p => p.cont.isOnPointer(pointer));
         const contIn = this.parent.cityPartyIn.conts.find(c => c.isOnPointer(pointer));
         if (cont) {
             this.onPortretToCont(pointer, portret, cont);
@@ -257,18 +257,23 @@ export default class CityPartyOut {
 
         } else if (contMove) {
             this.onPortretToCont(pointer, portret, contMove);
-        } else if(inPortret){
-            if(portret.unit.numCells===2){
+        } else if (inPortret) {
+            if (portret.unit.isLeader) {
+                store.dispatch(dropCityPortret());
+                portret.toStart();
+                return;
+            }
+            if (portret.unit.numCells === 2) {
                 const portraits = this.parent.cityPartyIn.portraits.filter(p2 => p2.unit.position[0] === inPortret.unit.position[0]);
 
                 store.dispatch(actionMoveTwoCellUnitOutIn({
                     unitId: portret.unit.uid,
                     units: portraits.map(p2 => p2.unit.uid)
                 }));
-            }else if(inPortret.unit.numCells===2){
+            } else if (inPortret.unit.numCells === 2) {
                 console.log('inPortret.unit.numCells===2');
                 const portraits = this.portraits.filter(p2 => p2.unit.position[0] === portret.unit.position[0]);
-                if(this.fullSlots-portraits.length+2>this.leader.leadership){
+                if (this.fullSlots - portraits.length + 2 > this.leader.leadership) {
                     store.dispatch(dropCityPortret());
                     portret.toStart();
                     return;
@@ -277,16 +282,21 @@ export default class CityPartyOut {
                     unitId: inPortret.unit.uid,
                     units: portraits.map(p2 => p2.unit.uid)
                 }));
+            } else {
+                store.dispatch(actionMoveUnitOutIn({
+                    unitId: portret.unit.uid,
+                    toUnitId: inPortret.unit.uid
+                }));
             }
         } else if (contIn) {
-            if(portret.unit.isLeader){
+            if (portret.unit.isLeader) {
                 store.dispatch(dropCityPortret());
                 portret.toStart();
                 return;
             }
             if (portret.unit.numCells === 2) {
                 const p = this.parent.cityPartyIn.portraits.find(p => p.unit.position[0] === contIn.data[0]);
-                if (p&&this.parent.cityData.lvl>this.parent.cityPartyIn.fullSlots+2-2) {
+                if (p && this.parent.cityData.lvl > this.parent.cityPartyIn.fullSlots + 2 - 2) {
                     store.dispatch(actionMoveTwoCellUnitOutIn({
                         unitId: portret.unit.uid,
                         units: [p.unit.uid]
@@ -295,17 +305,17 @@ export default class CityPartyOut {
                     return;
                 }
             }
-            if(this.parent.cityData.lvl>this.parent.cityPartyIn.fullSlots+portret.unit.numCells-1){
+            if (this.parent.cityData.lvl > this.parent.cityPartyIn.fullSlots + portret.unit.numCells - 1) {
                 store.dispatch(actionMoveCitySquadInOut({
                     unitId: portret.unit.uid,
                     toIdx: contIn.data,
                 }))
                     .then(() => portret.drop(pointer));
-            }else{
+            } else {
                 store.dispatch(dropCityPortret());
                 portret.toStart();
             }
-            
+
         } else {
             store.dispatch(dropCityPortret());
             portret.toStart();
