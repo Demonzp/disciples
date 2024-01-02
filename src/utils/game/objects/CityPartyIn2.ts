@@ -8,6 +8,7 @@ import { IScene } from "../scenes/IScene";
 import store from "store/store";
 import { actionDoubleMoveCitySquadIn, actionMoveCitySquadIn, actionMoveCitySquadInOut, actionMoveTwoCellCitySquadIn, actionMoveTwoCellUnitInOut, actionMoveUnitInOut } from "store/actions/actionsGame";
 import { TPointer } from "utils/gameLib/InputEvent";
+import { dropCityPortret } from "store/slices/cityParty";
 
 export default class CityPartyIn{
     conts: Container[] = [];
@@ -221,6 +222,83 @@ export default class CityPartyIn{
         cont.data = [i, j];
         cont.setZindex(1000);
         this.conts.push(cont);
+    }
+
+    onPortretToCont(pointer: TPoint, portret: PartyPortrait, cont: Container) {
+        if (!portret) {
+            return;
+        }
+        if (portret.unit.numCells === 2) {
+            const p = this.portraits.find(p => p.unit.position[0] === cont.data[0]);
+            if (p) {
+                store.dispatch(actionMoveTwoCellCitySquadIn({
+                    unitId: portret.unit.uid,
+                    units: [p.unit.uid]
+                }))
+                    .then(() => portret.drop(pointer));
+                return;
+            }
+        }
+        store.dispatch(actionMoveCitySquadIn({
+            unitId: portret.unit.uid,
+            toIdx: cont.data,
+        }))
+            .then(() => portret.drop(pointer));
+    }
+
+    onPortretToAny(point:TPoint){
+        //console.log('drop Portret IN!!!');
+        const cont = this.conts.find(c => c.isOnPointer(point));
+        const portret = this.portraits.find(p => p.isCanMove);
+        const anotherPortret = this.portraits.find(p => {
+            if (p.unit.uid !== portret.unit.uid && p.sprite.isOnPointer(point)) {
+                return true;
+            }
+            return false;
+        });
+
+        const contMove = this.contsMove.find(c => c.isOnPointer(point));
+        const outPortret = this.parent.cityPartyOut.portraits.find(p => p.cont.isOnPointer(point));
+        const contOut = this.parent.cityPartyOut.conts.find(c => c.isOnPointer(point));
+
+        if(cont){
+            this.onPortretToCont(point, portret, cont);
+        } else if (anotherPortret) {
+            if (portret.unit.numCells === 2) {
+                const portraits = this.portraits.filter(p2 => p2.unit.position[0] === anotherPortret.unit.position[0]);
+                //console.log(portraits.map(p2=>p2.unit.defaultName));
+                store.dispatch(actionMoveTwoCellCitySquadIn({
+                    unitId: portret.unit.uid,
+                    units: portraits.map(p2 => p2.unit.uid)
+                }));
+            } else if (anotherPortret.unit.numCells === 2) {
+                const portraits = this.portraits.filter(p2 => p2.unit.position[0] === portret.unit.position[0]);
+                store.dispatch(actionMoveTwoCellCitySquadIn({
+                    unitId: anotherPortret.unit.uid,
+                    units: portraits.map(p2 => p2.unit.uid)
+                }));
+            } else {
+                store.dispatch(actionDoubleMoveCitySquadIn({
+                    unitId: portret.unit.uid,
+                    toUnitId: anotherPortret.unit.uid
+                }));
+            }
+        } else if (contMove) {
+            this.onPortretToCont(point, portret, contMove);
+        } else if (outPortret) {
+            if (outPortret.unit.isLeader) {
+                store.dispatch(dropCityPortret());
+                portret.toStart();
+                return;
+            } if (portret.unit.numCells === 2) {
+                const portraits = this.parent.cityPartyOut.portraits.filter(p2 => p2.unit.position[0] === outPortret.unit.position[0]);
+
+                store.dispatch(actionMoveTwoCellUnitInOut({
+                    unitId: portret.unit.uid,
+                    units: portraits.map(p2 => p2.unit.uid)
+                }));
+            }
+        }
     }
 
     dropPortrait(point: TPoint, portret: PartyPortrait){
