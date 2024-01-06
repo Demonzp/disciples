@@ -292,11 +292,45 @@ export default class CityPartyIn{
                 return;
             } if (portret.unit.numCells === 2) {
                 const portraits = this.parent.cityPartyOut.portraits.filter(p2 => p2.unit.position[0] === outPortret.unit.position[0]);
-
+                const leader = portraits.find(p=>p.unit.isLeader);
+                if(leader||this.fullSlots - portraits.length+2>this.cityData.lvl){
+                    store.dispatch(dropCityPortret());
+                    portret.toStart();
+                    return;
+                }
                 store.dispatch(actionMoveTwoCellUnitInOut({
                     unitId: portret.unit.uid,
                     units: portraits.map(p2 => p2.unit.uid)
                 }));
+            } else if (outPortret.unit.numCells === 2) {
+                console.log('inPortret.unit.numCells===2');
+                const portraits = this.portraits.filter(p2 => p2.unit.position[0] === portret.unit.position[0]);
+                if (this.fullSlots - portraits.length + 2 > this.cityData.lvl) {
+                    store.dispatch(dropCityPortret());
+                    portret.toStart();
+                    return;
+                }
+                store.dispatch(actionMoveTwoCellUnitInOut({
+                    unitId: outPortret.unit.uid,
+                    units: portraits.map(p2 => p2.unit.uid)
+                }));
+            } else {
+                store.dispatch(actionMoveUnitInOut({
+                    unitId: portret.unit.uid,
+                    toUnitId: outPortret.unit.uid
+                }));
+            }
+        } else if (contOut) {
+            if (portret.unit.numCells === 2) {
+                const p = this.parent.cityPartyOut.portraits.find(p => p.unit.position[0] === contOut.data[0]);
+                if (p && !p.unit.isLeader && this.parent.cityPartyOut.leader.leadership > this.parent.cityPartyOut.fullSlots + 2 - 2) {
+                    store.dispatch(actionMoveTwoCellUnitInOut({
+                        unitId: portret.unit.uid,
+                        units: [p.unit.uid]
+                    }))
+                        .then(() => portret.drop(point));
+                    return;
+                }
             }
         }
     }
