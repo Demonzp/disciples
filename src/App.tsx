@@ -12,7 +12,6 @@ const App = () => {
                     <p>
                         To move Camera use keyboard arrows;
                         <br/>
-                        To move Casle click on them and move mouse cursor;
                     </p>
                 </div>
             </div>

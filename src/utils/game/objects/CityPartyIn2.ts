@@ -294,6 +294,7 @@ export default class CityPartyIn{
                 const portraits = this.parent.cityPartyOut.portraits.filter(p2 => p2.unit.position[0] === outPortret.unit.position[0]);
                 const leader = portraits.find(p=>p.unit.isLeader);
                 if(leader||this.fullSlots - portraits.length+2>this.cityData.lvl){
+                    console.log('back!!!!!!!!!!!!!!---');
                     store.dispatch(dropCityPortret());
                     portret.toStart();
                     return;
@@ -330,8 +331,27 @@ export default class CityPartyIn{
                     }))
                         .then(() => portret.drop(point));
                     return;
+                }else if(!p&&this.parent.cityPartyOut.leader.leadership >= this.parent.cityPartyOut.fullSlots + 2){
+                    store.dispatch(actionMoveCitySquadInOut({
+                        unitId: portret.unit.uid,
+                        toIdx: contOut.data
+                    }));
                 }
+
+                store.dispatch(dropCityPortret());
+                portret.toStart();
+            }else if(this.parent.cityPartyOut.leader.leadership >= this.parent.cityPartyOut.fullSlots + 1){
+                store.dispatch(actionMoveCitySquadInOut({
+                    unitId: portret.unit.uid,
+                    toIdx: contOut.data
+                }));
+            }else{
+                store.dispatch(dropCityPortret());
+                portret.toStart();
             }
+        }else{
+            store.dispatch(dropCityPortret());
+            portret.toStart();
         }
     }
 

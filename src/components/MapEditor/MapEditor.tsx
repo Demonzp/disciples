@@ -139,7 +139,7 @@ const MapEditor: FC<Props> = ({ game }) => {
                     </div>
                 </div>
                 <button
-                    onClick={onAddRace}
+                    onClick={()=>{}}
                     disabled={editorMod === 'add-race'}
                 >Add Race</button>
                 <div className="row">

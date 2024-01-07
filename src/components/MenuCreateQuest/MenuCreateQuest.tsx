@@ -108,13 +108,13 @@ const MenuCreateQuest:FC<TProps> = ({setMenuType})=>{
                         />
                         <label>The Empire</label>
                     </div>
-                    <div>
+                    {/* <div>
                         <input
                             type="checkbox" 
                             onChange={(e)=>onChooseRace({race:'legions',value:e.target.checked})}
                         />
                         <label>Legions of the Demned</label>
-                    </div>
+                    </div> */}
                 </div>
                 <div>
                     <button
