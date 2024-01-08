@@ -293,7 +293,7 @@ export default class CityPartyIn{
             } if (portret.unit.numCells === 2) {
                 const portraits = this.parent.cityPartyOut.portraits.filter(p2 => p2.unit.position[0] === outPortret.unit.position[0]);
                 const leader = portraits.find(p=>p.unit.isLeader);
-                if(leader||this.fullSlots - portraits.length+2>this.cityData.lvl){
+                if(leader||this.parent.cityPartyOut.leader.leadership<this.parent.cityPartyOut.fullSlots-portraits.length+2){
                     console.log('back!!!!!!!!!!!!!!---');
                     store.dispatch(dropCityPortret());
                     portret.toStart();
