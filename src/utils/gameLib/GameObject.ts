@@ -291,7 +291,7 @@ export default class GameObject{
     //   return;
     // }
 
-    //console.log('isOnPointer');
+    console.log('isOnPointer');
     const worldPointer = {
       x: point.x-this.scene.game.camera.cameraPoint().x,
       y: point.y-this.scene.game.camera.cameraPoint().y

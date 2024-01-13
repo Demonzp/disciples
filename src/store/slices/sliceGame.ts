@@ -243,7 +243,7 @@ export const arrGlobalRaces = (): TRace[]=>{
 };
 export type TCapitalRace = 'empire' | 'legions' | 'clans' | 'elves' | 'undead';
 export const arrRaces: TCapitalRace[] = ['empire', 'legions'];
-export type TWhatScene = 'loading' | 'mainMenu' | 'mapEditorMenu' | 'mapEditor';
+export type TWhatScene = 'loading' | 'mainMenu' | 'mapEditorMenu' | 'mapEditor' | 'mainGameMenu';
 
 export type TTerrain = 'neutral' | 'empire' | 'legions' | 'clans' | 'elves' | 'undead';
 export type TEditorMod = 'add-race' | 'properties' | 'move' | 'add-party' | 'copy-party' | 'add-city';

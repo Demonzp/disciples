@@ -10,6 +10,7 @@ import MainMenu from "components/MainMenu";
 import MapEditorMenuScene from "utils/game/scenes/mapEditMenuScene";
 import MenuEditor from "components/MenuEditor";
 import EditorScene from "utils/game/scenes/editorScene";
+import MainGameMenuScene from "utils/game/scenes/mainGameMenuScene";
 
 const GameComp = () => {
     const refCont = useRef<HTMLCanvasElement>(null);
@@ -26,7 +27,7 @@ const GameComp = () => {
                 // height: 360,
                 width: 854,
                 height: 480,
-                scenes: [LoaderScene, MainScene, MapEditorMenuScene, EditorScene]
+                scenes: [LoaderScene, MainScene, MapEditorMenuScene, EditorScene, MainGameMenuScene]
             });
 
             setGame(g);
@@ -46,7 +47,7 @@ const GameComp = () => {
         if (game) {
             const gameScene = game.scene.getScene<EditorScene>('EditorScene');
             console.log('update state capitalCities = ', scene);
-            if(isMapInit&&gameScene&&gameScene.isInit){
+            if (isMapInit && gameScene && gameScene.isInit) {
                 gameScene.updateCapitals();
             }
         }
@@ -56,8 +57,8 @@ const GameComp = () => {
         if (game) {
             const gameScene = game.scene.getScene<EditorScene>('EditorScene');
             //console.log('update state cities = ',gameScene.isInit);
-            if(isMapInit&&gameScene&&gameScene.isInit){
-                
+            if (isMapInit && gameScene && gameScene.isInit) {
+
                 gameScene.updateCities();
             }
         }
@@ -101,9 +102,13 @@ const GameComp = () => {
                 case 'mapEditorMenu':
                     game.scene.start('MapEditorMenuScene');
                     break;
-                    
+
                 case 'mapEditor':
                     game.scene.start('EditorScene');
+                    break;
+
+                case 'mainGameMenu':
+                    game.scene.start('MainGameMenuScene');
                     break;
 
                 default:
@@ -126,7 +131,7 @@ const GameComp = () => {
                 <canvas ref={refCont} />
                 {scene === 'mainMenu' && <MainMenu />}
                 {scene === 'mapEditorMenu' && <MenuEditor />}
-                {scene === 'mapEditor' && <MapEditor game={game}/>}
+                {scene === 'mapEditor' && <MapEditor game={game} />}
             </div>
         </>
 

@@ -43,6 +43,11 @@ export default class LoaderScene extends Scene {
     this.load.image('place-two', './assets/imgs/place-two.png');
     this.load.image('modal-city', './assets/imgs/modal-city.jpg');
     this.load.image('modal-message', './assets/imgs/modal-message.jpg');
+    this.load.image('main-menu-fon', './assets/imgs/main-menu-fon.jpg');
+    this.load.image('main-menu-button', './assets/imgs/main-menu-button.png');
+    this.load.image('main-menu-button-cristal', './assets/imgs/main-menu-button-cristal.png');
+    
+    this.load.spritesheet('_FIREFLY_HUMAN', './assets/imgs/_FIREFLY_HUMAN.PNG', { frameWidth: 187, frameHeight: 112, endFrame: 29 });
     this.load.spritesheet('portret-units-one-empire', './assets/imgs/portret-units-one-empire.png', { frameWidth: 70, frameHeight: 85, endFrame: 10 });
     this.load.spritesheet('portret-units-two', './assets/imgs/portret-units-two.png', { frameWidth: 150, frameHeight: 85, endFrame: 3 });
     this.load.spritesheet('grass-water', './assets/imgs/isometric-grass-and-water-64x64.png', { frameWidth: 64, frameHeight: 64, endFrame: 24 });

@@ -2,17 +2,21 @@ import { useAppDispatch } from "store/hooks";
 import classes from "./main-menu.module.css";
 import { setScene } from "store/slices/sliceGame";
 
-const MainMenu =()=>{
+const MainMenu = () => {
 
     const dispatch = useAppDispatch();
 
-    const onMapEditor = ()=>{
+    const onMapEditor = () => {
         dispatch(setScene('mapEditorMenu'));
     };
 
-    return(
+    const onGame = () => {
+        dispatch(setScene('mainGameMenu'));
+    };
+
+    return (
         <div className={`${classes.cont} col`}>
-            <button>Game</button>
+            <button onClick={onGame}>Game</button>
             <button onClick={onMapEditor}>MapEditor</button>
         </div>
     );

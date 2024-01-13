@@ -20,6 +20,8 @@ export default class Sprite extends GameObject{
   sHeight = 0;
   rows = 0;
   cols = 0;
+  frameRate = 1;
+  frameTimer = 0;
   isPlay = false;
   isPlayS = false;
   isFlipX = false;
@@ -214,6 +216,13 @@ export default class Sprite extends GameObject{
       return;
     }
 
+    this.frameTimer++;
+    if(this.frameTimer<this.frameRate){
+      return;
+    }
+
+    this.frameTimer=0;
+
     let idx = this.frameIdx+1;
     //console.log('idx = ', idx);
     if(idx===this.framesPos.length){
@@ -242,6 +251,13 @@ export default class Sprite extends GameObject{
     if(!this.isPlayS){
       return;
     }
+
+    this.frameTimer++;
+    if(this.frameTimer<this.frameRate){
+      return;
+    }
+
+    this.frameTimer=0;
     //console.log('_playS');
     if(this.isRevers){
       this._playSRevers();
