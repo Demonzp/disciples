@@ -1,4 +1,5 @@
 import Game from './Game';
+import Scene from './Scene';
 import ScenesManager from './ScenesManager';
 
 export type TInputEvents = 'pointerdown' |'pointerup' | 'pointermove' | 'pointerover';
@@ -103,8 +104,23 @@ export default class InputEvent{
 
     for (let i = activeScenes.length-1; i >= 0; i--) {
       const scene = activeScenes[i];
-      scene.pointerMove(pointer);
+      //console.log('Objects = ', scene.add.gameObjects);
+      console.log('interactiveObjects = ', scene.add.interactiveObjects.length);
+      //scene.add.interactiveObjects.length;
+      for (let i = 0; i < scene.add.interactiveObjects.length; i++) {
+        const obj = scene.add.interactiveObjects[i];
+        console.log('obj = ', obj.name);
+        obj.onPointerMove(pointer);
+      }
     }
+
+
+    // const obj = this.getObjFromScene(pointer, activeScenes);
+    
+    // if(obj){
+    //   console.log('obj = ', obj.name);
+    //   obj.onPointerMove(pointer);
+    // }
 
     this.pointerMoveCallbacks.forEach(objCallback=>{
       if(objCallback.sceneId===sceneId){
@@ -117,12 +133,13 @@ export default class InputEvent{
   private pointerUp(event: PointerEvent){
     const pointer = this.getPointer(event);
 
-    const obj = this.getObjFromScene(pointer);
+    const activeScenes = (this.game.scene as ScenesManager).getActiveScenes();
+    const obj = this.getObjFromScene(pointer, activeScenes);
     if(obj){
       obj.onPointerUp(pointer);
     }
 
-    const activeScenes = (this.game.scene as ScenesManager).getActiveScenes();
+    
     const sceneId = activeScenes[activeScenes.length-1].key;
 
     this.pointerUpCallbacks.forEach(objCallback=>{
@@ -167,14 +184,15 @@ export default class InputEvent{
     //console.log('pointerDown');
     //event.preventDefault();
     const pointer = this.getPointer(event);
+    const activeScenes = (this.game.scene as ScenesManager).getActiveScenes();
 
-    const obj = this.getObjFromScene(pointer);
+    const obj = this.getObjFromScene(pointer, activeScenes);
     if(obj){
       //console.log('pointerDown');
       return obj.onPointerDown(pointer);
     }
 
-    const activeScenes = (this.game.scene as ScenesManager).getActiveScenes();
+    
     const sceneId = activeScenes[activeScenes.length-1].key;
 
     this.pointerDownCallbacks.forEach(objCallback=>{
@@ -201,9 +219,9 @@ export default class InputEvent{
     }
   }
 
-  private getObjFromScene(point: TPointer){
+  private getObjFromScene(point: TPointer, activeScenes: Scene[]){
 
-    const activeScenes = (this.game.scene as ScenesManager).getActiveScenes();
+    //const activeScenes = (this.game.scene as ScenesManager).getActiveScenes();
 
     for (let i = activeScenes.length-1; i >= 0; i--) {
       const scene = activeScenes[i];

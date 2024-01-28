@@ -110,10 +110,10 @@ export default class GameObject{
   set width(val: number){
     this._width = val;
     this._halfWidth = val/2;
-    //if(this.name==='Sprite'){
+    if(this.name==='Sprite'){
       this.setInteractiveRect(this._width, this._height, this._interactiveBodyRect.x, this._interactiveBodyRect.y);
       this.changeCenter();
-    //}
+    }
   }
 
   get height(): number{
@@ -127,10 +127,10 @@ export default class GameObject{
   set height(val: number){
     this._height = val;
     this._halfHeight = val/2;
-    //if(this.name==='Sprite'){
+    if(this.name==='Sprite'){
       this.setInteractiveRect(this._width, this._height, this._interactiveBodyRect.x, this._interactiveBodyRect.y);
       this.changeCenter();
-    //}
+    }
   }
 
   get parent(): TParetGameObject{
@@ -184,7 +184,7 @@ export default class GameObject{
     if(x&&!y){
       y0 = x0;
     }
-    //console.log('setInteractiveRect');
+    //console.log('setInteractiveRect = ',this.name, '||', width, '||', height);
     this._interactiveBodyRect = {
       width,
       height,
@@ -227,7 +227,7 @@ export default class GameObject{
           break;
 
       case 'pointerover':
-        //console.log('register pointerover');
+        console.log('register pointerover = ');
         this.pointerOverCallbacks.push({
           id,
           handler: handler.bind(context)
@@ -236,6 +236,7 @@ export default class GameObject{
         break;
         
       case 'pointerout':
+        console.log('register pointerout');
         this.pointerOutCallbacks.push({
           id,
           handler: handler.bind(context)
@@ -270,6 +271,7 @@ export default class GameObject{
 
   off(id: string){
     //this.scene.input.off(id);
+    //console.log('GameObject.off');
     this.pointerDownCallbacks = this.pointerDownCallbacks.filter(callData=>callData.id!==id);
     this.pointerUpCallbacks = this.pointerUpCallbacks.filter(callData=>callData.id!==id);
     this.pointerMoveCallbacks = this.pointerMoveCallbacks.filter(callData=>callData.id!==id);
@@ -290,21 +292,31 @@ export default class GameObject{
     // if(!this.isMouseEvent){
     //   return;
     // }
-
-    console.log('isOnPointer');
+    
+    //console.log('isOnPointer');
     const worldPointer = {
       x: point.x-this.scene.game.camera.cameraPoint().x,
       y: point.y-this.scene.game.camera.cameraPoint().y
     }
     if(this._parent instanceof Container){
+      
       const globalPos = this.getGlobalPos();
+      //console.log('this._interactiveBodyRect = ', this._interactiveBodyRect);
       const x0 = globalPos.x - this._interactiveBodyRect.halfWidth;
       const y0 = globalPos.y - this._interactiveBodyRect.halfHeight;
       const x1 = globalPos.x + this._interactiveBodyRect.halfWidth;
       const y1 = globalPos.y + this._interactiveBodyRect.halfHeight;
-
+      //const graphics = this.scene.add.graphics();
+      //console.log('worldPointer = ', worldPointer.x,'||',worldPointer.y);
+      //console.log(x0,'||',y0,'||',x1,'||',y1);
+      // graphics.fillStyle('#ff0004');
+      // graphics.fillRect(x0, y0, 5,5);
+      // graphics.fillRect(x1, y0, 5,5);
+      // graphics.fillRect(x0, y1, 5,5);
+      // graphics.fillRect(x1, y1, 5,5);
       if((worldPointer.x>=x0&&worldPointer.x<=x1)&&(worldPointer.y>=y0&&worldPointer.y<=y1)){
-        //console.log('isOnPointerDown');
+        //console.log('isOnPointer');
+        //console.log('obj = ', this.name);
         return this;
       }
     }else{
@@ -357,6 +369,7 @@ export default class GameObject{
       //   return this;
       // }
     }
+    return undefined;
   }
 
   onPointerUp(pointer: TPointer){
@@ -366,6 +379,10 @@ export default class GameObject{
   }
 
   onPointerMove(pointer: TPointer){
+    //console.log('onPointerMove = ', this.name);
+    if(!this.isMouseEvent){
+      return;
+    }
     if(!this.isOnPointer(pointer)){
       if(this.isMouseOver){
         this.isMouseOver = false;
@@ -381,9 +398,17 @@ export default class GameObject{
     // this.pointerMoveCallbacks.forEach(callData=>{
     //   callData.handler(pointer);
     // });
-    // console.log('onPointerMove')
-    if(!this.isMouseOver){
+    
+    if(!this.isMouseOver&&this.isOnPointer(pointer)){
       this.isMouseOver = true;
+      if(this.pointerOverCallbacks.length>=1){
+        console.log('onPointerMove = ', this.data);
+        console.log('getGlobalPos = ',this.getGlobalPos());
+        
+        console.log('instanceof Container',this._interactiveBodyRect);
+      }
+      //console.log('isMouseOver');
+      //console.log('length===', this.pointerOverCallbacks.length);
       this.pointerOverCallbacks.forEach(callData=>{
         callData.handler(pointer);
       });

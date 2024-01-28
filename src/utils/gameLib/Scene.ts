@@ -1,3 +1,4 @@
+import Container from './Container';
 import Game from './Game';
 import GameObject from './GameObject';
 import { TInputEvents, TPointer } from './InputEvent';
@@ -107,14 +108,30 @@ export default class Scene{
     this.isActive = true;
   }
 
+  recursPointerMove(pointer: TPointer, obj:GameObject){
+    if(obj instanceof Container){
+      //console.log('recursPointerMove = ', obj.data);
+      //console.log('children = ', obj.children.length);
+      //const gameObj = (obj as GameObject);
+      obj.onPointerMove(pointer);
+      obj.children.forEach(child=>{
+        //if(obj.type==='gameobject'){
+          this.recursPointerMove(pointer, child as GameObject)
+        //}
+      });
+    }else{
+      //const gameObj = (obj as GameObject);
+      obj.onPointerMove(pointer);
+    }
+  }
+
   pointerMove(pointer: TPointer){
-    //console.log('pointerMove');
+    console.log('SCENE pointerMove');
     this.add.gameObjects.forEach(obj=>{
       
       //console.log('obj.id = ', obj.id);
       if(obj.type==='gameobject'){
-        const gameObj = (obj as GameObject);
-        gameObj.onPointerMove(pointer);
+        this.recursPointerMove(pointer, obj as GameObject);
       }
       // if(obj instanceof GameObject){
       //   obj.detectPoinerOut(pointer);

@@ -39,6 +39,17 @@ export default class Manager {
     return new VirtualRectangle(this.scene, width, height, x, y);
   }
 
+  fromSceneToContainer(data: GameObject | Graphics | (GameObject | Graphics)[]){
+    if (Array.isArray(data)) {
+      for (let i = 0; i < data.length; i++) {
+        const obj = data[i];
+        this.gameObjects = this.gameObjects.filter(obj2 => obj2.uid !== obj.uid);
+      }
+    } else {
+      this.gameObjects = this.gameObjects.filter(obj => obj.uid !== data.uid);
+    }
+  }
+
   remove(data: GameObject | Graphics | (GameObject | Graphics)[]) {
     //console.log('befor del = ', this.gameObjects.length);
     if (Array.isArray(data)) {
@@ -67,11 +78,13 @@ export default class Manager {
   addInteractiveObj(obj: GameObject) {
     const interObj = this.interactiveObjects.find(o => o.uid === obj.uid);
     if (!interObj) {
+      console.log('addInteractiveObj');
       this.interactiveObjects.push(obj);
     }
   }
 
   delInteractiveObj(obj: GameObject) {
+    console.log('delInteractiveObj = ', obj.name);
     this.interactiveObjects = this.interactiveObjects.filter(o => o.uid !== obj.uid);
   }
 

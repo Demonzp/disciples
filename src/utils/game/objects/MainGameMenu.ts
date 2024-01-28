@@ -23,14 +23,16 @@ export default class MainGameMenu{
         //this.btn_exit = new MainMenuButton(this.scene, 0, 60*2, 'EXIT');
 
         this.container.x = 650;
+        this.container.data = 'main cont';
         //this.container.y = -63*2-63/2;
-        this.container.add(this.btn_single.container);
+        this.container.add([this.btn_single.container]);
         //this.container.add([this.btn_exit.container, this.btn_multi.container, this.btn_single.container]);
         //this.isAnimate = true;
         //this.isShow = true;
     }
 
     animShow(){
+        console.log('animShow');
         this.container.y+=this.speed;
         if(this.container.y>=this.maxY){
             this.container.y = this.maxY;

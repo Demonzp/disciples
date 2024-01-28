@@ -14,7 +14,7 @@ export default class Container extends GameObject{
   }
 
   add(data: GameObject|Graphics|Text|(GameObject|Graphics|Text)[]){
-    this.scene.add.remove(data);
+    this.scene.add.fromSceneToContainer(data);
     if(Array.isArray(data)){
       data.forEach(obj=>{
         obj.parent = this;
