@@ -32,20 +32,18 @@ export default class MainMenuButton {
     create() {
         this._container = this.scene.add.container();
         this._container.data = 'contButton';
-        this.container.setInteractiveRect(40,20);
+        this.container.setInteractiveRect(240,48);
         this.container.x = this.x;
         this.container.y = this.y;
         
-        this._sprite = this.scene.add.sprite('place-one');
-        //this._sprite = this.scene.add.sprite('main-menu-button');
-        const spriteBtn = this.scene.add.sprite('main-menu-button');
+        this._sprite = this.scene.add.sprite('main-menu-button');
         this._cristal = this.scene.add.sprite('main-menu-button-cristal');
         this.cristal.alpha = 0;
         this._label = this.scene.add.text(this.text);
         //this.container.add(this.sprite);
         //this.container.add([this.sprite, this._label]);
         //this.container.add([this.cristal, this._label]);
-        this.container.add([spriteBtn, this.sprite, this.label, this.cristal]);
+        this.container.add([this.sprite, this.label, this.cristal]);
         //this.sprite.on('pointerover', this.onOver, this);
         //this.sprite.on('pointerout', this.onOut, this);
         this.container.on('pointerover', this.onOver, this);

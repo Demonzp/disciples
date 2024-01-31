@@ -54,15 +54,15 @@ export default class Container extends GameObject{
       return this;
     }
 
-    for (let i = this.children.length-1; i >= 0; i--) {
-      const obj = this.children[i];
-      if(obj instanceof GameObject){
-        colligionObj = obj.isOnPointer(pointer);
-        if(colligionObj){
-          return colligionObj;
-        }
-      }
-    }
+    // for (let i = this.children.length-1; i >= 0; i--) {
+    //   const obj = this.children[i];
+    //   if(obj instanceof GameObject){
+    //     colligionObj = obj.isOnPointer(pointer);
+    //     if(colligionObj){
+    //       return colligionObj;
+    //     }
+    //   }
+    // }
   }
 
   render(): void {
