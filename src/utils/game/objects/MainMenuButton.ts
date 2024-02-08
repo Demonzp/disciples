@@ -9,7 +9,7 @@ export default class MainMenuButton {
     private _container: Container | undefined = undefined;
     private _label: Text | undefined = undefined;
 
-    constructor(public scene: Scene, private x = 0, private y = 0, private text = '') {
+    constructor(public scene: Scene, private x = 0, private y = 0, private text = '', private callback=()=>{}) {
         this.create();
     }
 
@@ -40,14 +40,10 @@ export default class MainMenuButton {
         this._cristal = this.scene.add.sprite('main-menu-button-cristal');
         this.cristal.alpha = 0;
         this._label = this.scene.add.text(this.text);
-        //this.container.add(this.sprite);
-        //this.container.add([this.sprite, this._label]);
-        //this.container.add([this.cristal, this._label]);
         this.container.add([this.sprite, this.label, this.cristal]);
-        //this.sprite.on('pointerover', this.onOver, this);
-        //this.sprite.on('pointerout', this.onOut, this);
         this.container.on('pointerover', this.onOver, this);
         this.container.on('pointerout', this.onOut, this);
+        this.container.on('pointerup', this.callback);
     }
 
     onOver(){

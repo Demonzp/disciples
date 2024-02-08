@@ -6,7 +6,7 @@ export default class MainGameMenu{
     isShow = false;
     private isAnimate = false;
     private isAnimated = false;
-    private speed = 4;
+    private speed = 7;
     private maxY = 63-63/2;
     private container:Container;
     private btn_exit:MainMenuButton;
@@ -20,7 +20,9 @@ export default class MainGameMenu{
         this.container = this.scene.add.container();
         this.btn_single = new MainMenuButton(this.scene, 0, 0, 'SINGLE PLAYER');
         this.btn_multi = new MainMenuButton(this.scene, 0, 60, 'MULTIPLAYER');
-        this.btn_exit = new MainMenuButton(this.scene, 0, 60*2, 'EXIT');
+        this.btn_exit = new MainMenuButton(this.scene, 0, 60*2, 'EXIT', ()=>{
+            console.log('EXIT');
+        });
 
         this.container.x = 650;
         this.container.data = 'main cont';
