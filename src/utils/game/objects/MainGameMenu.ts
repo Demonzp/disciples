@@ -1,6 +1,8 @@
 import Scene from "utils/gameLib/Scene";
 import MainMenuButton from "./MainMenuButton";
 import Container from "utils/gameLib/Container";
+import store from "store/store";
+import { setScene } from "store/slices/sliceGame";
 
 export default class MainGameMenu{
     isShow = false;
@@ -21,7 +23,7 @@ export default class MainGameMenu{
         this.btn_single = new MainMenuButton(this.scene, 0, 0, 'SINGLE PLAYER');
         this.btn_multi = new MainMenuButton(this.scene, 0, 60, 'MULTIPLAYER');
         this.btn_exit = new MainMenuButton(this.scene, 0, 60*2, 'EXIT', ()=>{
-            console.log('EXIT');
+            store.dispatch(setScene('mainMenu'));
         });
 
         this.container.x = 650;
