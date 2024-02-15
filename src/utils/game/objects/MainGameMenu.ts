@@ -35,6 +35,11 @@ export default class MainGameMenu{
         this.isShow = true;
     }
 
+    hide(){
+        this.isAnimate = true;
+        this.isShow = false;
+    }
+
     animShow(){
         console.log('animShow');
         this.container.y+=this.speed;
@@ -45,10 +50,16 @@ export default class MainGameMenu{
         }
     }
 
+    animHide(){
+
+    }
+
     update(){
         if(this.isAnimate){
             if(this.isShow){
                 this.animShow();
+            }else{
+                this.animHide();
             }
         }
         

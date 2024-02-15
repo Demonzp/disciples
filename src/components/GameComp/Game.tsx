@@ -11,12 +11,13 @@ import MapEditorMenuScene from "utils/game/scenes/mapEditMenuScene";
 import MenuEditor from "components/MenuEditor";
 import EditorScene from "utils/game/scenes/editorScene";
 import MainGameMenuScene from "utils/game/scenes/mainGameMenuScene";
+import useGameMenu from "hooks/useGameManu";
 
 const GameComp = () => {
     const refCont = useRef<HTMLCanvasElement>(null);
     const [game, setGame] = useState<Game | undefined>();
     const { pointerMatrix, capitalCities, cities, fieldMatrix, scene, isMapInit, editorMod, selectObj } = useAppSelector(state => state.game);
-
+    useGameMenu({game});
     useEffect(() => {
         if (refCont.current && !game) {
             document.addEventListener('contextmenu', onContext);
