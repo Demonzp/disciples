@@ -46,6 +46,10 @@ export default class MainMenuButton {
         this.container.on('pointerup', this.callback);
     }
 
+    destroy(){
+        this.scene.add.remove(this.container);
+    }
+
     onOver(){
         console.log('pointerover');
         this.cristal.alpha = 1;

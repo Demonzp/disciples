@@ -2,7 +2,7 @@ import Scene from "utils/gameLib/Scene";
 import MainGameMenu from "../objects/MainGameMenu";
 
 export default class MainGameMenuScene extends Scene{
-    private mainMenu:MainGameMenu;
+    mainMenu:MainGameMenu;
     constructor(){
         super('MainGameMenuScene');
     }

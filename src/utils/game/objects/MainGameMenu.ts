@@ -15,7 +15,7 @@ export default class MainGameMenu{
     private btn_single:MainMenuButton;
     private btn_multi:MainMenuButton;
     constructor(public scene:Scene){
-        this.create();
+        //this.create();
     }
 
     create(){
@@ -51,7 +51,17 @@ export default class MainGameMenu{
     }
 
     animHide(){
-
+        console.log('animShow');
+        this.container.y-=this.speed;
+        if(this.container.y>=-63*2-63/2){
+            this.container.y = -63*2-63/2;
+            this.isAnimate = false;
+            this.isAnimated = true;
+            this.btn_exit.destroy();
+            this.btn_multi.destroy();
+            this.btn_single.destroy();
+            this.scene.add.remove(this.container);
+        }
     }
 
     update(){
