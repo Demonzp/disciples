@@ -8,15 +8,18 @@ type TProps = {
 };
 
 const useGameMenu = ({game}:TProps)=>{
-    const {scene} = useAppSelector((state)=>state.game);
+    const {scene, sceneStatus} = useAppSelector((state)=>state.game);
     const {menuType} = useAppSelector((state)=>state.gameMenu);
 
     useEffect(()=>{
+        if(sceneStatus==='notReady'){
+            return;
+        }
         if(scene==='mainGameMenu'){
             const gameScene = game.scene.getScene<MainGameMenuScene>('MainGameMenuScene');
             switch (menuType) {
                 case 'main':
-                    //gameScene.mainMenu.create();
+                    gameScene.mainMenu.create();
                     break;
             
                 default:
@@ -25,7 +28,7 @@ const useGameMenu = ({game}:TProps)=>{
         }
         
         //MainGameMenuScene
-    }, [menuType, scene]);
+    }, [sceneStatus, menuType, scene]);
 };
 
 export default useGameMenu;

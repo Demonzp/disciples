@@ -383,6 +383,8 @@ export const defaultRect = (): TRectangle => {
 
 }
 
+type TSceneStatus = 'notReady'|'ready';
+
 export interface IStateGame {
     errors: any[],
     isMapInit: boolean,
@@ -396,6 +398,7 @@ export interface IStateGame {
     selectObj: TSelectObj | null;
     isPointerMove: boolean;
     isPointerDown: boolean;
+    sceneStatus: TSceneStatus;
     scene: TWhatScene;
     editorMod: TEditorMod;
     units: IUnit[];
@@ -415,6 +418,7 @@ const initialState: IStateGame = {
     selectObj: null,
     isPointerMove: false,
     isPointerDown: false,
+    sceneStatus: 'notReady',
     scene: 'loading',
     editorMod: 'properties',
     units: [],
@@ -430,7 +434,12 @@ const sliceGame = createSlice({
         // },
 
         setScene(state, action: PayloadAction<TWhatScene>) {
+            state.sceneStatus = 'notReady';
             state.scene = action.payload;
+        },
+
+        setReadyScene(state){
+            state.sceneStatus = 'ready';
         },
 
         setFieldMatrix(state, action: PayloadAction<TFieldMatrix>) {
@@ -1014,6 +1023,7 @@ export const {
     setFieldMatrix,
     setScene,
     setPointerMatrix,
+    setReadyScene,
     addCapitalCity,
     setCityLvl,
 } = sliceGame.actions;

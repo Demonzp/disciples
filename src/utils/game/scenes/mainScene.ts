@@ -1,3 +1,5 @@
+import { setReadyScene } from "store/slices/sliceGame";
+import store from "store/store";
 import Scene from "utils/gameLib/Scene";
 
 export default class MainScene extends Scene{
@@ -8,6 +10,7 @@ export default class MainScene extends Scene{
     }
 
     create(): void {
+        store.dispatch(setReadyScene());
         //console.log('mainScene');
     }
 

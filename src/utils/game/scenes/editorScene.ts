@@ -1,4 +1,4 @@
-import { TCell, TFieldMatrix, addCapitalCity, setFieldMatrix, setPointerMatrix } from "store/slices/sliceGame";
+import { TCell, TFieldMatrix, addCapitalCity, setFieldMatrix, setPointerMatrix, setReadyScene } from "store/slices/sliceGame";
 import store from "store/store";
 import Game, { TPoint } from "utils/gameLib/Game";
 import Scene from "utils/gameLib/Scene";
@@ -230,7 +230,8 @@ export default class EditorScene extends Scene {
         
         this.updateCapitals();
         this.isInit = true;
-
+        
+        store.dispatch(setReadyScene());
         //this.modalPropertiesCapital.init();
 
         //this.inputs.push(new InputEl(this));

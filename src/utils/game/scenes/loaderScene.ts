@@ -1,4 +1,4 @@
-import { setScene } from "store/slices/sliceGame";
+import { setReadyScene, setScene } from "store/slices/sliceGame";
 import store from "store/store";
 import { ELoadEvents } from "utils/gameLib/Loader";
 import Scene from "utils/gameLib/Scene";
@@ -56,6 +56,7 @@ export default class LoaderScene extends Scene {
 
   create() {
     console.log('loaded!!!');
+    store.dispatch(setReadyScene());
     store.dispatch(setScene('mainMenu'));
     //this.scene.start('MainScene');
   }
