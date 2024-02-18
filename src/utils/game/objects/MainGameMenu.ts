@@ -31,7 +31,7 @@ export default class MainGameMenu extends BaseMainGameMenu{
         this.btn_single = new MainMenuButton(this.scene, 0, 0, 'SINGLE PLAYER');
         this.btn_multi = new MainMenuButton(this.scene, 0, 60, 'MULTIPLAYER', ()=>{
             //store.dispatch(setMenuType('multiplayer'));
-            //this.hideCallback = ()=>store.dispatch(setMenuType('multiplayer'));
+            this.hideCallback = ()=>store.dispatch(setMenuType('multiplayer'));
             this.hide();
         });
         this.btn_exit = new MainMenuButton(this.scene, 0, 60*2, 'EXIT', ()=>{
@@ -51,7 +51,8 @@ export default class MainGameMenu extends BaseMainGameMenu{
         this.btn_exit.destroy();
         this.btn_multi.destroy();
         this.btn_single.destroy();
-        store.dispatch(setMenuType('multiplayer'));
+        this.hideCallback();
+        //store.dispatch(setMenuType('multiplayer'));
     }
 
     // hide(){
