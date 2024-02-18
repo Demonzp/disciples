@@ -36,11 +36,14 @@ export default class MainMenuButton {
         this.container.x = this.x;
         this.container.y = this.y;
         
-        this._sprite = this.scene.add.sprite('main-menu-button');
-        this._cristal = this.scene.add.sprite('main-menu-button-cristal');
+        this._sprite = this.scene.add.sprite('main-menu-button',-200);
+        this._cristal = this.scene.add.sprite('main-menu-button-cristal',-200);
         this.cristal.alpha = 0;
         this._label = this.scene.add.text(this.text);
+        this.label.x = 0-this.label.width/2;
         this.container.add([this.sprite, this.label, this.cristal]);
+        this.sprite.x = 0;
+        this.cristal.x = 0;
         this.container.on('pointerover', this.onOver, this);
         this.container.on('pointerout', this.onOut, this);
         this.container.on('pointerup', this.callback);

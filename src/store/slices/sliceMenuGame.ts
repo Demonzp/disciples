@@ -6,17 +6,22 @@ type TMenuType ='main'|'multiplayer'|'single-player';
 type InitState = {
     menuType:TMenuType,
     isSceneReady: boolean,
+    isLogin: boolean,
 }
 
 const initialState:InitState = {
     menuType:'main',
     isSceneReady: false,
+    isLogin: false,
 };
 
 const sliceMenuGame = createSlice({
     name: 'sliceMenuGame',
     initialState,
     reducers: {
+        setMenuType(state, action:PayloadAction<TMenuType>){
+            state.menuType = action.payload;
+        },
         setStatusScene(state, action:PayloadAction<boolean>){
             state.isSceneReady = action.payload;
         },
@@ -27,7 +32,8 @@ const sliceMenuGame = createSlice({
 });
 
 export const {
-    setStatusScene
+    setStatusScene,
+    setMenuType
 } = sliceMenuGame.actions;
 
 export default sliceMenuGame;

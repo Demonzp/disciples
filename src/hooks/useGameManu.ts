@@ -19,9 +19,13 @@ const useGameMenu = ({game}:TProps)=>{
             const gameScene = game.scene.getScene<MainGameMenuScene>('MainGameMenuScene');
             switch (menuType) {
                 case 'main':
+                    console.log('-------main----------');
                     gameScene.mainMenu.create();
                     break;
-            
+                case 'multiplayer':
+                    console.log('-------multiplayer----------');
+                    gameScene.multiplayerMenu.create();
+                    break;
                 default:
                     break;
             }
