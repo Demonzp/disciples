@@ -26,7 +26,7 @@ export default class MainGameMenu extends BaseMainGameMenu{
         this.hideHook = this.hidden.bind(this);
         this.maxY = 63-63/2;
         this.container = this.scene.add.container();
-        this.container.x = 650;
+        this.container.x = 700;
         this.container.y = -63*2-63/2;
         this.btn_single = new MainMenuButton(this.scene, 0, 0, 'SINGLE PLAYER');
         this.btn_multi = new MainMenuButton(this.scene, 0, 60, 'MULTIPLAYER', ()=>{
@@ -54,45 +54,4 @@ export default class MainGameMenu extends BaseMainGameMenu{
         this.hideCallback();
         //store.dispatch(setMenuType('multiplayer'));
     }
-
-    // hide(){
-    //     this.isAnimate = true;
-    //     this.isShow = false;
-    // }
-
-    // animShow(){
-    //     console.log('animShow');
-    //     this.container.y+=this.speed;
-    //     if(this.container.y>=this.maxY){
-    //         this.container.y = this.maxY;
-    //         this.isAnimate = false;
-    //         this.isAnimated = true;
-    //     }
-    // }
-
-    // animHide(){
-    //     console.log('animShow');
-    //     this.container.y-=this.speed;
-    //     if(this.container.y<=-63*2-63/2){
-    //         this.container.y = -63*2-63/2;
-    //         this.isAnimate = false;
-    //         this.isAnimated = true;
-    //         this.btn_exit.destroy();
-    //         this.btn_multi.destroy();
-    //         this.btn_single.destroy();
-    //         this.scene.add.remove(this.container);
-    //         this.hideCallback();
-    //     }
-    // }
-
-    // update(){
-    //     if(this.isAnimate){
-    //         if(this.isShow){
-    //             this.animShow();
-    //         }else{
-    //             this.animHide();
-    //         }
-    //     }
-        
-    // }
 }

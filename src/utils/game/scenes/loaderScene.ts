@@ -46,6 +46,7 @@ export default class LoaderScene extends Scene {
     this.load.image('main-menu-fon', './assets/imgs/main-menu-fon.jpg');
     this.load.image('main-menu-button', './assets/imgs/main-menu-button.png');
     this.load.image('main-menu-button-cristal', './assets/imgs/main-menu-button-cristal.png');
+    this.load.image('window-info', './assets/imgs/window-info.png');
     
     this.load.spritesheet('_FIREFLY_HUMAN', './assets/imgs/_FIREFLY_HUMAN.PNG', { frameWidth: 187, frameHeight: 112, endFrame: 29 });
     this.load.spritesheet('portret-units-one-empire', './assets/imgs/portret-units-one-empire.png', { frameWidth: 70, frameHeight: 85, endFrame: 10 });

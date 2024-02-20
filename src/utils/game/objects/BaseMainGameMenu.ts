@@ -10,6 +10,7 @@ export default class BaseMainGameMenu{
     protected container: Container;
     protected hideCallback:()=>void;
     protected hideHook:()=>void;
+    protected showHook:()=>void|null = null;
     constructor(protected scene:Scene){
         //this.create();
     }
@@ -26,6 +27,9 @@ export default class BaseMainGameMenu{
             this.container.y = this.maxY;
             this.isAnimate = false;
             this.isAnimated = true;
+            if(this.showHook){
+                this.showHook();
+            }
         }
     }
 

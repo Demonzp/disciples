@@ -26,6 +26,10 @@ const useGameMenu = ({game}:TProps)=>{
                     console.log('-------multiplayer----------');
                     gameScene.multiplayerMenu.create();
                     break;
+                case 'arena-menu':
+                    console.log('-------arena-menu----------');
+                    gameScene.arenaMenu.create();
+                    break;
                 default:
                     break;
             }

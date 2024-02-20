@@ -1,7 +1,7 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { setScene } from './sliceGame';
 
-type TMenuType ='main'|'multiplayer'|'single-player';
+type TMenuType ='main'|'multiplayer'|'single-player'|'arena-menu';
 
 type InitState = {
     menuType:TMenuType,

@@ -3,10 +3,12 @@ import MainGameMenu from "../objects/MainGameMenu";
 import store from "store/store";
 import { setReadyScene } from "store/slices/sliceGame";
 import MultiplayerGameMenu from "../objects/MultiplayerGameMenu";
+import ArenaGameMenu from "../objects/ArenaGameMenu";
 
 export default class MainGameMenuScene extends Scene{
     mainMenu:MainGameMenu;
     multiplayerMenu:MultiplayerGameMenu;
+    arenaMenu:ArenaGameMenu;
     constructor(){
         super('MainGameMenuScene');
     }
@@ -17,6 +19,8 @@ export default class MainGameMenuScene extends Scene{
         fon.y = this.halfHeight;
         this.mainMenu = new MainGameMenu(this);
         this.multiplayerMenu = new MultiplayerGameMenu(this);
+        this.arenaMenu = new ArenaGameMenu(this);
+        //this.arenaMenu.create();
         store.dispatch(setReadyScene());
     }
 

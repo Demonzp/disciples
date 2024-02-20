@@ -15,10 +15,11 @@ export default class MultiplayerGameMenu extends BaseMainGameMenu{
         this.hideHook = this.hidden.bind(this);
         this.maxY = 63-63/2;
         this.container = this.scene.add.container();
-        this.container.x = 650;
+        this.container.x = 700;
         this.container.y = -63*2-63/2;
         this.btn_arena = new MainMenuButton(this.scene, 0, 60, 'ARENA', ()=>{
-            
+            this.hideCallback = ()=>store.dispatch(setMenuType('arena-menu'));
+            this.hide();
         });
 
         this.btn_exit = new MainMenuButton(this.scene, 0, 60*2, 'EXIT', ()=>{
@@ -26,7 +27,6 @@ export default class MultiplayerGameMenu extends BaseMainGameMenu{
             this.hide();
         });
 
-        
         this.container.data = 'main cont';
         
         //this.container.add([this.btn_single.container]);
