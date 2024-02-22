@@ -22,14 +22,12 @@ export default class ArenaGameMenu extends BaseMainGameMenu{
         this.container.x = 700;
         this.container.y = -63*2-63/2;
         this.btn_lobby = new MainMenuButton(this.scene, 0, 0, 'CREATE LOBBY');
-        this.btn_to_battle = new MainMenuButton(this.scene, 0, 0, 'TO BATTLE');
-        this.btn_exit = new MainMenuButton(this.scene, 0, 0, 'EXIT', ()=>{
-            this.hideCallback = ()=>store.dispatch(setMenuType('arena-menu'));
+        this.btn_to_battle = new MainMenuButton(this.scene, 0, 60, 'TO BATTLE');
+        this.btn_exit = new MainMenuButton(this.scene, 0, 60*2, 'EXIT', ()=>{
+            this.hideCallback = ()=>store.dispatch(setMenuType('multiplayer'));
             this.hide();
         }); 
         this.container.data = 'main cont';
-        //this.container.y = -63*2-63/2;
-        //this.container.add([this.btn_single.container]);
         this.container.add([this.btn_exit.container, this.btn_lobby.container, this.btn_to_battle.container]);
         this.isAnimate = true;
         this.isShow = true;
@@ -37,8 +35,10 @@ export default class ArenaGameMenu extends BaseMainGameMenu{
 
     showed(){
         this.windowInfo = this.scene.add.sprite('window-info');
+        //this.windowInfo.setZindex(-1);
         this.windowInfo.x +=this.windowInfo.halfWidth;
         this.windowInfo.y +=this.windowInfo.halfHeight;
+        this.container.setZindex(1);
     }
 
     hidden(){

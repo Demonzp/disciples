@@ -27,5 +27,6 @@ export default class MainGameMenuScene extends Scene{
     update(){
         this.mainMenu.update();
         this.multiplayerMenu.update();
+        this.arenaMenu.update();
     }
 }
