@@ -4,6 +4,7 @@ import sliceCityParty from './slices/cityParty';
 import sliceCityProps from './slices/cityProps';
 import sliceMenuGame from './slices/sliceMenuGame';
 import sliceMultiArena from './slices/sliceMultiArena';
+import sliceMultiplayer from './slices/sliceMultiplayer';
 
 export function makeStore(){
     return configureStore({
@@ -13,6 +14,7 @@ export function makeStore(){
             cityProps: sliceCityProps.reducer,
             gameMenu: sliceMenuGame.reducer,
             multiArena: sliceMultiArena.reducer,
+            multiplayer: sliceMultiplayer.reducer
         }
     });
 }

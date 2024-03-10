@@ -22,6 +22,10 @@ const useGameMenu = ({game}:TProps)=>{
                     console.log('-------main----------');
                     gameScene.mainMenu.create();
                     break;
+                case 'multiplayer-signin':
+                    console.log('-------multiplayer-signin----------');
+                    gameScene.multiplayerSigninMenu.create();
+                    break;
                 case 'multiplayer':
                     console.log('-------multiplayer----------');
                     gameScene.multiplayerMenu.create();

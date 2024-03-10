@@ -4,9 +4,11 @@ import store from "store/store";
 import { setReadyScene } from "store/slices/sliceGame";
 import MultiplayerGameMenu from "../objects/MultiplayerGameMenu";
 import ArenaGameMenu from "../objects/ArenaGameMenu";
+import MultiplayerSigninMenu from "../objects/MultiplayerSigninMenu";
 
 export default class MainGameMenuScene extends Scene{
     mainMenu:MainGameMenu;
+    multiplayerSigninMenu:MultiplayerSigninMenu;
     multiplayerMenu:MultiplayerGameMenu;
     arenaMenu:ArenaGameMenu;
     constructor(){
@@ -20,6 +22,7 @@ export default class MainGameMenuScene extends Scene{
         this.mainMenu = new MainGameMenu(this);
         this.multiplayerMenu = new MultiplayerGameMenu(this);
         this.arenaMenu = new ArenaGameMenu(this);
+        this.multiplayerSigninMenu = new MultiplayerSigninMenu(this);
         //this.arenaMenu.create();
         store.dispatch(setReadyScene());
     }

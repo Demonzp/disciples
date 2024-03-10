@@ -12,12 +12,16 @@ import MenuEditor from "components/MenuEditor";
 import EditorScene from "utils/game/scenes/editorScene";
 import MainGameMenuScene from "utils/game/scenes/mainGameMenuScene";
 import useGameMenu from "hooks/useGameManu";
+//import { io } from "socket.io-client";
+import GoogleBtn from "components/GoogleBtn/GoogleBtn";
 
 const GameComp = () => {
     const refCont = useRef<HTMLCanvasElement>(null);
     const [game, setGame] = useState<Game | undefined>();
     const { pointerMatrix, capitalCities, cities, fieldMatrix, scene, isMapInit, editorMod, selectObj } = useAppSelector(state => state.game);
-    useGameMenu({game});
+    const { menuType } = useAppSelector(state=>state.gameMenu);
+    const { isLogin, isLogined } = useAppSelector(state=>state.multiplayer);
+    useGameMenu({ game });
     useEffect(() => {
         if (refCont.current && !game) {
             document.addEventListener('contextmenu', onContext);
@@ -32,10 +36,13 @@ const GameComp = () => {
             });
 
             setGame(g);
+
         }
     }, [refCont, game]);
 
     useEffect(() => {
+        //const socket = io('http://localhost:4000');
+        
         return () => {
             document.removeEventListener('contextmenu', onContext);
             if (game) {
@@ -134,6 +141,7 @@ const GameComp = () => {
                 {scene === 'mapEditorMenu' && <MenuEditor />}
                 {scene === 'mapEditor' && <MapEditor game={game} />}
             </div>
+            {(!isLogin&&!isLogined&&menuType==='multiplayer-signin')&&<GoogleBtn onSuccess={()=>{}}/>}
         </>
 
     );
