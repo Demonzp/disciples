@@ -105,11 +105,11 @@ export default class InputEvent{
     for (let i = activeScenes.length-1; i >= 0; i--) {
       const scene = activeScenes[i];
       //console.log('Objects = ', scene.add.gameObjects);
-      console.log('interactiveObjects = ', scene.add.interactiveObjects.length);
+      //console.log('interactiveObjects = ', scene.add.interactiveObjects.length);
       //scene.add.interactiveObjects.length;
       for (let i = 0; i < scene.add.interactiveObjects.length; i++) {
         const obj = scene.add.interactiveObjects[i];
-        console.log('obj = ', obj.name);
+        //console.log('obj = ', obj.name);
         obj.onPointerMove(pointer);
       }
     }

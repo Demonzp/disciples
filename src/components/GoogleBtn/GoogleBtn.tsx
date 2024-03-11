@@ -106,6 +106,7 @@ const GoogleBtn: FC<TProps> = ({ onSuccess }) => {
     if (isShowGoogle) {
       container.current!.hidden = false;
     } else {
+      console.log('hidden');
       container.current!.hidden = true;
     }
   }, [isShowGoogle]);

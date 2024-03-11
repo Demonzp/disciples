@@ -402,10 +402,10 @@ export default class GameObject{
     if(!this.isMouseOver&&this.isOnPointer(pointer)){
       this.isMouseOver = true;
       if(this.pointerOverCallbacks.length>=1){
-        console.log('onPointerMove = ', this.data);
-        console.log('getGlobalPos = ',this.getGlobalPos());
+        //console.log('onPointerMove = ', this.data);
+        //console.log('getGlobalPos = ',this.getGlobalPos());
         
-        console.log('instanceof Container',this._interactiveBodyRect);
+        //console.log('instanceof Container',this._interactiveBodyRect);
       }
       //console.log('isMouseOver');
       //console.log('length===', this.pointerOverCallbacks.length);
