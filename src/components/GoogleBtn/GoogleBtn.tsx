@@ -70,7 +70,7 @@ const GoogleBtn: FC<TProps> = ({ onSuccess }) => {
       return;
     }
 
-    const id = '6138788617-8uoc08dt14psseai0i9jvijocvqog9bp.apps.googleusercontent.com';
+    const id = '';
 
 
     window.google.accounts.id.initialize({
@@ -82,7 +82,7 @@ const GoogleBtn: FC<TProps> = ({ onSuccess }) => {
     });
 
     window.google.accounts.id.prompt((notification) => {
-      //console.log('prompt');
+      console.log('prompt');
       if (notification.isNotDisplayed() || notification.isSkippedMoment()) {
         setIsShowGoogle(true);
       } else {
@@ -102,18 +102,23 @@ const GoogleBtn: FC<TProps> = ({ onSuccess }) => {
     onSuccess(data);
   }
 
-  useEffect(() => {
-    if (isShowGoogle) {
-      container.current!.hidden = false;
-    } else {
-      console.log('hidden');
-      container.current!.hidden = true;
-    }
-  }, [isShowGoogle]);
+  // useEffect(() => {
+  //   console.log('useEffect isShowGoogle = ', isShowGoogle);
+  //   if(!container.current){
+  //     return;
+  //   }
+  //   console.log('useEffect isShowGoogle = ', isShowGoogle);
+  //   if (isShowGoogle) {
+  //     container.current.hidden = false;
+  //   } else {
+  //     console.log('hidden');
+  //     container.current.hidden = true;
+  //   }
+  // }, [isShowGoogle, container]);
 
   return (
     <>
-      <div className={styles.googleContBtn} ref={container}></div>
+      <div className={`${styles.googleContBtn} ${isShowGoogle?styles.googleContBtnShow:styles.googleContBtnHidden}`} ref={container}></div>
     </>
   );
 };

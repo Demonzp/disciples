@@ -4,3 +4,13 @@
     justify-content: center;
     align-items: center;
 }
+
+.googleContBtnHidden{
+    pointer-events: none;
+    opacity: 0;
+}
+
+.googleContBtnShow{
+    pointer-events: auto;
+    opacity: 1;
+}
