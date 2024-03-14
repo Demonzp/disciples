@@ -42,7 +42,8 @@ const GameComp = () => {
 
     useEffect(() => {
         //const socket = io('http://localhost:4000');
-        
+        //dotenv.config();
+        console.log('CLIENT_ID = ', process.env.CLIENT_ID);
         return () => {
             document.removeEventListener('contextmenu', onContext);
             if (game) {

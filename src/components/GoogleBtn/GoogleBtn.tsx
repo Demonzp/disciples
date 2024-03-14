@@ -72,7 +72,6 @@ const GoogleBtn: FC<TProps> = ({ onSuccess }) => {
 
     const id = '';
 
-
     window.google.accounts.id.initialize({
       client_id: id,
       auto_select: false,
