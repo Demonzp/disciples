@@ -70,10 +70,10 @@ const GoogleBtn: FC<TProps> = ({ onSuccess }) => {
       return;
     }
 
-    const id = '';
+    //const id = '';
 
     window.google.accounts.id.initialize({
-      client_id: id,
+      client_id: process.env.CLIENT_ID,
       auto_select: false,
       callback: googleCallback,
       cancel_on_tap_outside: false,

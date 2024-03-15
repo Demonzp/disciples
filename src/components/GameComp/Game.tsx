@@ -4,7 +4,7 @@ import MainScene from "utils/game/scenes/mainScene";
 import Game from "utils/gameLib/Game";
 
 import classes from "./game.module.css";
-import { useAppSelector } from "store/hooks";
+import { useAppDispatch, useAppSelector } from "store/hooks";
 import MapEditor from "components/MapEditor";
 import MainMenu from "components/MainMenu";
 import MapEditorMenuScene from "utils/game/scenes/mapEditMenuScene";
@@ -14,6 +14,7 @@ import MainGameMenuScene from "utils/game/scenes/mainGameMenuScene";
 import useGameMenu from "hooks/useGameManu";
 //import { io } from "socket.io-client";
 import GoogleBtn from "components/GoogleBtn/GoogleBtn";
+import { googleLogin } from "store/actions/actionsMultiplayer";
 
 const GameComp = () => {
     const refCont = useRef<HTMLCanvasElement>(null);
@@ -21,6 +22,7 @@ const GameComp = () => {
     const { pointerMatrix, capitalCities, cities, fieldMatrix, scene, isMapInit, editorMod, selectObj } = useAppSelector(state => state.game);
     const { menuType } = useAppSelector(state=>state.gameMenu);
     const { isLogin, isLogined } = useAppSelector(state=>state.multiplayer);
+    const dispatch = useAppDispatch();
     useGameMenu({ game });
     useEffect(() => {
         if (refCont.current && !game) {
@@ -43,7 +45,7 @@ const GameComp = () => {
     useEffect(() => {
         //const socket = io('http://localhost:4000');
         //dotenv.config();
-        console.log('CLIENT_ID = ', process.env.CLIENT_ID);
+        //console.log('CLIENT_ID = ', process.env.CLIENT_ID);
         return () => {
             document.removeEventListener('contextmenu', onContext);
             if (game) {
@@ -131,6 +133,10 @@ const GameComp = () => {
         e.preventDefault();
     };
 
+    const login = (data: any)=>{
+        dispatch(googleLogin(data.credential));
+    }
+
     return (
         <>
             <div>
@@ -142,7 +148,7 @@ const GameComp = () => {
                 {scene === 'mapEditorMenu' && <MenuEditor />}
                 {scene === 'mapEditor' && <MapEditor game={game} />}
             </div>
-            {(!isLogin&&!isLogined&&menuType==='multiplayer-signin')&&<GoogleBtn onSuccess={()=>{}}/>}
+            {(!isLogin&&!isLogined&&menuType==='multiplayer-signin')&&<GoogleBtn onSuccess={login}/>}
         </>
 
     );
