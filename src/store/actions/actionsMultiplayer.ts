@@ -5,7 +5,17 @@ export const googleLogin = createAsyncThunk<any, any, { state: AppState, rejectW
     'multiplaeyr/googleLogin',
     async (data, { rejectWithValue }) => {
       try {
-        return data;
+        const response = await fetch('http://localhost:4000/auth-google', {
+          method: 'POST',
+          headers: {
+            Authorization: data
+          },
+        });
+        if(response.ok){
+          const result = await response.json();
+          return result;
+        }
+        throw new Error('Authentication error');
       } catch (error) {
         console.error('error = ', (error as Error).message);
         return rejectWithValue({ message: (error as Error).message, field: 'nameTable' });
