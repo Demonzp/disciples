@@ -8,7 +8,7 @@ export default class BaseMainGameMenu{
     protected isAnimated = false;
     protected speed = 7;
     protected container: Container;
-    protected hideCallback:()=>void;
+    public hideCallback:()=>void;
     protected hideHook:()=>void;
     protected showHook:()=>void|null = null;
     constructor(protected scene:Scene){

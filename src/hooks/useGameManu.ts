@@ -1,5 +1,7 @@
 import { useEffect } from "react";
-import { useAppSelector } from "store/hooks";
+import { actionLogouded } from "store/actions/actionsMultiplayer";
+import { useAppDispatch, useAppSelector } from "store/hooks";
+import { setMenuType } from "store/slices/sliceMenuGame";
 import MainGameMenuScene from "utils/game/scenes/mainGameMenuScene";
 import Game from "utils/gameLib/Game";
 
@@ -10,6 +12,8 @@ type TProps = {
 const useGameMenu = ({game}:TProps)=>{
     const {scene, sceneStatus} = useAppSelector((state)=>state.game);
     const {menuType} = useAppSelector((state)=>state.gameMenu);
+    const {isLogin, isLogout, user} = useAppSelector(state=>state.multiplayer);
+    const dispatch = useAppDispatch();
 
     useEffect(()=>{
         if(sceneStatus==='notReady'){
@@ -24,6 +28,10 @@ const useGameMenu = ({game}:TProps)=>{
                     break;
                 case 'multiplayer-signin':
                     console.log('-------multiplayer-signin----------');
+                    if(isLogin){
+                        dispatch(setMenuType('multiplayer'));
+                        return;
+                    }
                     gameScene.multiplayerSigninMenu.create();
                     break;
                 case 'multiplayer':
@@ -41,6 +49,27 @@ const useGameMenu = ({game}:TProps)=>{
         
         //MainGameMenuScene
     }, [sceneStatus, menuType, scene]);
+
+    useEffect(()=>{
+        if(isLogin){
+            const gameScene = game.scene.getScene<MainGameMenuScene>('MainGameMenuScene');
+            gameScene.multiplayerSigninMenu.hideCallback = ()=>dispatch(setMenuType('multiplayer'));
+            gameScene.multiplayerSigninMenu.hide();
+        }
+    }, [isLogin]);
+
+    useEffect(()=>{
+        console.log('useEffect isLogout = ', isLogout);
+        if(isLogout){
+          
+          window.google.accounts.id.revoke(user.id,()=>{
+            console.log('---------------revoke----------------');
+            dispatch(actionLogouded());
+            //dispatch(setLogout(false));
+            //dispatch(setMenuType('multiplayer-signin'));
+          });
+        }
+    }, [isLogout]);
 };
 
 export default useGameMenu;

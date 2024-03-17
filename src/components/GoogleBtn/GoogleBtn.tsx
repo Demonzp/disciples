@@ -1,6 +1,10 @@
 import { FC, useEffect, useRef, useState } from "react";
 import useSWR from "swr";
 import styles from './googlebtn.module.css';
+import { useAppDispatch, useAppSelector } from "store/hooks";
+import { setLogined, setLogout } from "store/slices/sliceMultiplayer";
+import { setMenuType } from "store/slices/sliceMenuGame";
+import { actionLogouded } from "store/actions/actionsMultiplayer";
 
 type TPromptOneTap = {
   isNotDisplayed: () => boolean,
@@ -27,6 +31,7 @@ declare global {
             cancel_on_tap_outside?: boolean
             use_fedcm_for_prompt?: boolean
           }) => void,
+          revoke:(id:string,callback?:(data:any)=>void)=>void,
           renderButton: (div: HTMLDivElement, { theme, size }: { theme: string, size: string }) => void,
           prompt: (data?: (data: TPromptOneTap) => void) => void,
           disableAutoSelect: () => void
@@ -56,11 +61,13 @@ const loadingScript = (src: string) => {
 
 const GoogleBtn: FC<TProps> = ({ onSuccess }) => {
   const container = useRef<HTMLDivElement>(null);
+  const dispatch = useAppDispatch();
   const { data } = useSWR('https://accounts.google.com/gsi/client', loadingScript, {
     revalidateIfStale: false,
     revalidateOnFocus: false,
     revalidateOnReconnect: false
   });
+  const {isLogout, user} = useAppSelector(state=>state.multiplayer);
 
   const [isShowGoogle, setIsShowGoogle] = useState(false);
 
@@ -83,8 +90,10 @@ const GoogleBtn: FC<TProps> = ({ onSuccess }) => {
     window.google.accounts.id.prompt((notification) => {
       console.log('prompt');
       if (notification.isNotDisplayed() || notification.isSkippedMoment()) {
+        dispatch(setLogined(false));
         setIsShowGoogle(true);
       } else {
+        dispatch(setLogined(true));
         setIsShowGoogle(false);
       }
     });

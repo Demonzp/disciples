@@ -18,6 +18,9 @@ export default class MultiplayerSigninMenu extends BaseMainGameMenu{
         this.container.y = -63;
         this.btnExit = new MainMenuButton(this.scene, 0,0,'EXIT',()=>{
             //console.log('MultiplayerSigninMenu EXIT');
+            if(store.getState().multiplayer.isLogined||store.getState().multiplayer.isLogin){
+                return;
+            }
             this.hideCallback = ()=>store.dispatch(setMenuType('main'));
             this.hide();
         });

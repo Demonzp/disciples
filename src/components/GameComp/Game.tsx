@@ -148,7 +148,7 @@ const GameComp = () => {
                 {scene === 'mapEditorMenu' && <MenuEditor />}
                 {scene === 'mapEditor' && <MapEditor game={game} />}
             </div>
-            {(!isLogin&&!isLogined&&menuType==='multiplayer-signin')&&<GoogleBtn onSuccess={login}/>}
+            {(!isLogin&&menuType==='multiplayer-signin')&&<GoogleBtn onSuccess={login}/>}
         </>
 
     );

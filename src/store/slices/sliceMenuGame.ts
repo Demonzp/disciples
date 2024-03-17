@@ -1,5 +1,6 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { setScene } from './sliceGame';
+import { actionLogouded } from 'store/actions/actionsMultiplayer';
 
 type TMenuType ='main'|'multiplayer-signin'|'multiplayer'|'single-player'|'arena-menu';
 
@@ -27,7 +28,10 @@ const sliceMenuGame = createSlice({
         },
     },
     extraReducers: (builder) => {
-       
+        builder.addCase(actionLogouded.fulfilled, (state, { payload }) => {
+            //console.log(payload);
+            state.menuType = 'multiplayer-signin';
+        });
     }
 });
 
