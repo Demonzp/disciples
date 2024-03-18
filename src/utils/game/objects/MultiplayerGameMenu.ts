@@ -5,11 +5,13 @@ import store from "store/store";
 import { setMenuType } from "store/slices/sliceMenuGame";
 import Sprite from "utils/gameLib/Sprite";
 import { setLogout } from "store/slices/sliceMultiplayer";
+import Text from "utils/gameLib/Text";
 
 export default class MultiplayerGameMenu extends BaseMainGameMenu{
     private btn_exit:MainMenuButton;
     private btn_arena:MainMenuButton;
     private btn_logout:Sprite;
+    private labelBtnLogout: Text;
     constructor(scene: Scene){
         super(scene);
     }
@@ -41,6 +43,9 @@ export default class MultiplayerGameMenu extends BaseMainGameMenu{
 
     createLogout(){
         this.btn_logout = this.scene.add.sprite('big-bnt', 700, this.scene.height-63);
+        this.labelBtnLogout = this.scene.add.text('SIGN OUT');
+        this.labelBtnLogout.y = this.scene.height-60;
+        this.labelBtnLogout.x = 700-this.labelBtnLogout.width/2;
         this.btn_logout.on('pointerup',()=>{
             this.hideCallback = ()=>store.dispatch(setLogout(true));
             this.hide();
@@ -52,7 +57,7 @@ export default class MultiplayerGameMenu extends BaseMainGameMenu{
     hidden(){
         this.btn_arena.destroy();
         this.btn_exit.destroy();
-        this.scene.add.remove(this.btn_logout);
+        this.scene.add.remove([this.btn_logout, this.labelBtnLogout]);
         console.log('MultiplayerGameMenu hidden');
         this.hideCallback();
     }

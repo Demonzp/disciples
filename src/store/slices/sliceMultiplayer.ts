@@ -3,7 +3,8 @@ import { actionLogouded, googleLogin } from 'store/actions/actionsMultiplayer';
 
 export type TUser = {
     id: string;
-    firstName:string;
+    uid: string;
+    firstName: string;
     secondName: string;
     email: string;
     picture: string;
@@ -13,7 +14,7 @@ export type TUser = {
 type InitState = {
     isMultiplayer: boolean;
     token: string;
-    user: TUser|null;
+    user: TUser | null;
     errors: string[];
     isLogin: boolean;
     isLogined: boolean;
@@ -34,11 +35,11 @@ const sliceMultiplayer = createSlice({
     name: 'sliceMultiplayer',
     initialState,
     reducers: {
-        setLogined(state, action:PayloadAction<boolean>){
+        setLogined(state, action: PayloadAction<boolean>) {
             state.isLogined = action.payload;
         },
 
-        setLogout(state, action:PayloadAction<boolean>){
+        setLogout(state, action: PayloadAction<boolean>) {
             console.log('setLogout = ', action.payload);
             state.isLogout = action.payload;
         }

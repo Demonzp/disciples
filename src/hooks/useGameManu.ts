@@ -4,6 +4,8 @@ import { useAppDispatch, useAppSelector } from "store/hooks";
 import { setMenuType } from "store/slices/sliceMenuGame";
 import MainGameMenuScene from "utils/game/scenes/mainGameMenuScene";
 import Game from "utils/gameLib/Game";
+import io from "socket.io-client";
+import socketInst from "utils/socket";
 
 type TProps = {
     game:Game
@@ -70,6 +72,10 @@ const useGameMenu = ({game}:TProps)=>{
           });
         }
     }, [isLogout]);
+
+    const connectArenaSocket = () => {
+        socketInst.init({url:'http://locolhost:4000', path: '', uid: user.uid });
+    };
 };
 
 export default useGameMenu;
