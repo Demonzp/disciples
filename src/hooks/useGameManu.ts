@@ -41,8 +41,9 @@ const useGameMenu = ({game}:TProps)=>{
                     gameScene.multiplayerMenu.create();
                     break;
                 case 'arena-menu':
-                    console.log('-------arena-menu----------');
-                    gameScene.arenaMenu.create();
+                    connectArenaSocket();
+                    //console.log('-------arena-menu----------');
+                    //gameScene.arenaMenu.create();
                     break;
                 default:
                     break;
@@ -73,8 +74,20 @@ const useGameMenu = ({game}:TProps)=>{
         }
     }, [isLogout]);
 
+
+
     const connectArenaSocket = () => {
-        socketInst.init({url:'http://locolhost:4000', path: '', uid: user.uid });
+        socketInst.init({url:'http://localhost:4000', path: '', uid: 'user.uid' });
+        socketInst.on('connect',()=>{
+            console.log('i`m conected');
+        });
+        socketInst.on('error',()=>{
+            console.log('socketInst error');
+        });
+        socketInst.on('disconnect', ()=>{
+            console.log('socketInst disconnected----');
+        });
+        socketInst.emit('gg', {data:'ggdata'});
     };
 };
 
