@@ -24,7 +24,7 @@ export default class MultiplayerGameMenu extends BaseMainGameMenu{
         this.container.x = 700;
         this.container.y = -63*2-63/2;
         this.btn_arena = new MainMenuButton(this.scene, 0, 0, 'ARENA', ()=>{
-            this.hideCallback = ()=>store.dispatch(setMenuType('arena-menu'));
+            this.hideCallback = ()=>store.dispatch(setMenuType('connect-arena'));
             this.hide();
         });
 

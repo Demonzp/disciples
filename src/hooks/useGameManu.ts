@@ -6,6 +6,7 @@ import MainGameMenuScene from "utils/game/scenes/mainGameMenuScene";
 import Game from "utils/gameLib/Game";
 import io from "socket.io-client";
 import socketInst from "utils/socket";
+import useArenaHooks from "./useArenaHooks";
 
 type TProps = {
     game:Game
@@ -16,6 +17,7 @@ const useGameMenu = ({game}:TProps)=>{
     const {menuType} = useAppSelector((state)=>state.gameMenu);
     const {isLogin, isLogout, user} = useAppSelector(state=>state.multiplayer);
     const dispatch = useAppDispatch();
+    const {connectArenaSocket} = useArenaHooks({game});
 
     useEffect(()=>{
         if(sceneStatus==='notReady'){
@@ -40,10 +42,14 @@ const useGameMenu = ({game}:TProps)=>{
                     console.log('-------multiplayer----------');
                     gameScene.multiplayerMenu.create();
                     break;
-                case 'arena-menu':
+                case 'connect-arena':
                     connectArenaSocket();
                     //console.log('-------arena-menu----------');
                     //gameScene.arenaMenu.create();
+                    break;
+                case 'arena-menu':
+                    console.log('-------arena-menu----------');
+                    gameScene.arenaMenu.create();
                     break;
                 default:
                     break;
@@ -76,19 +82,19 @@ const useGameMenu = ({game}:TProps)=>{
 
 
 
-    const connectArenaSocket = () => {
-        socketInst.init({url:'http://localhost:4000', path: '', uid: 'user.uid' });
-        socketInst.on('connect',()=>{
-            console.log('i`m conected');
-        });
-        socketInst.on('error',()=>{
-            console.log('socketInst error');
-        });
-        socketInst.on('disconnect', ()=>{
-            console.log('socketInst disconnected----');
-        });
-        socketInst.emit('gg', {data:'ggdata'});
-    };
+    // const connectArenaSocket = () => {
+    //     socketInst.init({url:'http://localhost:4000', path: '', uid: 'user.uid' });
+    //     socketInst.on('connect',()=>{
+    //         console.log('i`m conected');
+    //     });
+    //     socketInst.on('error',()=>{
+    //         console.log('socketInst error');
+    //     });
+    //     socketInst.on('disconnect', ()=>{
+    //         console.log('socketInst disconnected----');
+    //     });
+    //     //socketInst.emit('gg', {data:'ggdata'});
+    // };
 };
 
 export default useGameMenu;

@@ -9,6 +9,7 @@ type InitState = {
     myLordName: string,
     enemyLordName: string,
     isInited: boolean,
+    isSocketConnect: boolean,
 }
 
 const initialState:InitState = {
@@ -18,13 +19,17 @@ const initialState:InitState = {
     enemyLord: 'guildmaster',
     myLordName: '',
     enemyLordName: '',
-    isInited: false
+    isInited: false,
+    isSocketConnect: false,
 };
 
 const sliceMultiArena = createSlice({
     name: 'sliceMultiArena',
     initialState,
     reducers: {
+        setIsConnect(state, action:PayloadAction<boolean>){
+            state.isSocketConnect = action.payload;
+        },
     },
     extraReducers: (builder) => {
        
@@ -32,7 +37,7 @@ const sliceMultiArena = createSlice({
 });
 
 export const {
-
+    setIsConnect
 } = sliceMultiArena.actions;
 
 export default sliceMultiArena;
