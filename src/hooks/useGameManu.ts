@@ -41,6 +41,7 @@ const useGameMenu = ({game}:TProps)=>{
                 case 'multiplayer':
                     console.log('-------multiplayer----------');
                     gameScene.multiplayerMenu.create();
+                    gameScene.profileMenu.create();
                     break;
                 case 'connect-arena':
                     connectArenaSocket();

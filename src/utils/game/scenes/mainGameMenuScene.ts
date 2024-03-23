@@ -26,7 +26,7 @@ export default class MainGameMenuScene extends Scene{
         this.arenaMenu = new ArenaGameMenu(this);
         this.multiplayerSigninMenu = new MultiplayerSigninMenu(this);
         this.profileMenu = new ProfileMenu(this);
-        this.profileMenu.create();
+        //this.profileMenu.create();
         //this.arenaMenu.create();
         store.dispatch(setReadyScene());
     }

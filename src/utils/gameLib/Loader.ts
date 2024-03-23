@@ -143,6 +143,7 @@ export default class Loader{
       end = this.loadImages.length;
     }
     this.idx = end;
+    //console.log('preloadImages2 = ', start,'||',end);
     for (let i = start; i < end; i++) {
       const el = this.loadImages[i];
       //console.log(el.key);
@@ -156,11 +157,12 @@ export default class Loader{
     this.numLoaded++;
     this.i++;
     
-    
-    if(this.numLoaded===this.loadImages.length-1){
+    //console.log('isLoadNext = ',this.numLoaded,'||', this.loadImages.length-1);
+    if(this.numLoaded===this.loadImages.length){
       
       this.eventProgressCallbacks = [];
       this.loadImages = [];
+      this.idx = 0;
       this.numLoaded=0;
       this.eventComplateCallbacks.forEach(callback=>callback(1));
       this.callback();
