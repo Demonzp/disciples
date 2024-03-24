@@ -9,21 +9,21 @@ import socketInst from "utils/socket";
 import useArenaHooks from "./useArenaHooks";
 
 type TProps = {
-    game:Game
+    game: Game
 };
 
-const useGameMenu = ({game}:TProps)=>{
-    const {scene, sceneStatus} = useAppSelector((state)=>state.game);
-    const {menuType} = useAppSelector((state)=>state.gameMenu);
-    const {isLogin, isLogout, user} = useAppSelector(state=>state.multiplayer);
+const useGameMenu = ({ game }: TProps) => {
+    const { scene, sceneStatus } = useAppSelector((state) => state.game);
+    const { menuType } = useAppSelector((state) => state.gameMenu);
+    const { isLogin, isLogout, user } = useAppSelector(state => state.multiplayer);
     const dispatch = useAppDispatch();
-    const {connectArenaSocket} = useArenaHooks({game});
+    const { connectArenaSocket } = useArenaHooks({ game });
 
-    useEffect(()=>{
-        if(sceneStatus==='notReady'){
+    useEffect(() => {
+        if (sceneStatus === 'notReady') {
             return;
         }
-        if(scene==='mainGameMenu'){
+        if (scene === 'mainGameMenu') {
             const gameScene = game.scene.getScene<MainGameMenuScene>('MainGameMenuScene');
             switch (menuType) {
                 case 'main':
@@ -32,7 +32,7 @@ const useGameMenu = ({game}:TProps)=>{
                     break;
                 case 'multiplayer-signin':
                     console.log('-------multiplayer-signin----------');
-                    if(isLogin){
+                    if (isLogin) {
                         dispatch(setMenuType('multiplayer'));
                         return;
                     }
@@ -56,46 +56,29 @@ const useGameMenu = ({game}:TProps)=>{
                     break;
             }
         }
-        
+
         //MainGameMenuScene
     }, [sceneStatus, menuType, scene]);
 
-    useEffect(()=>{
-        if(isLogin){
+    useEffect(() => {
+        if (isLogin) {
             const gameScene = game.scene.getScene<MainGameMenuScene>('MainGameMenuScene');
-            gameScene.multiplayerSigninMenu.hideCallback = ()=>dispatch(setMenuType('multiplayer'));
+            gameScene.multiplayerSigninMenu.hideCallback = () => dispatch(setMenuType('multiplayer'));
             gameScene.multiplayerSigninMenu.hide();
         }
     }, [isLogin]);
 
-    useEffect(()=>{
+    useEffect(() => {
         console.log('useEffect isLogout = ', isLogout);
-        if(isLogout){
-          
-          window.google.accounts.id.revoke(user.id,()=>{
-            console.log('---------------revoke----------------');
-            dispatch(actionLogouded());
-            //dispatch(setLogout(false));
-            //dispatch(setMenuType('multiplayer-signin'));
-          });
+        if (isLogout) {
+            window.google.accounts.id.revoke(user.id, () => {
+                console.log('---------------revoke----------------');
+                dispatch(actionLogouded());
+                //dispatch(setLogout(false));
+                //dispatch(setMenuType('multiplayer-signin'));
+            });
         }
     }, [isLogout]);
-
-
-
-    // const connectArenaSocket = () => {
-    //     socketInst.init({url:'http://localhost:4000', path: '', uid: 'user.uid' });
-    //     socketInst.on('connect',()=>{
-    //         console.log('i`m conected');
-    //     });
-    //     socketInst.on('error',()=>{
-    //         console.log('socketInst error');
-    //     });
-    //     socketInst.on('disconnect', ()=>{
-    //         console.log('socketInst disconnected----');
-    //     });
-    //     //socketInst.emit('gg', {data:'ggdata'});
-    // };
 };
 
 export default useGameMenu;

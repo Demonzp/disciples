@@ -4,12 +4,17 @@ import Sprite from "utils/gameLib/Sprite";
 import MainMenuButton from "./MainMenuButton";
 import store from "store/store";
 import { setMenuType } from "store/slices/sliceMenuGame";
+import Text from "utils/gameLib/Text";
 
 export default class ArenaGameMenu extends BaseMainGameMenu{
     private windowInfo:Sprite;
     private btn_lobby: MainMenuButton;
     private btn_to_battle: MainMenuButton;
     private btn_exit: MainMenuButton;
+    private serverInfo: Sprite;
+    private serverTextOnline: Text;
+    private serverTextQueue: Text;
+    private serverTextVersion: Text;
     constructor(scene:Scene){
         super(scene);
         this.showHook = this.showed.bind(this);
@@ -39,13 +44,41 @@ export default class ArenaGameMenu extends BaseMainGameMenu{
         this.windowInfo.x +=this.windowInfo.halfWidth;
         this.windowInfo.y +=this.windowInfo.halfHeight;
         this.container.setZindex(1);
+
+        this.serverInfo = this.scene.add.sprite('arena-status');
+        this.serverInfo.x = this.scene.width-this.serverInfo.halfWidth;
+        this.serverInfo.y = this.scene.height-this.serverInfo.halfHeight;
+        const {users, queue, version} = store.getState().multiArena;
+        this.serverTextOnline = this.scene.add.text(`online: ${users}`);
+        this.serverTextOnline.fontSize = 20;
+        
+        this.serverTextOnline.x = this.serverInfo.x-this.serverInfo.halfWidth+30;
+        this.serverTextOnline.y = this.serverInfo.y-this.serverInfo.halfHeight+80;
+
+        this.serverTextQueue = this.scene.add.text(`queue: ${queue}`);
+        this.serverTextQueue.fontSize = 20;
+        
+        this.serverTextQueue.x = this.serverInfo.x-this.serverInfo.halfWidth+30;
+        this.serverTextQueue.y = this.serverTextOnline.y+this.serverTextQueue.height+10;
+
+        this.serverTextVersion = this.scene.add.text(`version: ${version}`);
+        this.serverTextVersion.fontSize = 20;
+        
+        this.serverTextVersion.x = this.serverInfo.x-this.serverInfo.halfWidth+30;
+        this.serverTextVersion.y = this.serverTextQueue.y+this.serverTextVersion.height+30;
     }
 
     hidden(){
         this.btn_lobby.destroy();
         this.btn_to_battle.destroy();
         this.btn_exit.destroy();
-        this.scene.add.remove(this.windowInfo);
+        this.scene.add.remove([
+            this.windowInfo, 
+            this.serverInfo, 
+            this.serverTextOnline,
+            this.serverTextQueue,
+            this.serverTextVersion
+        ]);
         this.hideCallback();
     }
 }

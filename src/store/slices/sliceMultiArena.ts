@@ -2,6 +2,9 @@ import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { TLordType, TRace } from './sliceGame';
 
 type InitState = {
+    users: number,
+    queue: number,
+    version: string,
     myRace: TRace,
     enemyRace: TRace,
     myLord: TLordType,
@@ -13,6 +16,9 @@ type InitState = {
 }
 
 const initialState:InitState = {
+    users: 1,
+    queue: 0,
+    version: '10.9.9.9',
     myRace:'clans',
     enemyRace:'clans',
     myLord: 'guildmaster',

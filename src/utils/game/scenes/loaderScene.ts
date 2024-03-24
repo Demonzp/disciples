@@ -49,6 +49,7 @@ export default class LoaderScene extends Scene {
     this.load.image('window-info', './assets/imgs/window-info.png');
     this.load.image('big-bnt', './assets/imgs/big-bnt.png');
     this.load.image('profile', './assets/imgs/profile.png');
+    this.load.image('arena-status', './assets/imgs/arena-status.png');
     this.load.image('profile-ico-mask', './assets/imgs/profile-ico-mask.png');
     
     this.load.spritesheet('_FIREFLY_HUMAN', './assets/imgs/_FIREFLY_HUMAN.PNG', { frameWidth: 187, frameHeight: 112, endFrame: 29 });
