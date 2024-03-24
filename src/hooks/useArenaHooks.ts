@@ -1,7 +1,7 @@
 import { useEffect } from "react";
 import { useAppDispatch, useAppSelector } from "store/hooks";
 import { setMenuType } from "store/slices/sliceMenuGame";
-import { setIsConnect } from "store/slices/sliceMultiArena";
+import { TOnlineInfo, TServerInfo, setIsConnect, setOnlineInfo, setServerInfo } from "store/slices/sliceMultiArena";
 import MainGameMenuScene from "utils/game/scenes/mainGameMenuScene";
 import Game from "utils/gameLib/Game";
 import socketInst from "utils/socket";
@@ -26,11 +26,27 @@ const useArenaHooks = ({ game }: TProps) => {
             //dispatch(setIsConnect(true));
             dispatch(setMenuType('arena-menu'));
         });
-        socketInst.on('server-info', (data) => {
+        socketInst.on('server-info', (data:TServerInfo) => {
             console.log('server-info = ', data);
-            //dispatch(setIsConnect(true));
+
+            dispatch(setServerInfo(data));
             //dispatch(setMenuType('arena-menu'));
         });
+
+        socketInst.on('update-online', (data:TOnlineInfo) => {
+            console.log('update-online = ', data);
+
+            dispatch(setOnlineInfo(data));
+            //dispatch(setMenuType('arena-menu'));
+        });
+
+        socketInst.on('to-queue', (data:any) => {
+            console.log('to-queue = ', data);
+
+            //dispatch(setOnlineInfo(data));
+            dispatch(setMenuType('queue-arena'));
+        });
+
         socketInst.on('error', () => {
             console.log('socketInst error');
         });

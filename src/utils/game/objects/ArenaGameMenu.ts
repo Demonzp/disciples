@@ -5,6 +5,7 @@ import MainMenuButton from "./MainMenuButton";
 import store from "store/store";
 import { setMenuType } from "store/slices/sliceMenuGame";
 import Text from "utils/gameLib/Text";
+import socketInst from "utils/socket";
 
 export default class ArenaGameMenu extends BaseMainGameMenu{
     private windowInfo:Sprite;
@@ -27,9 +28,13 @@ export default class ArenaGameMenu extends BaseMainGameMenu{
         this.container.x = 700;
         this.container.y = -63*2-63/2;
         this.btn_lobby = new MainMenuButton(this.scene, 0, 0, 'CREATE LOBBY');
-        this.btn_to_battle = new MainMenuButton(this.scene, 0, 60, 'TO BATTLE');
+        this.btn_to_battle = new MainMenuButton(this.scene, 0, 60, 'TO BATTLE', ()=>{
+            this.hideCallback = ()=>socketInst.socket.emit('to-queue');
+            this.hide();
+        });
         this.btn_exit = new MainMenuButton(this.scene, 0, 60*2, 'EXIT', ()=>{
             this.hideCallback = ()=>store.dispatch(setMenuType('multiplayer'));
+            socketInst.socket.disconnect();
             this.hide();
         }); 
         this.container.data = 'main cont';
@@ -48,8 +53,8 @@ export default class ArenaGameMenu extends BaseMainGameMenu{
         this.serverInfo = this.scene.add.sprite('arena-status');
         this.serverInfo.x = this.scene.width-this.serverInfo.halfWidth;
         this.serverInfo.y = this.scene.height-this.serverInfo.halfHeight;
-        const {users, queue, version} = store.getState().multiArena;
-        this.serverTextOnline = this.scene.add.text(`online: ${users}`);
+        const {online, queue, version} = store.getState().multiArena;
+        this.serverTextOnline = this.scene.add.text(`online: ${online}`);
         this.serverTextOnline.fontSize = 20;
         
         this.serverTextOnline.x = this.serverInfo.x-this.serverInfo.halfWidth+30;
@@ -80,5 +85,16 @@ export default class ArenaGameMenu extends BaseMainGameMenu{
             this.serverTextVersion
         ]);
         this.hideCallback();
+    }
+
+    update(){
+        super.update();
+        if(!this.isShow||this.isAnimate){
+            return;
+        }
+        const {online, queue, version} = store.getState().multiArena;
+        this.serverTextOnline.text = `online: ${online}`;
+        this.serverTextQueue.text = `queue: ${queue}`;
+        this.serverTextVersion.text = `version: ${version}`;
     }
 }
