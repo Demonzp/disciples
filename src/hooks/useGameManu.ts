@@ -66,7 +66,7 @@ const useGameMenu = ({ game }: TProps) => {
     useEffect(() => {
         if (isLogin) {
             const gameScene = game.scene.getScene<MainGameMenuScene>('MainGameMenuScene');
-            gameScene.multiplayerSigninMenu.hideCallback = () => dispatch(setMenuType('main'));
+            gameScene.multiplayerSigninMenu.hideCallback = () => dispatch(setMenuType('multiplayer'));
             gameScene.multiplayerSigninMenu.hide();
         }
     }, [isLogin]);

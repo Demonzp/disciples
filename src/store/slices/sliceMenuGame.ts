@@ -1,6 +1,6 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { setScene } from './sliceGame';
-import { actionLogouded } from 'store/actions/actionsMultiplayer';
+import { actionLogouded, googleLogin } from 'store/actions/actionsMultiplayer';
 
 type TMenuType ='main'|'multiplayer-signin'|'multiplayer'|'single-player'|'connect-arena'|'arena-menu'|'queue-arena';
 
@@ -30,7 +30,12 @@ const sliceMenuGame = createSlice({
     extraReducers: (builder) => {
         builder.addCase(actionLogouded.fulfilled, (state, { payload }) => {
             //console.log(payload);
-            state.menuType = 'multiplayer-signin';
+            state.menuType = 'main';
+        });
+
+        builder.addCase(googleLogin.fulfilled, (state, { payload }) => {
+            //console.log('actionLogouded.fulfilled');
+            //state.menuType = 'multiplayer';
         });
     }
 });

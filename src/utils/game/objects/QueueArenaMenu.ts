@@ -12,7 +12,8 @@ export default class QueueArenaMenu extends BaseMainGameMenu{
     create(){
         this.container = this.scene.add.container();
         this.fon = this.scene.add.sprite('window-info');
-
+        this.container.x = this.fon.halfWidth;
+        
         this.container.add([this.fon]);
     }
 }

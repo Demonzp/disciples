@@ -36,6 +36,22 @@ export type TLoadedItem = {
   //blob: Blob;
 }
 
+const imgLoadByPath = (path: string)=>{
+  return new Promise<HTMLImageElement>((resolve, reject)=>{
+    const img = new Image();
+
+    img.onload = ()=>{
+      //console.log('render sprite!!!');
+      resolve(img);
+      //URL.revokeObjectURL(img.src);
+      //this.scene.ctx?.drawImage(img, this.x, this.y);
+    }
+    img.onerror = (err)=>reject(err);
+
+    img.src = path;
+  });
+}
+
 const imgLoad = (blob: Blob)=>{
   return new Promise<HTMLImageElement>((resolve, reject)=>{
     const img = new Image();
@@ -135,6 +151,48 @@ export default class Loader{
     this.callback = callback;
     this.preloadImages2();
   }
+
+  loadImgs(callback:()=>void){
+    this.callback = callback;
+    this.preloadImages3();
+  }
+
+  preloadImages3(){
+    const start = this.idx;
+    let end = this.idx+this.maxFiles;
+    if(end>this.loadImages.length){
+      end = this.loadImages.length;
+    }
+    this.idx = end;
+    //console.log('preloadImages2 = ', start,'||',end);
+    for (let i = start; i < end; i++) {
+      const el = this.loadImages[i];
+      //console.log(el.key);
+      this.loadImg(el);
+    }
+  }
+
+  async loadImgsByPath(item:ILoadItem){
+    try{
+      //const res = await fetch(item.path);
+      //const blob = await res.blob();
+      const img = await imgLoadByPath(item.path);
+      //num = (1/100)*(100/(this.loadImages.length/i));
+      this.loadedImages.push({
+        key: item.key, 
+        keyScene: item.keyScene, 
+        file: img,
+        //blob
+      });
+      const num = (1/100)*(100/(this.loadImages.length/this.numLoaded));
+      this.eventProgressCallbacks.forEach(callback=>callback(num));
+      this.isLoadNextImg();
+      //this.eventProgressCallbacks.forEach(callback=>callback(num));
+    }catch(error){
+      console.error('loadError: ', (error as Error).message);
+      this.isLoadNextImg();
+    }
+  }
 //22
   preloadImages2(){
     const start = this.idx;
@@ -151,6 +209,28 @@ export default class Loader{
     }
     //console.log('start = ',start,' end = ', end);
     //console.log(this.loadImages.length);
+  }
+
+  isLoadNextImg(){
+    this.numLoaded++;
+    this.i++;
+    
+    //console.log('isLoadNext = ',this.numLoaded,'||', this.loadImages.length-1);
+    if(this.numLoaded===this.loadImages.length){
+      
+      this.eventProgressCallbacks = [];
+      this.loadImages = [];
+      this.idx = 0;
+      this.numLoaded=0;
+      this.eventComplateCallbacks.forEach(callback=>callback(1));
+      this.callback();
+      return;
+    }
+
+    if(this.i===this.maxFiles&&this.numLoaded<this.loadImages.length){
+      this.i = 0;
+      this.preloadImages3();
+    }
   }
 
   isLoadNext(){

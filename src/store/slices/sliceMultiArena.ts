@@ -58,7 +58,7 @@ const sliceMultiArena = createSlice({
         },
     },
     extraReducers: (builder) => {
-       
+
     }
 });
 
