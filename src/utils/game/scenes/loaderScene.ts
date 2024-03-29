@@ -48,6 +48,7 @@ export default class LoaderScene extends Scene {
     this.load.image('main-menu-button-cristal', './assets/imgs/main-menu-button-cristal.png');
     this.load.image('window-info', './assets/imgs/window-info.png');
     this.load.image('big-bnt', './assets/imgs/big-bnt.png');
+    this.load.image('smol-bnt', './assets/imgs/smol-bnt.png');
     this.load.image('profile', './assets/imgs/profile.png');
     this.load.image('arena-status', './assets/imgs/arena-status.png');
     this.load.image('profile-ico-mask', './assets/imgs/profile-ico-mask.png');

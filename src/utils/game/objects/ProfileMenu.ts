@@ -46,14 +46,14 @@ export default class ProfileMenu{
 
         this.container.add([this.sprite, this.label]);
         const pathIco = store.getState().multiplayer.user.picture;
-        if(this.prevIcoPath!==pathIco){
-            this.prevIcoPath = pathIco;
-            this.icoId = Game.createId();
-            this.scene.load.image(this.icoId, pathIco);
-            this.scene.game.load.loadImgs(this.initUserIco.bind(this));
-        }else{
-            this.initUserIco();
-        }
+        // if(this.prevIcoPath!==pathIco){
+        //     this.prevIcoPath = pathIco;
+        //     this.icoId = Game.createId();
+        //     this.scene.load.image(this.icoId, pathIco);
+        //     this.scene.game.load.loadImgs(this.initUserIco.bind(this));
+        // }else{
+        //     this.initUserIco();
+        // }
         this.show();
     }
 
