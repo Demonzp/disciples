@@ -47,6 +47,13 @@ const useArenaHooks = ({ game }: TProps) => {
             dispatch(setMenuType('queue-arena'));
         });
 
+        socketInst.on('exit-queue', (data:any) => {
+            console.log('exit-queue = ', data);
+
+            //dispatch(setOnlineInfo(data));
+            dispatch(setMenuType('arena-menu'));
+        });
+
         socketInst.on('error', () => {
             console.log('socketInst error');
         });
