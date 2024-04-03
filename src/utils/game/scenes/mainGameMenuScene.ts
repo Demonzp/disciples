@@ -7,6 +7,7 @@ import ArenaGameMenu from "../objects/ArenaGameMenu";
 import MultiplayerSigninMenu from "../objects/MultiplayerSigninMenu";
 import ProfileMenu from "../objects/ProfileMenu";
 import QueueArenaMenu from "../objects/QueueArenaMenu";
+import ArenaManagerMenu from "../objects/ArenaManagerMenu";
 
 export default class MainGameMenuScene extends Scene{
     mainMenu:MainGameMenu;
@@ -15,6 +16,7 @@ export default class MainGameMenuScene extends Scene{
     profileMenu: ProfileMenu;
     arenaMenu:ArenaGameMenu;
     queueArenaMenu:QueueArenaMenu;
+    arenaManagerMenu: ArenaManagerMenu;
     constructor(){
         super('MainGameMenuScene');
     }
@@ -29,6 +31,7 @@ export default class MainGameMenuScene extends Scene{
         this.multiplayerSigninMenu = new MultiplayerSigninMenu(this);
         this.profileMenu = new ProfileMenu(this);
         this.queueArenaMenu = new QueueArenaMenu(this);
+        this.arenaManagerMenu = new ArenaManagerMenu(this);
         //this.profileMenu.create();
         //this.arenaMenu.create();
         store.dispatch(setReadyScene());
@@ -41,5 +44,6 @@ export default class MainGameMenuScene extends Scene{
         this.multiplayerSigninMenu.update();
         this.profileMenu.update();
         this.queueArenaMenu.update();
+        this.arenaManagerMenu.update();
     }
 }

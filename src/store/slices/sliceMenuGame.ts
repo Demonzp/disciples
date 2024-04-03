@@ -2,7 +2,7 @@ import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { setScene } from './sliceGame';
 import { actionLogouded, googleLogin } from 'store/actions/actionsMultiplayer';
 
-type TMenuType ='main'|'multiplayer-signin'|'multiplayer'|'single-player'|'connect-arena'|'arena-menu'|'queue-arena';
+type TMenuType ='main'|'multiplayer-signin'|'multiplayer'|'single-player'|'connect-arena'|'arena-menu'|'queue-arena'|'arena-manager-menu';
 
 type InitState = {
     menuType:TMenuType,
