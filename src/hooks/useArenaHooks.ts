@@ -56,7 +56,7 @@ const useArenaHooks = ({ game }: TProps) => {
 
         socketInst.on('init-game', (data:any) => {
             console.log('init-game = ', data);
-
+            dispatch(setMenuType('arena-manager-menu'));
             //dispatch(setOnlineInfo(data));
             //dispatch(setMenuType('arena-menu'));
         });

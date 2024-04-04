@@ -55,6 +55,10 @@ const useGameMenu = ({ game }: TProps) => {
                 case 'queue-arena':
                     gameScene.queueArenaMenu.create();
                     break;
+                case 'arena-manager-menu':
+                    gameScene.queueArenaMenu.hide();
+                    gameScene.arenaManagerMenu.create();
+                    break;
                 default:
                     break;
             }
