@@ -1,7 +1,7 @@
 import { useEffect } from "react";
 import { useAppDispatch, useAppSelector } from "store/hooks";
 import { setMenuType } from "store/slices/sliceMenuGame";
-import { TOnlineInfo, TServerInfo, setIsConnect, setOnlineInfo, setServerInfo } from "store/slices/sliceMultiArena";
+import { TOnlineInfo, TServerInfo, initState, setIsConnect, setOnlineInfo, setServerInfo } from "store/slices/sliceMultiArena";
 import MainGameMenuScene from "utils/game/scenes/mainGameMenuScene";
 import Game from "utils/gameLib/Game";
 import socketInst from "utils/socket";
@@ -56,6 +56,10 @@ const useArenaHooks = ({ game }: TProps) => {
 
         socketInst.on('init-game', (data:any) => {
             console.log('init-game = ', data);
+            dispatch(initState({
+                playerRace: data.player.race,
+                enemyRace: data.enemy.race
+            }));
             dispatch(setMenuType('arena-manager-menu'));
             //dispatch(setOnlineInfo(data));
             //dispatch(setMenuType('arena-menu'));

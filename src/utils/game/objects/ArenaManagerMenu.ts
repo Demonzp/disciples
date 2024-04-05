@@ -4,11 +4,17 @@ import Sprite from "utils/gameLib/Sprite";
 
 export default class ArenaManagerMenu extends BaseMainGameMenu{
     private mainSprite: Sprite;
+    private spritePlayerRace: Sprite;
+    private spriteEnemyRace: Sprite;
     constructor(scene: Scene){
         super(scene);
     }
 
     create(){
         this.mainSprite = this.scene.add.sprite('arena-squad-menu', this.scene.halfWidth, this.scene.halfHeight);
+    }
+
+    update(){
+        
     }
 }

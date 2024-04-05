@@ -12,6 +12,11 @@ export type TServerInfo = {
     version: string,
 }
 
+export type TInitState = {
+    playerRace: TRace;
+    enemyRace: TRace;
+}
+
 type InitState = {
     online: number,
     queue: number,
@@ -56,6 +61,10 @@ const sliceMultiArena = createSlice({
         setIsConnect(state, action:PayloadAction<boolean>){
             state.isSocketConnect = action.payload;
         },
+        initState(state, action:PayloadAction<TInitState>){
+            state.myRace = action.payload.playerRace;
+            state.enemyRace = action.payload.enemyRace;
+        },
     },
     extraReducers: (builder) => {
 
@@ -65,7 +74,8 @@ const sliceMultiArena = createSlice({
 export const {
     setIsConnect,
     setServerInfo,
-    setOnlineInfo
+    setOnlineInfo,
+    initState,
 } = sliceMultiArena.actions;
 
 export default sliceMultiArena;
