@@ -66,7 +66,6 @@ export default class PartyPortrait {
             this.startPoint.y = this.cont.y - pointer.y;
             store.dispatch(upCityPortret(this.side));
         });
-
     }
 
     destroy(){

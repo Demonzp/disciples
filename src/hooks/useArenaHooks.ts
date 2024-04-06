@@ -65,6 +65,17 @@ const useArenaHooks = ({ game }: TProps) => {
             //dispatch(setMenuType('arena-menu'));
         });
 
+        socketInst.on('reconnect-game', (data:any) => {
+            console.log('reconnect-game = ', data);
+            dispatch(initState({
+                playerRace: data.player.race,
+                enemyRace: data.enemy.race
+            }));
+            dispatch(setMenuType('arena-manager-menu'));
+            //dispatch(setOnlineInfo(data));
+            //dispatch(setMenuType('arena-menu'));
+        });
+
         socketInst.on('error', () => {
             console.log('socketInst error');
         });

@@ -52,8 +52,8 @@ export default class LoaderScene extends Scene {
     this.load.image('profile', './assets/imgs/profile.png');
     this.load.image('arena-status', './assets/imgs/arena-status.png');
     this.load.image('arena-squad-menu', './assets/imgs/arena-squad-menu.png');
-    this.load.image('vs-ico-empire', './vs-ico-empire.jpg');
-    this.load.image('vs-ico-legions', './vs-ico-legions.jpg');
+    this.load.image('vs-ico-empire', './assets/imgs/vs-ico-empire.jpg');
+    this.load.image('vs-ico-legions', './assets/imgs/vs-ico-legions.jpg');
     this.load.image('profile-ico-mask', './assets/imgs/profile-ico-mask.png');
     
     this.load.spritesheet('_FIREFLY_HUMAN', './assets/imgs/_FIREFLY_HUMAN.PNG', { frameWidth: 187, frameHeight: 112, endFrame: 29 });
