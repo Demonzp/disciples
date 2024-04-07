@@ -24,8 +24,15 @@ const useArenaHooks = ({ game }: TProps) => {
         socketInst.on('connect', () => {
             console.log('i`m conected');
             //dispatch(setIsConnect(true));
+            //dispatch(setMenuType('arena-menu'));
+        });
+
+        socketInst.on('init-arena-menu', () => {
+            //console.log('i`m conected');
+            //dispatch(setIsConnect(true));
             dispatch(setMenuType('arena-menu'));
         });
+        
         socketInst.on('server-info', (data:TServerInfo) => {
             console.log('server-info = ', data);
 

@@ -50,6 +50,9 @@ export default class QueueArenaMenu extends BaseMainGameMenu{
     }
 
     hide(){
+        if(!this.isShow){
+            return;
+        }
         this.isShow = false;
         this.scene.add.remove([
             this.fon, 
