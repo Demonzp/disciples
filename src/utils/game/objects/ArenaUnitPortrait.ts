@@ -1,4 +1,4 @@
-import { IUnit } from "store/slices/sliceGame";
+import { IUnit, portretPartyOneData } from "store/slices/sliceGame";
 import { TPoint } from "utils/gameLib/Game";
 import Scene from "utils/gameLib/Scene";
 import Sprite from "utils/gameLib/Sprite";
@@ -16,7 +16,12 @@ export default class ArenaUnitPortrait{
     private startPos:TPoint = {x:0,y:0};
     private sprite: Sprite;
     constructor(private scene:Scene, public unit:IUnit){
-        this.startPos = coordinats[String(unit.position[0]+unit.position[1])];
-        this.sprite = this.scene.add.sprite(unit.icon,this.startPos.x,this.startPos.y);
+        this.startPos = coordinats[`${unit.position[0]}${unit.position[1]}`];
+        if(unit.numCells===2){
+            this.sprite = this.scene.add.sprite(`portret-units-two`,this.startPos.x,this.startPos.y);
+        }else{
+            this.sprite = this.scene.add.sprite(`portret-units-one-${this.unit.fraction}`,this.startPos.x,this.startPos.y);
+        }
+        this.sprite.setFrame(portretPartyOneData[this.unit.icon]);
     }
 }
