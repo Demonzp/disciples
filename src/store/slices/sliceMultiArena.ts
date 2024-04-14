@@ -1,5 +1,5 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { TLordType, TRace } from './sliceGame';
+import { IUnit, TLordType, TRace } from './sliceGame';
 
 export type TOnlineInfo = {
     online: number,
@@ -14,11 +14,13 @@ export type TServerInfo = {
 
 export type TInitState = {
     playerRace: TRace;
+    units: IUnit[];
     enemyRace: TRace;
 }
 
 type InitState = {
     online: number,
+    units: IUnit[],
     queue: number,
     version: string,
     myRace: TRace,
@@ -33,6 +35,7 @@ type InitState = {
 
 const initialState:InitState = {
     online: 0,
+    units:[],
     queue: 0,
     version: '',
     myRace:'clans',
@@ -64,6 +67,7 @@ const sliceMultiArena = createSlice({
         initState(state, action:PayloadAction<TInitState>){
             state.myRace = action.payload.playerRace;
             state.enemyRace = action.payload.enemyRace;
+            state.units = action.payload.units;
         },
     },
     extraReducers: (builder) => {

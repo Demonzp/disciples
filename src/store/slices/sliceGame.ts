@@ -10,8 +10,27 @@ export const portretPartyOneData:{[name: string]: number} = {
     'archer':7,
     'apprentice':8,
     'acolyt':9,
+    'knight':10,
+    'witch-hunter':11,
+    'marksman':12,
+    'mage':13,
+    'priest':14,
+    'cleric':15,
+    'man-at-arms':16,
     'titan':2,
     'gargoyle':0,
+    'marble-gargoyle':5,
+    'duke':0,
+    'counselor':1,
+    'arch-devil':2,
+    'baroness':3,
+    'thief-legions':4,
+    'ashkael':5,
+    'cultist':6,
+    'possessed':7,
+    'witch':8,
+    'sorcerer':9,
+    'berzerker':10
 };
 
 export const baseUnits: IBaseUnit[] = [

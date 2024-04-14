@@ -65,6 +65,7 @@ const useArenaHooks = ({ game }: TProps) => {
             console.log('init-game = ', data);
             dispatch(initState({
                 playerRace: data.player.race,
+                units: data.player.units,
                 enemyRace: data.enemy.race
             }));
             dispatch(setMenuType('arena-manager-menu'));
@@ -76,6 +77,7 @@ const useArenaHooks = ({ game }: TProps) => {
             console.log('reconnect-game = ', data);
             dispatch(initState({
                 playerRace: data.player.race,
+                units: data.player.units,
                 enemyRace: data.enemy.race
             }));
             dispatch(setMenuType('arena-manager-menu'));
