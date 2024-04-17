@@ -3,6 +3,7 @@ import Container from "utils/gameLib/Container";
 import { TPoint } from "utils/gameLib/Game";
 import Scene from "utils/gameLib/Scene";
 import Sprite from "utils/gameLib/Sprite";
+import Text from "utils/gameLib/Text";
 
 const coordinats:{[key:string]:TPoint} = {
     '00':{x:219,y:49},
@@ -17,6 +18,7 @@ export default class ArenaUnitPortrait{
     private startPos:TPoint = {x:0,y:0};
     private sprite: Sprite;
     private container: Container;
+    private hpLabel:Text;
     constructor(private scene:Scene, public unit:IUnit){
         this.create();
     }
@@ -31,6 +33,10 @@ export default class ArenaUnitPortrait{
             this.sprite = this.scene.add.sprite(`portret-units-one-${this.unit.fraction}`);
         }
         this.sprite.setFrame(portretPartyOneData[this.unit.icon]);
-        this.container.add([this.sprite]);
+        this.hpLabel = this.scene.add.text(`${this.unit.defaultHp}/${this.unit.hitPoints}`);
+        this.hpLabel.fontSize = 12;
+        this.hpLabel.y = this.sprite.halfHeight+this.hpLabel.height+3;
+        this.hpLabel.x = -this.hpLabel.halfWidth;
+        this.container.add([this.sprite, this.hpLabel]);
     }
 }

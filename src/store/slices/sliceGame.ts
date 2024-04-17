@@ -48,6 +48,7 @@ export const baseUnits: IBaseUnit[] = [
         icon: 'myzrael',
         numCells: 1,
         hitPoints: 1200,
+        defaultHp: 1200,
         damageName: 'Holy Wrath',
         chancesHit: 80,
         damage: 250,
@@ -71,6 +72,7 @@ export const baseUnits: IBaseUnit[] = [
         icon: 'archmage',
         numCells: 1,
         hitPoints: 65,
+        defaultHp: 65,
         damageName: 'Lightning',
         chancesHit: 70,
         damage: 16,
@@ -94,6 +96,7 @@ export const baseUnits: IBaseUnit[] = [
         icon: 'pegasus',
         numCells: 1,
         hitPoints: 150,
+        defaultHp: 150,
         damageName: 'Long Sword',
         chancesHit: 80,
         damage: 23,
@@ -117,6 +120,7 @@ export const baseUnits: IBaseUnit[] = [
         icon: 'squire',
         numCells: 1,
         hitPoints: 110,
+        defaultHp: 110,
         damageName: 'Sword',
         chancesHit: 80,
         damage: 25,
@@ -140,6 +144,7 @@ export const baseUnits: IBaseUnit[] = [
         icon: 'archer',
         numCells: 1,
         hitPoints: 50,
+        defaultHp: 50,
         damageName: 'Arrow',
         chancesHit: 70,
         damage: 25,
@@ -163,6 +168,7 @@ export const baseUnits: IBaseUnit[] = [
         icon: 'apprentice',
         numCells: 1,
         hitPoints: 50,
+        defaultHp: 50,
         damageName: 'Lightning',
         chancesHit: 70,
         damage: 15,
@@ -186,6 +192,7 @@ export const baseUnits: IBaseUnit[] = [
         icon: 'acolyt',
         numCells: 1,
         hitPoints: 50,
+        defaultHp: 50,
         damageName: 'Healing',
         chancesHit: 100,
         damage: 0,
@@ -209,6 +216,7 @@ export const baseUnits: IBaseUnit[] = [
         icon: 'titan',
         numCells: 2,
         hitPoints: 250,
+        defaultHp: 250,
         damageName: 'Smash',
         chancesHit: 80,
         damage: 55,
@@ -232,6 +240,7 @@ export const baseUnits: IBaseUnit[] = [
         icon: 'gargoyle',
         numCells: 2,
         hitPoints: 90,
+        defaultHp: 90,
         damageName: 'Rock Shards',
         chancesHit: 80,
         damage: 40,
@@ -308,6 +317,7 @@ export interface IBaseUnit {
     icon: string;
     numCells: number;
     hitPoints: number;
+    defaultHp: number;
     chancesHit: number;
     damageName: string;
     damage: number;
