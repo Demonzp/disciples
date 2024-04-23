@@ -31,6 +31,7 @@ type InitState = {
     enemyLordName: string,
     isInited: boolean,
     isSocketConnect: boolean,
+    isUpUnit: boolean,
 }
 
 const initialState:InitState = {
@@ -46,6 +47,7 @@ const initialState:InitState = {
     enemyLordName: '',
     isInited: false,
     isSocketConnect: false,
+    isUpUnit: false,
 };
 
 const sliceMultiArena = createSlice({
