@@ -6,23 +6,15 @@ import { TPointer } from "utils/gameLib/InputEvent";
 import Scene from "utils/gameLib/Scene";
 import Sprite from "utils/gameLib/Sprite";
 import Text from "utils/gameLib/Text";
-
-const coordinats:{[key:string]:TPoint} = {
-    '00':{x:219,y:49},
-    '01':{x:301,y:49},
-    '10':{x:219,y:154},
-    '11':{x:301,y:154},
-    '20':{x:219,y:260},
-    '21':{x:301,y:260},
-};
+import { coordinats } from "./ArenaParty";
 
 export default class ArenaUnitPortrait{
     private startPos:TPoint = {x:0,y:0};
     private sprite: Sprite;
-    private container: Container;
+    public container: Container;
     private hpLabel:Text;
     private hpFon:Graphics;
-    private isUp = false;
+    public isUp = false;
     constructor(private scene:Scene, public unit:IUnit){
         this.create();
     }
@@ -50,7 +42,7 @@ export default class ArenaUnitPortrait{
         this.container.add([this.sprite, this.hpFon, this.hpLabel]);
         this.container.on('pointerdown', ()=>{
             this.isUp = true;
-            console.log('click on = ', this.unit.defaultName);
+            //console.log('click on = ', this.unit.defaultName);
         });
     }
 
@@ -59,5 +51,13 @@ export default class ArenaUnitPortrait{
             this.container.x = pointer.x;
             this.container.y = pointer.y;
         }
+    }
+
+    drop(pointer:TPointer){
+        if(!this.isUp){
+            return;
+        }
+        this.isUp = false;
+
     }
 }
