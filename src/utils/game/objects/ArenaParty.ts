@@ -5,6 +5,8 @@ import ArenaUnitPortrait from "./ArenaUnitPortrait";
 import Container from "utils/gameLib/Container";
 import { TPoint } from "utils/gameLib/Game";
 import { TPointer } from "utils/gameLib/InputEvent";
+import { setIsUpUnit } from "store/slices/sliceMultiArena";
+import { unitToUnit } from "store/actions/actionArena";
 
 export const coordinats:{[key:string]:TPoint} = {
     '00':{x:219,y:49},
@@ -71,12 +73,34 @@ export default class ArenaParty{
     pointerUp(pointer:TPointer){
         console.log('pointerUp-----');
         for (let i = 0; i < this.portraits.length; i++) {
-            if(this.portraits[i].isUp){
+            const portrait = this.portraits[i];
+            if(portrait.isUp){
+                store.dispatch(setIsUpUnit(false));
+
                 const cell = this.cells.find(c=>c.isOnPointer(pointer));
                 if(cell){
                     console.log('drop on', cell.data);
+                    return;
                 }
-                break;
+                const onPortrair = this.portraits.find(p=>{
+                    if((p.unit.position[0]!==portrait.unit.position[0]||
+                        p.unit.position[1]!==portrait.unit.position[1])&&
+                        p.container.isOnPointer(pointer)
+                    ){
+                        return true;
+                    }
+                    return false;
+                });
+                if(onPortrair){
+                    console.log('drop on portrait = ', onPortrair.unit.defaultName);
+                    store.dispatch(unitToUnit({
+                        unit1:portrait.unit.position,
+                        unit2:onPortrair.unit.position
+                    }))
+                    return;
+                }
+                portrait.drop();
+                portrait.toStartPos();
             }
             
         }

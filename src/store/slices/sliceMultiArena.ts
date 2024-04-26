@@ -71,6 +71,9 @@ const sliceMultiArena = createSlice({
             state.enemyRace = action.payload.enemyRace;
             state.units = action.payload.units;
         },
+        setIsUpUnit(state, action:PayloadAction<boolean>){
+            state.isUpUnit = action.payload;
+        }
     },
     extraReducers: (builder) => {
 
@@ -82,6 +85,7 @@ export const {
     setServerInfo,
     setOnlineInfo,
     initState,
+    setIsUpUnit,
 } = sliceMultiArena.actions;
 
 export default sliceMultiArena;

@@ -7,10 +7,12 @@ import Scene from "utils/gameLib/Scene";
 import Sprite from "utils/gameLib/Sprite";
 import Text from "utils/gameLib/Text";
 import { coordinats } from "./ArenaParty";
+import store from "store/store";
+import { setIsUpUnit } from "store/slices/sliceMultiArena";
 
 export default class ArenaUnitPortrait{
     private startPos:TPoint = {x:0,y:0};
-    private sprite: Sprite;
+    public sprite: Sprite;
     public container: Container;
     private hpLabel:Text;
     private hpFon:Graphics;
@@ -25,6 +27,7 @@ export default class ArenaUnitPortrait{
         
         if(this.unit.numCells===2){
             this.container.x -= 40;
+            this.startPos.x = this.container.x;
             this.sprite = this.scene.add.sprite(`portret-units-two`);
         }else{
             this.sprite = this.scene.add.sprite(`portret-units-one-${this.unit.fraction}`);
@@ -41,7 +44,13 @@ export default class ArenaUnitPortrait{
         this.hpLabel.x = -this.hpLabel.halfWidth;
         this.container.add([this.sprite, this.hpFon, this.hpLabel]);
         this.container.on('pointerdown', ()=>{
+            const isUnitUp = store.getState().multiArena.isUpUnit;
+            if(isUnitUp){
+                return;
+            }
+            this.container.setZindex(1001);
             this.isUp = true;
+            store.dispatch(setIsUpUnit(true));
             //console.log('click on = ', this.unit.defaultName);
         });
     }
@@ -53,11 +62,13 @@ export default class ArenaUnitPortrait{
         }
     }
 
-    drop(pointer:TPointer){
-        if(!this.isUp){
-            return;
-        }
-        this.isUp = false;
+    toStartPos(){
+        this.container.x = this.startPos.x;
+        this.container.y = this.startPos.y;
+    }
 
+    drop(){
+        this.isUp = false;
+        this.container.setZindex(1);
     }
 }
