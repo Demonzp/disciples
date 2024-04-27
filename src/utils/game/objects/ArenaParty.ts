@@ -76,7 +76,7 @@ export default class ArenaParty{
             const portrait = this.portraits[i];
             if(portrait.isUp){
                 store.dispatch(setIsUpUnit(false));
-
+                portrait.drop();
                 const cell = this.cells.find(c=>c.isOnPointer(pointer));
                 if(cell){
                     console.log('drop on', cell.data);
@@ -99,7 +99,7 @@ export default class ArenaParty{
                     }))
                     return;
                 }
-                portrait.drop();
+                //portrait.drop();
                 portrait.toStartPos();
             }
             

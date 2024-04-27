@@ -12,6 +12,7 @@ type TProps = {
 
 const useArenaHooks = ({ game }: TProps) => {
     const { user } = useAppSelector(state => state.multiplayer);
+    const { units } = useAppSelector(state=>state.multiArena);
     const dispatch = useAppDispatch();
 
     useEffect(() => {
@@ -81,6 +82,13 @@ const useArenaHooks = ({ game }: TProps) => {
                 enemyRace: data.enemy.race
             }));
             dispatch(setMenuType('arena-manager-menu'));
+            //dispatch(setOnlineInfo(data));
+            //dispatch(setMenuType('arena-menu'));
+        });
+
+        socketInst.on('unit-to-unit', (data:any) => {
+            console.log('unit-to-unit = ', data);
+
             //dispatch(setOnlineInfo(data));
             //dispatch(setMenuType('arena-menu'));
         });
