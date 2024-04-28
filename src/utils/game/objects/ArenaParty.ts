@@ -8,13 +8,16 @@ import { TPointer } from "utils/gameLib/InputEvent";
 import { setIsUpUnit } from "store/slices/sliceMultiArena";
 import { unitToUnit } from "store/actions/actionArena";
 
-export const coordinats:{[key:string]:TPoint} = {
-    '00':{x:219,y:49},
-    '01':{x:301,y:49},
-    '10':{x:219,y:154},
-    '11':{x:301,y:154},
-    '20':{x:219,y:260},
-    '21':{x:301,y:260},
+export const coordinats = (key:string):TPoint=> {
+    const obj:{[key:string]:TPoint} = {
+        '00':{x:219,y:49},
+        '01':{x:301,y:49},
+        '10':{x:219,y:154},
+        '11':{x:301,y:154},
+        '20':{x:219,y:260},
+        '21':{x:301,y:260},
+    }
+    return {...obj[key]}
 };
 
 export default class ArenaParty{
@@ -22,19 +25,14 @@ export default class ArenaParty{
     private portraits: ArenaUnitPortrait[] = [];
     private cells:Container[] = [];
     constructor(private scene: Scene){
-        this.create();
+        //this.create();
+        this.scene.input.on('pointermove', this.pointerMove, this);
+        this.scene.input.on('pointerup', this.pointerUp, this);
     }
 
     create(){
         this.units = store.getState().multiArena.units;
         console.log('num units = ', this.units.length);
-        // for (let i = 0; i < this.units.length; i++) {
-            
-        //     const u = this.units[i];
-        //     console.log(`add unit ${u.defaultName}`);
-        //     const portrait = new ArenaUnitPortrait(this.scene, u);
-        //     this.portraits.push(portrait);
-        // }
         this.units.forEach(u=>{
             console.log(`add unit ${u.defaultName}`);
             const portrait = new ArenaUnitPortrait(this.scene, u);
@@ -44,8 +42,15 @@ export default class ArenaParty{
         for (let i = 0; i < 3; i++) {
             for (let j = 0; j < 2; j++) {
                 
-                if(!this.units.find(u=>u.position[0]===i&&u.position[1]===j)){
-                    const pos = coordinats[`${i}${j}`];
+                if(!this.units.find(u=>{
+                    if(u.numCells!==2&&u.position[0]===i&&u.position[1]===j){
+                        return true;
+                    }else if(u.position[0]===i){
+                        return true;
+                    }
+                    return false;
+                })){
+                    const pos = coordinats(`${i}${j}`);
                     //console.log('pos = ', pos);
                     const cont = this.scene.add.container(pos.x, pos.y);
                     cont.data = [i,j];
@@ -59,8 +64,15 @@ export default class ArenaParty{
                   
             }
         }
-        this.scene.input.on('pointermove', this.pointerMove, this);
-        this.scene.input.on('pointerup', this.pointerUp, this);
+        
+    }
+
+    updateUnits(){
+        this.portraits.forEach(p=>p.destroy());
+        this.portraits = [];
+        this.scene.add.remove(this.cells);
+        this.cells = [];
+        this.create();
     }
 
     pointerMove(pointer:TPointer){
@@ -72,19 +84,20 @@ export default class ArenaParty{
 
     pointerUp(pointer:TPointer){
         console.log('pointerUp-----');
+        const cell = this.cells.find(c=>c.isOnPointer(pointer));
         for (let i = 0; i < this.portraits.length; i++) {
             const portrait = this.portraits[i];
             if(portrait.isUp){
                 store.dispatch(setIsUpUnit(false));
                 portrait.drop();
-                const cell = this.cells.find(c=>c.isOnPointer(pointer));
+                
                 if(cell){
                     console.log('drop on', cell.data);
+                    portrait.toStartPos();
                     return;
                 }
                 const onPortrair = this.portraits.find(p=>{
-                    if((p.unit.position[0]!==portrait.unit.position[0]||
-                        p.unit.position[1]!==portrait.unit.position[1])&&
+                    if(p.unit.uid!==portrait.unit.uid&&
                         p.container.isOnPointer(pointer)
                     ){
                         return true;
@@ -96,13 +109,18 @@ export default class ArenaParty{
                     store.dispatch(unitToUnit({
                         unit1:portrait.unit.position,
                         unit2:onPortrair.unit.position
-                    }))
+                    }));
                     return;
                 }
                 //portrait.drop();
                 portrait.toStartPos();
+                return;
             }
-            
+            if(cell){
+                console.log('select hero');
+            }
         }
+
+
     }
 }

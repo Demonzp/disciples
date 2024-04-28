@@ -331,13 +331,15 @@ export interface IBaseUnit {
     armor: number;
 }
 
+export type TPosition = [number,number];
+
 export interface IUnit extends IBaseUnit {
     uid: string;
     name: string;
     partyId: string|null;
     cityId: string|null;
     capitalId: string|null;
-    position: [number,number];
+    position: TPosition;
     isLeader: boolean;
     race: TCapitalRace;
     battlesWon: number;

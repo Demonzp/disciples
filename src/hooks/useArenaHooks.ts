@@ -1,5 +1,7 @@
 import { useEffect } from "react";
+import { unitToUnitRes } from "store/actions/actionArena";
 import { useAppDispatch, useAppSelector } from "store/hooks";
+import { IUnit } from "store/slices/sliceGame";
 import { setMenuType } from "store/slices/sliceMenuGame";
 import { TOnlineInfo, TServerInfo, initState, setIsConnect, setOnlineInfo, setServerInfo } from "store/slices/sliceMultiArena";
 import MainGameMenuScene from "utils/game/scenes/mainGameMenuScene";
@@ -12,12 +14,21 @@ type TProps = {
 
 const useArenaHooks = ({ game }: TProps) => {
     const { user } = useAppSelector(state => state.multiplayer);
-    const { units } = useAppSelector(state=>state.multiArena);
+    const { isInited, units } = useAppSelector(state=>state.multiArena);
+    //const {menuType} = useAppSelector(state=>state.gameMenu);
     const dispatch = useAppDispatch();
 
     useEffect(() => {
-
-    }, []);
+        if(!isInited){
+            return;
+        }
+        //if(menuType==='arena-manager-menu'){
+            const gameScene = game.scene.getScene<MainGameMenuScene>('MainGameMenuScene');
+            if(gameScene){
+                gameScene.arenaManagerMenu.party.updateUnits();
+            }
+        //}
+    }, [units, isInited]);
 
     const connectArenaSocket = () => {
         const gameScene = game.scene.getScene<MainGameMenuScene>('MainGameMenuScene');
@@ -86,11 +97,9 @@ const useArenaHooks = ({ game }: TProps) => {
             //dispatch(setMenuType('arena-menu'));
         });
 
-        socketInst.on('unit-to-unit', (data:any) => {
+        socketInst.on('unit-to-unit', (data:IUnit[]) => {
             console.log('unit-to-unit = ', data);
-
-            //dispatch(setOnlineInfo(data));
-            //dispatch(setMenuType('arena-menu'));
+            dispatch(unitToUnitRes(data));
         });
 
         socketInst.on('error', () => {

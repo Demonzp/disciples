@@ -78,13 +78,13 @@ export default class Manager {
   addInteractiveObj(obj: GameObject) {
     const interObj = this.interactiveObjects.find(o => o.uid === obj.uid);
     if (!interObj) {
-      console.log('addInteractiveObj');
+      //console.log('addInteractiveObj');
       this.interactiveObjects.push(obj);
     }
   }
 
   delInteractiveObj(obj: GameObject) {
-    console.log('delInteractiveObj = ', obj.name);
+    //console.log('delInteractiveObj = ', obj.name);
     this.interactiveObjects = this.interactiveObjects.filter(o => o.uid !== obj.uid);
   }
 

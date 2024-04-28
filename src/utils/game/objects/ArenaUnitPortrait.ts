@@ -22,7 +22,7 @@ export default class ArenaUnitPortrait{
     }
 
     create(){
-        this.startPos = coordinats[`${this.unit.position[0]}${this.unit.position[1]}`];
+        this.startPos = coordinats(`${this.unit.position[0]}${this.unit.position[1]}`);
         this.container = this.scene.add.container(this.startPos.x,this.startPos.y);
         
         if(this.unit.numCells===2){
@@ -53,6 +53,17 @@ export default class ArenaUnitPortrait{
             store.dispatch(setIsUpUnit(true));
             //console.log('click on = ', this.unit.defaultName);
         });
+    }
+
+    destroy(){
+        this.scene.add.remove(
+            [
+                this.sprite,
+                this.container,
+                this.hpFon,
+                this.hpLabel
+            ]
+        );
     }
 
     move(pointer:TPointer){
