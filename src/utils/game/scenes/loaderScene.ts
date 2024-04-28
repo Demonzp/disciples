@@ -50,6 +50,7 @@ export default class LoaderScene extends Scene {
     this.load.image('big-bnt', './assets/imgs/big-bnt.png');
     this.load.image('small-bnt', './assets/imgs/small-bnt.png');
     this.load.image('profile', './assets/imgs/profile.png');
+    this.load.image('parchment-vertical', './assets/imgs/parchment-vertical.png');
     this.load.image('arena-status', './assets/imgs/arena-status.png');
     this.load.image('arena-squad-menu', './assets/imgs/arena-squad-menu.png');
     this.load.image('vs-ico-empire', './assets/imgs/vs-ico-empire.jpg');
@@ -59,6 +60,7 @@ export default class LoaderScene extends Scene {
     this.load.spritesheet('_FIREFLY_HUMAN', './assets/imgs/_FIREFLY_HUMAN.PNG', { frameWidth: 187, frameHeight: 112, endFrame: 29 });
     this.load.spritesheet('portret-units-one-legions', './assets/imgs/portret-units-one-legions.jpg', { frameWidth: 70, frameHeight: 85, endFrame: 11 });
     this.load.spritesheet('portret-units-one-empire', './assets/imgs/portret-units-one-empire.jpg', { frameWidth: 70, frameHeight: 85, endFrame: 17 });
+    this.load.spritesheet('seal-btns', './assets/imgs/seal-btns.png', { frameWidth: 46, frameHeight: 89, endFrame: 4 });
     //this.load.spritesheet('portret-units-one-empire', './assets/imgs/portret-units-one-empire.png', { frameWidth: 70, frameHeight: 85, endFrame: 10 });
     
     this.load.spritesheet('portret-units-two', './assets/imgs/portret-units-two.jpg', { frameWidth: 150, frameHeight: 85, endFrame: 6 });

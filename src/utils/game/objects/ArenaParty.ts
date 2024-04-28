@@ -5,7 +5,7 @@ import ArenaUnitPortrait from "./ArenaUnitPortrait";
 import Container from "utils/gameLib/Container";
 import { TPoint } from "utils/gameLib/Game";
 import { TPointer } from "utils/gameLib/InputEvent";
-import { setIsUpUnit } from "store/slices/sliceMultiArena";
+import { setIsShowHireHero, setIsUpUnit } from "store/slices/sliceMultiArena";
 import { unitToUnit } from "store/actions/actionArena";
 
 export const coordinats = (key:string):TPoint=> {
@@ -83,6 +83,9 @@ export default class ArenaParty{
     }
 
     pointerUp(pointer:TPointer){
+        if(store.getState().multiArena.isShowHireHero){
+            return;
+        }
         console.log('pointerUp-----');
         const cell = this.cells.find(c=>c.isOnPointer(pointer));
         for (let i = 0; i < this.portraits.length; i++) {
@@ -117,7 +120,8 @@ export default class ArenaParty{
                 return;
             }
             if(cell){
-                console.log('select hero');
+                store.dispatch(setIsShowHireHero(true));
+                //console.log('select hero');
             }
         }
 

@@ -5,6 +5,7 @@ import store from "store/store";
 import ArenaParty from "./ArenaParty";
 import { setInitScene } from "store/slices/sliceMultiArena";
 import Text from "utils/gameLib/Text";
+import ArenaHireHero from "./ArenaHireHero";
 
 export default class ArenaManagerMenu extends BaseMainGameMenu{
     private mainSprite: Sprite;
@@ -12,6 +13,7 @@ export default class ArenaManagerMenu extends BaseMainGameMenu{
     private spriteEnemyRace: Sprite;
     private textDefault: Text;
     public party: ArenaParty;
+    public hireHeroMenu: ArenaHireHero;
     constructor(scene: Scene){
         super(scene);
     }
@@ -30,6 +32,8 @@ export default class ArenaManagerMenu extends BaseMainGameMenu{
         this.textDefault = this.scene.add.text('Click on free cell to hire a hero!', 14, 200, 110);
         this.textDefault.fontSize = 16;
         this.party = new ArenaParty(this.scene);
+        this.hireHeroMenu = new ArenaHireHero(this.scene);
+        //this.hireHeroMenu.show();
         store.dispatch(setInitScene(true));
     }
 

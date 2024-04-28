@@ -44,6 +44,9 @@ export default class ArenaUnitPortrait{
         this.hpLabel.x = -this.hpLabel.halfWidth;
         this.container.add([this.sprite, this.hpFon, this.hpLabel]);
         this.container.on('pointerdown', ()=>{
+            if(store.getState().multiArena.isShowHireHero){
+                return;
+            }
             const isUnitUp = store.getState().multiArena.isUpUnit;
             if(isUnitUp){
                 return;
