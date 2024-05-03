@@ -16,12 +16,14 @@ export type TServerInfo = {
 export type TInitState = {
     playerRace: TRace;
     units: IUnit[];
+    heroes: IUnit[];
     enemyRace: TRace;
 }
 
 type InitState = {
     online: number,
     units: IUnit[],
+    heroes: IUnit[];
     queue: number,
     version: string,
     myRace: TRace,
@@ -39,6 +41,7 @@ type InitState = {
 const initialState: InitState = {
     online: 0,
     units: [],
+    heroes: [],
     queue: 0,
     version: '',
     myRace: 'clans',

@@ -91,6 +91,7 @@ const useArenaHooks = ({ game }: TProps) => {
             dispatch(initState({
                 playerRace: data.player.race,
                 units: data.player.units,
+                heroes: data.player.heroes,
                 enemyRace: data.enemy.race
             }));
             dispatch(setMenuType('arena-manager-menu'));
@@ -103,6 +104,7 @@ const useArenaHooks = ({ game }: TProps) => {
             dispatch(initState({
                 playerRace: data.player.race,
                 units: data.player.units,
+                heroes: data.player.heroes,
                 enemyRace: data.enemy.race
             }));
             dispatch(setMenuType('arena-manager-menu'));
