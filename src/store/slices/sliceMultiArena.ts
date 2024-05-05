@@ -1,6 +1,6 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { IUnit, TLordType, TRace } from './sliceGame';
-import { unitToUnitRes } from 'store/actions/actionArena';
+import { updateUnitsRes } from 'store/actions/actionArena';
 
 export type TOnlineInfo = {
     online: number,
@@ -77,6 +77,7 @@ const sliceMultiArena = createSlice({
         },
         initState(state, action: PayloadAction<TInitState>) {
             state.myRace = action.payload.playerRace;
+            state.heroes = action.payload.heroes;
             state.enemyRace = action.payload.enemyRace;
             state.units = action.payload.units;
         },
@@ -88,11 +89,11 @@ const sliceMultiArena = createSlice({
         },
     },
     extraReducers: (builder) => {
-        builder.addCase(unitToUnitRes.pending, (state) => {
+        builder.addCase(updateUnitsRes.pending, (state) => {
 
         });
 
-        builder.addCase(unitToUnitRes.fulfilled, (state, { payload }) => {
+        builder.addCase(updateUnitsRes.fulfilled, (state, { payload }) => {
             //const newUnits:IUnit[] = [...state.units];
             for (let i = 0; i < state.units.length; i++) {
                 const unit = state.units[i];
@@ -103,7 +104,7 @@ const sliceMultiArena = createSlice({
             }
         });
 
-        builder.addCase(unitToUnitRes.rejected, (state, { payload }) => {
+        builder.addCase(updateUnitsRes.rejected, (state, { payload }) => {
 
         });
     }

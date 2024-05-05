@@ -1,5 +1,5 @@
 import { useEffect } from "react";
-import { unitToUnitRes } from "store/actions/actionArena";
+import { updateUnitsRes } from "store/actions/actionArena";
 import { useAppDispatch, useAppSelector } from "store/hooks";
 import { IUnit } from "store/slices/sliceGame";
 import { setMenuType } from "store/slices/sliceMenuGame";
@@ -114,7 +114,12 @@ const useArenaHooks = ({ game }: TProps) => {
 
         socketInst.on('unit-to-unit', (data:IUnit[]) => {
             console.log('unit-to-unit = ', data);
-            dispatch(unitToUnitRes(data));
+            dispatch(updateUnitsRes(data));
+        });
+
+        socketInst.on('pick-hero', (data:IUnit[]) => {
+            console.log('pick-hero', data);
+            dispatch(updateUnitsRes(data));
         });
 
         socketInst.on('error', () => {

@@ -21,8 +21,8 @@ export const unitToUnit = createAsyncThunk<undefined, TUnitToUnitData, { state: 
   }
 );
 
-export const unitToUnitRes = createAsyncThunk<IUnit[], IUnit[], { state: AppState, rejectWithValue: any }>(
-  'multiArena/unitToUnitRes',
+export const updateUnitsRes = createAsyncThunk<IUnit[], IUnit[], { state: AppState, rejectWithValue: any }>(
+  'multiArena/updateUnitsRes',
   async (data, { rejectWithValue }) => {
     try {
       return data;

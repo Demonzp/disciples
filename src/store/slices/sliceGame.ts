@@ -5,6 +5,7 @@ import { TPointMatrix } from 'utils/game/scenes/editorScene';
 export const portretPartyOneData:{[name: string]: number} = {
     'pegasus':0,
     'archmage':1,
+    'ranger':3,
     'myzrael':2,
     'squire':6,
     'archer':7,
@@ -343,6 +344,8 @@ export interface IUnit extends IBaseUnit {
     isLeader: boolean;
     race: TCapitalRace;
     battlesWon: number;
+    isLevelUp: boolean;
+    levelsUp: number;
 }
 
 export type TSelectObj = {

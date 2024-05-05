@@ -8,110 +8,113 @@ import { TPointer } from "utils/gameLib/InputEvent";
 import { setIsShowHireHero, setIsUpUnit } from "store/slices/sliceMultiArena";
 import { unitToUnit } from "store/actions/actionArena";
 
-export const coordinats = (key:string):TPoint=> {
-    const obj:{[key:string]:TPoint} = {
-        '00':{x:219,y:49},
-        '01':{x:301,y:49},
-        '10':{x:219,y:154},
-        '11':{x:301,y:154},
-        '20':{x:219,y:260},
-        '21':{x:301,y:260},
+export const coordinats = (key: string): TPoint => {
+    const obj: { [key: string]: TPoint } = {
+        '00': { x: 219, y: 49 },
+        '01': { x: 301, y: 49 },
+        '10': { x: 219, y: 154 },
+        '11': { x: 301, y: 154 },
+        '20': { x: 219, y: 260 },
+        '21': { x: 301, y: 260 },
     }
-    return {...obj[key]}
+    return { ...obj[key] }
 };
 
-export default class ArenaParty{
+export default class ArenaParty {
     private units: IUnit[] = [];
     private portraits: ArenaUnitPortrait[] = [];
-    private cells:Container[] = [];
-    constructor(private scene: Scene){
+    private cells: Container[] = [];
+    constructor(private scene: Scene) {
         //this.create();
         this.scene.input.on('pointermove', this.pointerMove, this);
         this.scene.input.on('pointerup', this.pointerUp, this);
     }
 
-    create(){
+    create() {
         this.units = store.getState().multiArena.units;
         console.log('num units = ', this.units.length);
-        this.units.forEach(u=>{
-            console.log(`add unit ${u.defaultName}`);
+        this.units.forEach(u => {
+            console.log(`add unit ${u.defaultName}|${u.position[0]}:${u.position[1]}`);
             const portrait = new ArenaUnitPortrait(this.scene, u);
 
             this.portraits.push(portrait);
         });
         for (let i = 0; i < 3; i++) {
             for (let j = 0; j < 2; j++) {
-                
-                if(!this.units.find(u=>{
-                    if(u.numCells!==2&&u.position[0]===i&&u.position[1]===j){
+
+                if (!this.units.find(u => {
+                    if (u.numCells !== 2 && (u.position[0] === i && u.position[1] === j)) {
+                        //console.log(`find = ${u.defaultName}|${i}:${j}`);
                         return true;
-                    }else if(u.position[0]===i){
+                    }
+                    if (u.numCells === 2 && u.position[0] === i) {
+                        //console.log(`find = ${u.defaultName}|${i}:${j}`);
                         return true;
                     }
                     return false;
-                })){
+                })) {
                     const pos = coordinats(`${i}${j}`);
                     //console.log('pos = ', pos);
                     const cont = this.scene.add.container(pos.x, pos.y);
-                    cont.data = [i,j];
-                    cont.setInteractiveRect(70,85);
+                    cont.data = [i, j];
+                    cont.setInteractiveRect(70, 85);
                     this.cells.push(cont);
-                    
+
                     // cont.on('pointerup',()=>{
                     //     console.log('drop on = ', cont.data);
                     // });
                 }
-                  
+
             }
         }
-        
+
     }
 
-    updateUnits(){
-        this.portraits.forEach(p=>p.destroy());
+    updateUnits() {
+        this.portraits.forEach(p => p.destroy());
         this.portraits = [];
         this.scene.add.remove(this.cells);
         this.cells = [];
         this.create();
     }
 
-    pointerMove(pointer:TPointer){
+    pointerMove(pointer: TPointer) {
         for (let i = 0; i < this.portraits.length; i++) {
             this.portraits[i].move(pointer);
-            
+
         }
     }
 
-    pointerUp(pointer:TPointer){
-        if(store.getState().multiArena.isShowHireHero){
+    pointerUp(pointer: TPointer) {
+        if (store.getState().multiArena.isShowHireHero) {
             return;
         }
         console.log('pointerUp-----');
-        const cell = this.cells.find(c=>c.isOnPointer(pointer));
+        const cell = this.cells.find(c => c.isOnPointer(pointer));
         for (let i = 0; i < this.portraits.length; i++) {
             const portrait = this.portraits[i];
-            if(portrait.isUp){
+            if (portrait.isUp) {
                 store.dispatch(setIsUpUnit(false));
                 portrait.drop();
-                
-                if(cell){
+
+                if (cell) {
                     console.log('drop on', cell.data);
                     portrait.toStartPos();
                     return;
                 }
-                const onPortrair = this.portraits.find(p=>{
-                    if(p.unit.uid!==portrait.unit.uid&&
+                const onPortrair = this.portraits.find(p => {
+                    if (p.unit.uid !== portrait.unit.uid &&
                         p.container.isOnPointer(pointer)
-                    ){
+                    ) {
                         return true;
                     }
                     return false;
                 });
-                if(onPortrair){
+                if (onPortrair) {
                     console.log('drop on portrait = ', onPortrair.unit.defaultName);
                     store.dispatch(unitToUnit({
-                        unit1:portrait.unit.position,
-                        unit2:onPortrair.unit.position
+                        unit1: portrait.unit.position,
+                        unit2: onPortrair.unit.position
                     }));
                     return;
                 }
@@ -119,7 +122,8 @@ export default class ArenaParty{
                 portrait.toStartPos();
                 return;
             }
-            if(cell){
+            if (cell) {
+                console.log('show select hero');
                 store.dispatch(setIsShowHireHero(true));
                 //console.log('select hero');
             }
