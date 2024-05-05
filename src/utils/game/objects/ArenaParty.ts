@@ -124,7 +124,7 @@ export default class ArenaParty {
             }
             if (cell) {
                 console.log('show select hero');
-                store.dispatch(setIsShowHireHero(true));
+                store.dispatch(setIsShowHireHero(cell.data));
                 //console.log('select hero');
             }
         }

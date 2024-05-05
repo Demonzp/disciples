@@ -1,6 +1,6 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { IUnit, TLordType, TRace } from './sliceGame';
-import { updateUnitsRes } from 'store/actions/actionArena';
+import { IUnit, TLordType, TPosition, TRace } from './sliceGame';
+import { pickHero, updateUnitsRes } from 'store/actions/actionArena';
 
 export type TOnlineInfo = {
     online: number,
@@ -36,6 +36,7 @@ type InitState = {
     isInited: boolean,
     isSocketConnect: boolean,
     isUpUnit: boolean,
+    selectCell: TPosition,
 }
 
 const initialState: InitState = {
@@ -54,13 +55,14 @@ const initialState: InitState = {
     isShowHireHero: false,
     isSocketConnect: false,
     isUpUnit: false,
+    selectCell: [0, 0],
 };
 
 const sliceMultiArena = createSlice({
     name: 'sliceMultiArena',
     initialState,
     reducers: {
-        setInitScene(state, action:PayloadAction<boolean>){
+        setInitScene(state, action: PayloadAction<boolean>) {
             state.isInited = action.payload;
         },
         setServerInfo(state, action: PayloadAction<TServerInfo>) {
@@ -84,24 +86,35 @@ const sliceMultiArena = createSlice({
         setIsUpUnit(state, action: PayloadAction<boolean>) {
             state.isUpUnit = action.payload;
         },
-        setIsShowHireHero(state, action:PayloadAction<boolean>){
-            state.isShowHireHero = action.payload;
+        setIsShowHireHero(state, action: PayloadAction<TPosition|undefined>) {
+            if (action.payload) {
+                state.isShowHireHero = true;
+                state.selectCell = action.payload;
+            } else {
+                state.isShowHireHero = false;
+            }
+
         },
     },
     extraReducers: (builder) => {
+        builder.addCase(pickHero.pending, (state) => {
+            state.isShowHireHero = false;
+        });
+
         builder.addCase(updateUnitsRes.pending, (state) => {
 
         });
 
         builder.addCase(updateUnitsRes.fulfilled, (state, { payload }) => {
             //const newUnits:IUnit[] = [...state.units];
-            for (let i = 0; i < state.units.length; i++) {
-                const unit = state.units[i];
-                const newUnit = payload.find(u => u.uid===unit.uid);
-                if (newUnit) {
-                    state.units[i] = newUnit;
-                }
-            }
+            state.units = payload;
+            // for (let i = 0; i < state.units.length; i++) {
+            //     const unit = state.units[i];
+            //     const newUnit = payload.find(u => u.uid === unit.uid);
+            //     if (newUnit) {
+            //         state.units[i] = newUnit;
+            //     }
+            // }
         });
 
         builder.addCase(updateUnitsRes.rejected, (state, { payload }) => {

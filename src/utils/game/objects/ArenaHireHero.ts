@@ -6,6 +6,7 @@ import store from "store/store";
 import { setIsShowHireHero } from "store/slices/sliceMultiArena";
 import ArenaHeroHireIco from "./ArenaHeroHireIco";
 import { IUnit } from "store/slices/sliceGame";
+import { pickHero } from "store/actions/actionArena";
 
 const heroIds = [];
 
@@ -70,12 +71,16 @@ export default class ArenaHireHero{
         if(!this.selectedHero){
             return;
         }
-        
         console.log('selected on = ', this.selectedHero.defaultName);
+
+        store.dispatch(pickHero({
+            idUnit: this.selectedHero.id,
+            position: store.getState().multiArena.selectCell
+        }));
     }
 
     onBtnCancel(){
-        store.dispatch(setIsShowHireHero(false));
+        store.dispatch(setIsShowHireHero());
     }
 
     hide(){

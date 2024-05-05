@@ -33,3 +33,21 @@ export const updateUnitsRes = createAsyncThunk<IUnit[], IUnit[], { state: AppSta
     }
   }
 );
+
+export type TPickHero = {
+  idUnit: string;
+  position: TPosition;
+}
+
+export const pickHero = createAsyncThunk<undefined, TPickHero, { state: AppState, rejectWithValue: any }>(
+  'multiArena/pickHero',
+  async (data, { rejectWithValue }) => {
+    try {
+
+      socketInst.emit('pick-hero', data);
+    } catch (error) {
+      console.error('error = ', (error as Error).message);
+      return rejectWithValue({ message: (error as Error).message, field: 'nameTable' });
+    }
+  }
+);
