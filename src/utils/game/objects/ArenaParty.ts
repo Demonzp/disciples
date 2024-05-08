@@ -6,7 +6,7 @@ import Container from "utils/gameLib/Container";
 import { TPoint } from "utils/gameLib/Game";
 import { TPointer } from "utils/gameLib/InputEvent";
 import { setIsShowHireHero, setIsUpUnit } from "store/slices/sliceMultiArena";
-import { unitToUnit } from "store/actions/actionArena";
+import { unitToCell, unitToUnit } from "store/actions/actionArena";
 
 export const coordinats = (key: string): TPoint => {
     const obj: { [key: string]: TPoint } = {
@@ -94,12 +94,17 @@ export default class ArenaParty {
         for (let i = 0; i < this.portraits.length; i++) {
             const portrait = this.portraits[i];
             if (portrait.isUp) {
+                //console.log('portrait isUp = ', portrait.unit.defaultName);
                 store.dispatch(setIsUpUnit(false));
                 portrait.drop();
 
                 if (cell) {
                     console.log('drop on', cell.data);
-                    portrait.toStartPos();
+                    store.dispatch(unitToCell({
+                        unitPos: portrait.unit.position,
+                        cellPos: cell.data
+                    }));
+                    //portrait.toStartPos();
                     return;
                 }
                 const onPortrair = this.portraits.find(p => {
@@ -111,7 +116,7 @@ export default class ArenaParty {
                     return false;
                 });
                 if (onPortrair) {
-                    console.log('drop on portrait = ', onPortrair.unit.defaultName);
+                    //console.log('drop on portrait = ', onPortrair.unit.defaultName);
                     store.dispatch(unitToUnit({
                         unit1: portrait.unit.position,
                         unit2: onPortrair.unit.position
@@ -122,13 +127,12 @@ export default class ArenaParty {
                 portrait.toStartPos();
                 return;
             }
-            if (cell) {
-                console.log('show select hero');
-                store.dispatch(setIsShowHireHero(cell.data));
-                //console.log('select hero');
-            }
+            
         }
-
-
+        if (cell) {
+            //console.log('show select hero');
+            store.dispatch(setIsShowHireHero(cell.data));
+            //console.log('select hero');
+        }
     }
 }

@@ -122,6 +122,11 @@ const useArenaHooks = ({ game }: TProps) => {
             dispatch(updateUnitsRes(data));
         });
 
+        socketInst.on('unit-to-cell', (data:IUnit[]) => {
+            console.log('unit-to-cell', data);
+            dispatch(updateUnitsRes(data));
+        });
+
         socketInst.on('error', () => {
             console.log('socketInst error');
         });

@@ -51,3 +51,21 @@ export const pickHero = createAsyncThunk<undefined, TPickHero, { state: AppState
     }
   }
 );
+
+type TUnitToCellData = {
+  unitPos:TPosition;
+  cellPos:TPosition;
+};
+
+export const unitToCell = createAsyncThunk<undefined, TUnitToCellData, { state: AppState, rejectWithValue: any }>(
+  'multiArena/unitToCell',
+  async (data, { rejectWithValue }) => {
+    try {
+
+      socketInst.emit('unit-to-cell', data);
+    } catch (error) {
+      console.error('error = ', (error as Error).message);
+      return rejectWithValue({ message: (error as Error).message, field: 'nameTable' });
+    }
+  }
+);
