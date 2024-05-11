@@ -9,6 +9,7 @@ import Text from "utils/gameLib/Text";
 import { coordinats } from "./ArenaParty";
 import store from "store/store";
 import { setIsUpUnit } from "store/slices/sliceMultiArena";
+import IcoLvlUpHero from "./IcoLvlUpHero";
 
 export default class ArenaUnitPortrait{
     private startPos:TPoint = {x:0,y:0};
@@ -17,6 +18,7 @@ export default class ArenaUnitPortrait{
     private hpLabel:Text;
     private hpFon:Graphics;
     public isUp = false;
+    private icoLvlUpHero = new IcoLvlUpHero(this.scene);
     constructor(private scene:Scene, public unit:IUnit){
         this.create();
     }
@@ -42,7 +44,12 @@ export default class ArenaUnitPortrait{
         this.hpLabel.fontSize = 12;
         this.hpLabel.y = this.sprite.halfHeight+this.hpLabel.height+3;
         this.hpLabel.x = -this.hpLabel.halfWidth;
+        
         this.container.add([this.sprite, this.hpFon, this.hpLabel]);
+        if(this.unit.isHero&&this.unit.levelsUp>0){
+            this.icoLvlUpHero.create();
+            this.container.add(this.icoLvlUpHero.sprite);
+        }
         this.container.on('pointerdown', ()=>{
             if(store.getState().multiArena.isShowHireHero){
                 return;
