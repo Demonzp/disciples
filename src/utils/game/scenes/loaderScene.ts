@@ -51,6 +51,7 @@ export default class LoaderScene extends Scene {
     this.load.image('small-bnt', './assets/imgs/small-bnt.png');
     this.load.image('profile', './assets/imgs/profile.png');
     this.load.image('parchment-vertical', './assets/imgs/parchment-vertical.png');
+    this.load.image('parchment-hero-up', './assets/imgs/parchment-hero-up.png');
     this.load.image('arena-status', './assets/imgs/arena-status.png');
     this.load.image('arena-squad-menu', './assets/imgs/arena-squad-menu.png');
     this.load.image('vs-ico-empire', './assets/imgs/vs-ico-empire.jpg');

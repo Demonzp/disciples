@@ -74,6 +74,7 @@ export default class ArenaUnitPortrait{
                 this.hpLabel
             ]
         );
+        this.icoLvlUpHero.destroy();
     }
 
     move(pointer:TPointer){

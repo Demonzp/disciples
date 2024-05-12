@@ -33,6 +33,7 @@ type InitState = {
     myLordName: string,
     enemyLordName: string,
     isShowHireHero: boolean,
+    isShowHeroUp: boolean,
     isInited: boolean,
     isSocketConnect: boolean,
     isUpUnit: boolean,
@@ -53,6 +54,7 @@ const initialState: InitState = {
     enemyLordName: '',
     isInited: false,
     isShowHireHero: false,
+    isShowHeroUp: false,
     isSocketConnect: false,
     isUpUnit: false,
     selectCell: [0, 0],
@@ -95,6 +97,10 @@ const sliceMultiArena = createSlice({
             }
 
         },
+
+        setIsMenuUpHero(state, action: PayloadAction<boolean>){
+            state.isShowHeroUp = action.payload;
+        },
     },
     extraReducers: (builder) => {
         builder.addCase(pickHero.pending, (state) => {
@@ -131,6 +137,7 @@ export const {
     setIsUpUnit,
     setInitScene,
     setIsShowHireHero,
+    setIsMenuUpHero,
 } = sliceMultiArena.actions;
 
 export default sliceMultiArena;
