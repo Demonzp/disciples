@@ -60,6 +60,7 @@ export default class LoaderScene extends Scene {
     this.load.image('border1-one', './assets/imgs/border1-one.png');
     this.load.image('ico-lvl-up', './assets/imgs/ico-lvl-up.png');
     
+    this.load.spritesheet('units-big-portrait', './assets/imgs/units-big-portrait.png', { frameWidth: 130, frameHeight: 142, endFrame: 12 });
     this.load.spritesheet('_FIREFLY_HUMAN', './assets/imgs/_FIREFLY_HUMAN.PNG', { frameWidth: 187, frameHeight: 112, endFrame: 29 });
     this.load.spritesheet('portret-units-one-legions', './assets/imgs/portret-units-one-legions.jpg', { frameWidth: 70, frameHeight: 85, endFrame: 11 });
     this.load.spritesheet('portret-units-one-empire', './assets/imgs/portret-units-one-empire.jpg', { frameWidth: 70, frameHeight: 85, endFrame: 17 });

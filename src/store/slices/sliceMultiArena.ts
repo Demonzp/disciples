@@ -37,6 +37,7 @@ type InitState = {
     isInited: boolean,
     isSocketConnect: boolean,
     isUpUnit: boolean,
+    isHasHero: boolean,
     selectCell: TPosition,
 }
 
@@ -57,6 +58,7 @@ const initialState: InitState = {
     isShowHeroUp: false,
     isSocketConnect: false,
     isUpUnit: false,
+    isHasHero: false,
     selectCell: [0, 0],
 };
 
@@ -84,6 +86,11 @@ const sliceMultiArena = createSlice({
             state.heroes = action.payload.heroes;
             state.enemyRace = action.payload.enemyRace;
             state.units = action.payload.units;
+            if(action.payload.units.find(u=>u.isHero)){
+                state.isHasHero = true;
+            }else{
+                state.isHasHero = false;
+            }
         },
         setIsUpUnit(state, action: PayloadAction<boolean>) {
             state.isUpUnit = action.payload;
@@ -112,15 +119,12 @@ const sliceMultiArena = createSlice({
         });
 
         builder.addCase(updateUnitsRes.fulfilled, (state, { payload }) => {
-            //const newUnits:IUnit[] = [...state.units];
             state.units = payload;
-            // for (let i = 0; i < state.units.length; i++) {
-            //     const unit = state.units[i];
-            //     const newUnit = payload.find(u => u.uid === unit.uid);
-            //     if (newUnit) {
-            //         state.units[i] = newUnit;
-            //     }
-            // }
+            if(payload.find(u=>u.isHero)){
+                state.isHasHero = true;
+            }else{
+                state.isHasHero = false;
+            }
         });
 
         builder.addCase(updateUnitsRes.rejected, (state, { payload }) => {

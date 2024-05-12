@@ -7,6 +7,7 @@ import { setInitScene } from "store/slices/sliceMultiArena";
 import Text from "utils/gameLib/Text";
 import ArenaHireHero from "./ArenaHireHero";
 import MenuHeroUp from "./MenuHeroUp";
+import ArenaHeroProfile from "./ArenaHeroProfile";
 
 export default class ArenaManagerMenu extends BaseMainGameMenu{
     private mainSprite: Sprite;
@@ -16,6 +17,7 @@ export default class ArenaManagerMenu extends BaseMainGameMenu{
     public party: ArenaParty;
     public hireHeroMenu: ArenaHireHero;
     public menuUpHero: MenuHeroUp;
+    public arenaHeroProfile: ArenaHeroProfile;
     constructor(scene: Scene){
         super(scene);
     }
@@ -31,8 +33,9 @@ export default class ArenaManagerMenu extends BaseMainGameMenu{
         this.spriteEnemyRace = this.scene.add.sprite(`vs-ico-${enemyRace}`);
         this.spriteEnemyRace.x = this.scene.width - this.spriteEnemyRace.halfWidth;
         this.spriteEnemyRace.y = this.scene.height-this.spriteEnemyRace.halfHeight;
-        this.textDefault = this.scene.add.text('Click on free cell to hire a hero!', 14, 200, 110);
-        this.textDefault.fontSize = 16;
+        //this.textDefault = this.scene.add.text('Click on free cell to hire a hero!', 14, 200, 110);
+        //this.textDefault.fontSize = 16;
+        this.arenaHeroProfile = new ArenaHeroProfile(this.scene);
         this.party = new ArenaParty(this.scene);
         this.hireHeroMenu = new ArenaHireHero(this.scene);
         this.menuUpHero = new MenuHeroUp(this.scene);

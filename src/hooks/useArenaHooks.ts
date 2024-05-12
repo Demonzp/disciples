@@ -14,7 +14,7 @@ type TProps = {
 
 const useArenaHooks = ({ game }: TProps) => {
     const { user } = useAppSelector(state => state.multiplayer);
-    const { isInited, units, isShowHireHero, isShowHeroUp } = useAppSelector(state=>state.multiArena);
+    const { isInited, units, isShowHireHero, isShowHeroUp, isHasHero } = useAppSelector(state=>state.multiArena);
     //const {menuType} = useAppSelector(state=>state.gameMenu);
     const dispatch = useAppDispatch();
 
@@ -55,6 +55,16 @@ const useArenaHooks = ({ game }: TProps) => {
         }
 
     }, [isInited, isShowHeroUp]);
+
+
+    useEffect(()=>{
+        if(!isInited){
+            return;
+        }
+        const gameScene = game.scene.getScene<MainGameMenuScene>('MainGameMenuScene');
+        gameScene.arenaManagerMenu.arenaHeroProfile.create();
+
+    }, [isInited, isHasHero]);
 
     const connectArenaSocket = () => {
         const gameScene = game.scene.getScene<MainGameMenuScene>('MainGameMenuScene');
