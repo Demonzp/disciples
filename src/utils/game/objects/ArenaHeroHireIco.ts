@@ -32,13 +32,13 @@ export default class ArenaHeroHireIco{
         this.labelLvl = this.scene.add.text('Level:', 0, -20);
         this.labelLvl.fontSize = 12;
 
-        this.labelLvlValue = this.scene.add.text('3', 80, -20);
+        this.labelLvlValue = this.scene.add.text(String(this.unitHero.level), 80, -20);
         this.labelLvlValue.fontSize = 12;
 
         this.labelLeadership = this.scene.add.text('Leadership:', 0, -5);
         this.labelLeadership.fontSize = 12;
 
-        this.labelLeadershipValue = this.scene.add.text('4', 80, -5);
+        this.labelLeadershipValue = this.scene.add.text(String(this.unitHero.leadership), 80, -5);
         this.labelLeadershipValue.fontSize = 12;
 
         this.border = this.scene.add.sprite('border1-one', -89, 0);

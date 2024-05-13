@@ -115,7 +115,8 @@ const useArenaHooks = ({ game }: TProps) => {
                 playerRace: data.player.race,
                 units: data.player.units,
                 heroes: data.player.heroes,
-                enemyRace: data.enemy.race
+                enemyRace: data.enemy.race,
+                heroSkills: data.player.heroSkills
             }));
             dispatch(setMenuType('arena-manager-menu'));
             //dispatch(setOnlineInfo(data));
@@ -128,7 +129,8 @@ const useArenaHooks = ({ game }: TProps) => {
                 playerRace: data.player.race,
                 units: data.player.units,
                 heroes: data.player.heroes,
-                enemyRace: data.enemy.race
+                enemyRace: data.enemy.race,
+                heroSkills: data.player.heroSkills
             }));
             dispatch(setMenuType('arena-manager-menu'));
             //dispatch(setOnlineInfo(data));

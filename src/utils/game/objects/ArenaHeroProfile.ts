@@ -7,6 +7,9 @@ import Text from "utils/gameLib/Text";
 export default class ArenaHeroProfile{
     private icoHero: Sprite;
     private textDefault: Text;
+    private labelName: Text;
+    private labelLevel: Text;
+    private labelLeadership: Text;
     constructor(private scene:Scene){
 
     }
@@ -32,6 +35,15 @@ export default class ArenaHeroProfile{
             this.icoHero.x = this.icoHero.halfWidth;
             this.icoHero.y = 86;
             this.icoHero.setFrame(portretBigData[hero.icon]);
+            
+            this.labelName = this.scene.add.text(`${hero.defaultName}`, 15, 184);
+            this.labelName.fontSize = 13;
+
+            this.labelLevel = this.scene.add.text(`level: ${hero.level}`, 15, this.labelName.y+this.labelName.halfHeight);
+            this.labelLevel.fontSize = 12;
+
+            this.labelLeadership = this.scene.add.text(`leadership: ${units.reduce((prev,u)=>{return prev+u.numCells},-1)}/${hero.leadership}`, 15, this.labelLevel.y+this.labelName.halfHeight);
+            this.labelLeadership.fontSize = 12;
         }
     }
 }

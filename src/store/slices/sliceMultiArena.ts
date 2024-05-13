@@ -2,6 +2,17 @@ import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { IUnit, TLordType, TPosition, TRace } from './sliceGame';
 import { pickHero, updateUnitsRes } from 'store/actions/actionArena';
 
+export type TModifier = 'heroSkills'|'Artifacts';
+
+export type THeroSkills = {
+    id: string,
+    type: TModifier,
+    level: number,
+    name: string,
+    discription: string,
+    value: any,
+}
+
 export type TOnlineInfo = {
     online: number,
     queue: number,
@@ -18,6 +29,7 @@ export type TInitState = {
     units: IUnit[];
     heroes: IUnit[];
     enemyRace: TRace;
+    heroSkills: THeroSkills;
 }
 
 type InitState = {
