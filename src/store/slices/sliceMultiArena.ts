@@ -4,7 +4,7 @@ import { pickHero, updateUnitsRes } from 'store/actions/actionArena';
 
 export type TModifier = 'heroSkills'|'Artifacts';
 
-export type THeroSkills = {
+export type THeroSkill = {
     id: string,
     type: TModifier,
     level: number,
@@ -29,7 +29,7 @@ export type TInitState = {
     units: IUnit[];
     heroes: IUnit[];
     enemyRace: TRace;
-    heroSkills: THeroSkills;
+    heroSkills: THeroSkill[];
 }
 
 type InitState = {
@@ -51,6 +51,7 @@ type InitState = {
     isUpUnit: boolean,
     isHasHero: boolean,
     selectCell: TPosition,
+    heroSkills: THeroSkill[],
 }
 
 const initialState: InitState = {
@@ -72,6 +73,7 @@ const initialState: InitState = {
     isUpUnit: false,
     isHasHero: false,
     selectCell: [0, 0],
+    heroSkills: [],
 };
 
 const sliceMultiArena = createSlice({
@@ -98,6 +100,7 @@ const sliceMultiArena = createSlice({
             state.heroes = action.payload.heroes;
             state.enemyRace = action.payload.enemyRace;
             state.units = action.payload.units;
+            state.heroSkills = action.payload.heroSkills;
             if(action.payload.units.find(u=>u.isHero)){
                 state.isHasHero = true;
             }else{
