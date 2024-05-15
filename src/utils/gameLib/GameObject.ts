@@ -195,7 +195,7 @@ export default class GameObject{
     };
   }
 
-  protected _on(event: TGameObjectEvents, handler: (pointer: TPointer)=>void, context?:any):string{
+  protected _on(event: TGameObjectEvents, handler: (pointer: TPointer, gameObject:GameObject)=>void, context?:any):string{
     const id = Game.createId();
     switch (event) {
       case 'pointerdown':

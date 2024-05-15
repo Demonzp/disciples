@@ -1,6 +1,8 @@
+import { THeroSkill } from "store/slices/sliceMultiArena";
 import store from "store/store";
 import Container from "utils/gameLib/Container";
 import Graphics from "utils/gameLib/Graphics";
+import { TPointer } from "utils/gameLib/InputEvent";
 import Scene from "utils/gameLib/Scene";
 import Sprite from "utils/gameLib/Sprite";
 import Text from "utils/gameLib/Text";
@@ -9,9 +11,10 @@ export default class MenuHeroUp{
     private container: Container;
     private fon: Sprite;
     private isShowed = false;
-    private skillsObj: {label:Text,fon:Graphics}[] = [];
+    private skillsObj: {label:Text, fon:Graphics, cont:Container, skill:THeroSkill}[] = [];
     private idx = 0;
     private defaultIdx = 5;
+    private textDiscription: Text;
     constructor(private scene:Scene){
 
     }
@@ -20,8 +23,14 @@ export default class MenuHeroUp{
         this.idx = this.defaultIdx;
         this.container = this.scene.add.container(this.scene.halfWidth,this.scene.halfHeight);
         this.fon = this.scene.add.sprite('parchment-hero-up');
+        this.textDiscription = this.scene.add.text('');
+        this.textDiscription.x = -165;
+        this.textDiscription.y = 96;
+        this.textDiscription.fontSize = 14;
+        this.textDiscription.maxWidth = 350;
         this.container.add([
-            this.fon
+            this.fon,
+            this.textDiscription,
         ]);
 
         this.renderSkills();
@@ -50,13 +59,26 @@ export default class MenuHeroUp{
                 skillLabel.x = 358;
                 graphics.fillRect(skillLabel.x,skillLabel.y-skillLabel.height,155,skillLabel.height+3);
                 graphics.alpha = 0;
+                const cont = this.scene.add.container(skillLabel.x+155/2, skillLabel.y-(skillLabel.height+3)/2);
+                cont.setInteractiveRect(155,skillLabel.height+3);
+                cont.data = skill.id;
+                cont.on('pointerup', ()=>this.clickOnSkill(cont));
                 this.skillsObj.push({
                     label: skillLabel,
                     fon: graphics,
+                    cont,
+                    skill,
                 });
                 y+=stepY;
             }
         }
+    }
+
+    clickOnSkill(cont:Container){
+        this.skillsObj.forEach(obj=>obj.fon.alpha=0);
+        const skillObj = this.skillsObj.find(obj=>obj.cont.data===cont.data);
+        skillObj.fon.alpha = 1;
+        this.textDiscription.text = skillObj.skill.discription;
     }
 
     destroy(){

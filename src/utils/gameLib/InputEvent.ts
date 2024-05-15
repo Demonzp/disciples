@@ -1,4 +1,5 @@
 import Game from './Game';
+import GameObject from './GameObject';
 import Scene from './Scene';
 import ScenesManager from './ScenesManager';
 

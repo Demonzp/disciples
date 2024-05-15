@@ -301,6 +301,7 @@ export default class Text extends GameObject {
 
     set maxWidth(val: number) {
         this._maxWidth = val;
+        this._calcBox();
     }
 
     set color(val: string) {
