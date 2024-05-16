@@ -2,10 +2,10 @@ import { THeroSkill } from "store/slices/sliceMultiArena";
 import store from "store/store";
 import Container from "utils/gameLib/Container";
 import Graphics from "utils/gameLib/Graphics";
-import { TPointer } from "utils/gameLib/InputEvent";
 import Scene from "utils/gameLib/Scene";
 import Sprite from "utils/gameLib/Sprite";
 import Text from "utils/gameLib/Text";
+import BtnSeal from "./BtnSeal";
 
 export default class MenuHeroUp{
     private container: Container;
@@ -15,6 +15,7 @@ export default class MenuHeroUp{
     private idx = 0;
     private defaultIdx = 5;
     private textDiscription: Text;
+    private btnOk: BtnSeal;
     constructor(private scene:Scene){
 
     }
@@ -28,11 +29,18 @@ export default class MenuHeroUp{
         this.textDiscription.y = 96;
         this.textDiscription.fontSize = 14;
         this.textDiscription.maxWidth = 350;
+
+        this.btnOk = new BtnSeal(this.scene,'ok',()=>{});
+        this.btnOk.create();
+        this.btnOk.sprite.x = 150;
+        this.btnOk.sprite.y = 174;
+
         this.container.add([
             this.fon,
             this.textDiscription,
+            this.btnOk.sprite
         ]);
-
+        
         this.renderSkills();
         this.isShowed = true;
     }
