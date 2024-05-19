@@ -86,8 +86,8 @@ export default class ArenaParty {
     }
 
     pointerUp(pointer: TPointer) {
-        const {isShowHeroUp, isShowHireHero} = store.getState().multiArena;
-        if (isShowHireHero||isShowHeroUp) {
+        const {isShowHeroUp, isShowHireHero, isLoad} = store.getState().multiArena;
+        if (isShowHireHero||isShowHeroUp||isLoad) {
             return;
         }
         console.log('pointerUp-----');

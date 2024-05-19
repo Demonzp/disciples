@@ -1,6 +1,6 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { IUnit, TLordType, TPosition, TRace } from './sliceGame';
-import { pickHero, updateUnitsRes } from 'store/actions/actionArena';
+import { actionHeroUpSkill, pickHero, updateUnitsRes } from 'store/actions/actionArena';
 
 export type TModifier = 'heroSkills'|'Artifacts';
 
@@ -50,6 +50,7 @@ type InitState = {
     isSocketConnect: boolean,
     isUpUnit: boolean,
     isHasHero: boolean,
+    isLoad: boolean,
     selectCell: TPosition,
     heroSkills: THeroSkill[],
 }
@@ -70,6 +71,7 @@ const initialState: InitState = {
     isShowHireHero: false,
     isShowHeroUp: false,
     isSocketConnect: false,
+    isLoad: false,
     isUpUnit: false,
     isHasHero: false,
     selectCell: [0, 0],
@@ -123,8 +125,19 @@ const sliceMultiArena = createSlice({
         setIsMenuUpHero(state, action: PayloadAction<boolean>){
             state.isShowHeroUp = action.payload;
         },
+
+        heroUpSkill(state, action: PayloadAction<IUnit[]>){
+            state.isLoad = false;
+            state.isShowHeroUp = true;
+            state.units = action.payload;
+        }
     },
     extraReducers: (builder) => {
+        builder.addCase(actionHeroUpSkill.pending, (state) => {
+            state.isShowHeroUp = false;
+            state.isLoad = true;
+        });
+
         builder.addCase(pickHero.pending, (state) => {
             state.isShowHireHero = false;
         });
@@ -157,6 +170,7 @@ export const {
     setInitScene,
     setIsShowHireHero,
     setIsMenuUpHero,
+    heroUpSkill,
 } = sliceMultiArena.actions;
 
 export default sliceMultiArena;

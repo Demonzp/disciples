@@ -69,3 +69,16 @@ export const unitToCell = createAsyncThunk<undefined, TUnitToCellData, { state: 
     }
   }
 );
+
+export const actionHeroUpSkill = createAsyncThunk<undefined, string, { state: AppState, rejectWithValue: any }>(
+  'multiArena/actionHeroUpSkill',
+  async (data, { rejectWithValue }) => {
+    try {
+
+      socketInst.emit('hero-up-skill', data);
+    } catch (error) {
+      console.error('error = ', (error as Error).message);
+      return rejectWithValue({ message: (error as Error).message, field: 'nameTable' });
+    }
+  }
+);

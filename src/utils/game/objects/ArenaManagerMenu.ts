@@ -4,7 +4,6 @@ import Sprite from "utils/gameLib/Sprite";
 import store from "store/store";
 import ArenaParty from "./ArenaParty";
 import { setInitScene } from "store/slices/sliceMultiArena";
-import Text from "utils/gameLib/Text";
 import ArenaHireHero from "./ArenaHireHero";
 import MenuHeroUp from "./MenuHeroUp";
 import ArenaHeroProfile from "./ArenaHeroProfile";
@@ -39,7 +38,7 @@ export default class ArenaManagerMenu extends BaseMainGameMenu{
         this.party = new ArenaParty(this.scene);
         this.hireHeroMenu = new ArenaHireHero(this.scene);
         this.menuUpHero = new MenuHeroUp(this.scene);
-        this.menuWait.create();
+        //this.menuWait.create();
         //this.hireHeroMenu.show();
         store.dispatch(setInitScene(true));
     }

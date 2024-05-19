@@ -3,7 +3,7 @@ import { updateUnitsRes } from "store/actions/actionArena";
 import { useAppDispatch, useAppSelector } from "store/hooks";
 import { IUnit } from "store/slices/sliceGame";
 import { setMenuType } from "store/slices/sliceMenuGame";
-import { TOnlineInfo, TServerInfo, initState, setIsConnect, setOnlineInfo, setServerInfo } from "store/slices/sliceMultiArena";
+import { TOnlineInfo, TServerInfo, heroUpSkill, initState, setIsConnect, setOnlineInfo, setServerInfo } from "store/slices/sliceMultiArena";
 import MainGameMenuScene from "utils/game/scenes/mainGameMenuScene";
 import Game from "utils/gameLib/Game";
 import socketInst from "utils/socket";
@@ -14,7 +14,7 @@ type TProps = {
 
 const useArenaHooks = ({ game }: TProps) => {
     const { user } = useAppSelector(state => state.multiplayer);
-    const { isInited, units, isShowHireHero, isShowHeroUp, isHasHero } = useAppSelector(state=>state.multiArena);
+    const { isInited, units, isShowHireHero, isShowHeroUp, isHasHero, isLoad } = useAppSelector(state=>state.multiArena);
     //const {menuType} = useAppSelector(state=>state.gameMenu);
     const dispatch = useAppDispatch();
 
@@ -65,6 +65,19 @@ const useArenaHooks = ({ game }: TProps) => {
         gameScene.arenaManagerMenu.arenaHeroProfile.create();
 
     }, [isInited, isHasHero]);
+
+    useEffect(()=>{
+        if(!isInited){
+            return;
+        }
+        const gameScene = game.scene.getScene<MainGameMenuScene>('MainGameMenuScene');
+        if(isLoad){
+            gameScene.arenaManagerMenu.menuWait.create();
+        }else{
+            gameScene.arenaManagerMenu.menuWait.destroy();
+        }
+
+    }, [isInited, isLoad]);
 
     const connectArenaSocket = () => {
         const gameScene = game.scene.getScene<MainGameMenuScene>('MainGameMenuScene');
@@ -150,6 +163,12 @@ const useArenaHooks = ({ game }: TProps) => {
         socketInst.on('unit-to-cell', (data:IUnit[]) => {
             console.log('unit-to-cell', data);
             dispatch(updateUnitsRes(data));
+        });
+
+        socketInst.on('hero-up-skill', (data:IUnit[]) => {
+            console.log('hero-up-skill', data);
+            dispatch(heroUpSkill(data));
+            //dispatch(updateUnitsRes(data));
         });
 
         socketInst.on('error', () => {

@@ -8,6 +8,7 @@ import Text from "utils/gameLib/Text";
 import BtnSeal from "./BtnSeal";
 import BtnSealArrow from "./BtnSealArrow";
 import { IUnit, portretPartyOneData } from "store/slices/sliceGame";
+import { actionHeroUpSkill } from "store/actions/actionArena";
 
 type TSkillObj = {
     label: Text,
@@ -66,7 +67,7 @@ export default class MenuHeroUp {
         this.textHeader2.y = -120;
         this.textHeader2.fontSize = 16;
 
-        this.btnOk = new BtnSeal(this.scene, 'ok', () => { });
+        this.btnOk = new BtnSeal(this.scene, 'ok', this.onOk.bind(this));
         this.btnOk.create();
         this.btnOk.sprite.x = 150;
         this.btnOk.sprite.y = 174;
@@ -186,6 +187,12 @@ export default class MenuHeroUp {
         this.textDiscription.text = this.heroSkills[this.selectIdx].discription;
     }
 
+    onOk(){
+
+        //this.destroy();
+        store.dispatch(actionHeroUpSkill(this.heroSkills[this.selectIdx].id));
+    }
+
     destroySkillsList(){
         this.skillsObj.forEach(skill=>{
             this.scene.add.remove([
@@ -203,8 +210,17 @@ export default class MenuHeroUp {
         }
         this.scene.add.remove([
             this.container,
-            this.fon
+            this.fon,
+            this.textDiscription,
+            this.borderPortrait,
+            this.portrait,
+            this.textHeader1,
+            this.textHeader2,
         ]);
+        this.destroySkillsList();
+        this.btnDown.destroy();
+        this.btnUp.destroy();
+        this.btnOk.destroy();
         this.isShowed = false;
     }
 }

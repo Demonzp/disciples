@@ -5,6 +5,7 @@ import Sprite from "utils/gameLib/Sprite";
 export default class MenuWait{
     private fon: Graphics;
     private sprite: Sprite;
+    private isShow = false;
     constructor(private scene:Scene){
 
     }
@@ -17,9 +18,13 @@ export default class MenuWait{
         this.sprite = this.scene.add.sprite('cursor-wait',this.scene.halfWidth, this.scene.halfHeight);
         this.sprite.frameRate = 10;
         this.sprite.play();
+        this.isShow = true;
     }
 
     destroy(){
+        if(!this.isShow){
+            return;
+        }
         this.scene.add.remove([
             this.fon,
             this.sprite

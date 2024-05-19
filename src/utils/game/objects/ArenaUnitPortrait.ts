@@ -51,8 +51,8 @@ export default class ArenaUnitPortrait{
             this.container.add(this.icoLvlUpHero.sprite);
         }
         this.container.on('pointerdown', ()=>{
-            const {isShowHeroUp, isShowHireHero} = store.getState().multiArena;
-            if (isShowHireHero||isShowHeroUp) {
+            const {isShowHeroUp, isShowHireHero, isLoad} = store.getState().multiArena;
+            if (isShowHireHero||isShowHeroUp||isLoad) {
                 return;
             }
             
