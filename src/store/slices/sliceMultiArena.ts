@@ -52,6 +52,8 @@ type InitState = {
     isHasHero: boolean,
     isLoad: boolean,
     selectCell: TPosition,
+    infoUnitId: string,
+    isInfoUnitOpen: boolean,
     heroSkills: THeroSkill[],
 }
 
@@ -74,7 +76,9 @@ const initialState: InitState = {
     isLoad: false,
     isUpUnit: false,
     isHasHero: false,
+    isInfoUnitOpen: false,
     selectCell: [0, 0],
+    infoUnitId: '',
     heroSkills: [],
 };
 
@@ -128,8 +132,21 @@ const sliceMultiArena = createSlice({
 
         heroUpSkill(state, action: PayloadAction<IUnit[]>){
             state.isLoad = false;
-            state.isShowHeroUp = true;
+            const hero = action.payload.find(u=>u.isHero);
+            if(hero.levelsUp>0){
+                state.isShowHeroUp = true;
+            }
             state.units = action.payload;
+        },
+        
+        openInfoUnit(state, action: PayloadAction<string>){
+            state.infoUnitId = action.payload;
+            state.isInfoUnitOpen = true;
+        },
+
+        closeInfoUnit(state){
+            //state.infoUnitId = action.payload;
+            state.isInfoUnitOpen = false;
         }
     },
     extraReducers: (builder) => {
@@ -171,6 +188,8 @@ export const {
     setIsShowHireHero,
     setIsMenuUpHero,
     heroUpSkill,
+    openInfoUnit,
+    closeInfoUnit,
 } = sliceMultiArena.actions;
 
 export default sliceMultiArena;

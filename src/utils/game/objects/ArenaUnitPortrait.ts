@@ -50,16 +50,17 @@ export default class ArenaUnitPortrait{
             this.icoLvlUpHero.create();
             this.container.add(this.icoLvlUpHero.sprite);
         }
-        this.container.on('pointerdown', ()=>{
-            const {isShowHeroUp, isShowHireHero, isLoad} = store.getState().multiArena;
-            if (isShowHireHero||isShowHeroUp||isLoad) {
+        this.container.on('pointerdown', (pointer)=>{
+            //console.log('pointer = ', pointer.event.button);
+            const {isShowHeroUp, isShowHireHero, isLoad, isUpUnit} = store.getState().multiArena;
+            if (isShowHireHero||isShowHeroUp||isLoad||isUpUnit||(pointer.event.pointerType==='mouse'&&pointer.event.button!==0)) {
                 return;
             }
             
-            const isUnitUp = store.getState().multiArena.isUpUnit;
-            if(isUnitUp){
-                return;
-            }
+            // const isUnitUp = store.getState().multiArena.isUpUnit;
+            // if(isUnitUp){
+            //     return;
+            // }
             this.container.setZindex(1001);
             this.isUp = true;
             store.dispatch(setIsUpUnit(true));
