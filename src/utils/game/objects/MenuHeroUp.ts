@@ -24,6 +24,8 @@ export default class MenuHeroUp {
     private idx = 0;
     private defaultIdx = 0;
     private selectIdx = 0;
+    private textHeader1: Text;
+    private textHeader2: Text;
     private textDiscription: Text;
     private btnOk: BtnSeal;
     private btnUp: BtnSealArrow;
@@ -39,7 +41,7 @@ export default class MenuHeroUp {
         const { heroSkills, units } = store.getState().multiArena;
         console.log('heroSkills = ', heroSkills);
         this.hero = units.find(u => u.isHero);
-        this.heroSkills = heroSkills.filter(skill => skill.level <= this.hero.level)
+        this.heroSkills = heroSkills.filter(skill => skill.level <= (this.hero.level-this.hero.levelsUp+1));
         
         this.idx = this.defaultIdx;
         this.container = this.scene.add.container(this.scene.halfWidth, this.scene.halfHeight);
@@ -49,6 +51,20 @@ export default class MenuHeroUp {
         this.textDiscription.y = 96;
         this.textDiscription.fontSize = 14;
         this.textDiscription.maxWidth = 350;
+
+        this.textHeader1 = this.scene.add.text(`
+            ${this.hero.defaultName} has gained a "${this.hero.level-this.hero.levelsUp+1}" level!
+        `);
+        this.textHeader1.x = -this.textHeader1.halfWidth-40;
+        this.textHeader1.y = -138;
+        this.textHeader1.fontSize = 16;
+
+        this.textHeader2 = this.scene.add.text(`
+            Select a new abbility for that leader.
+        `);
+        this.textHeader2.x = -this.textHeader2.halfWidth-40;
+        this.textHeader2.y = -120;
+        this.textHeader2.fontSize = 16;
 
         this.btnOk = new BtnSeal(this.scene, 'ok', () => { });
         this.btnOk.create();
@@ -78,6 +94,8 @@ export default class MenuHeroUp {
             this.btnDown.sprite,
             this.portrait,
             this.borderPortrait,
+            this.textHeader1,
+            this.textHeader2
         ]);
 
         this.renderSkills();

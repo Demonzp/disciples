@@ -8,12 +8,6 @@ const App = () => {
             <div className={styles.content}>
                 <h2>Disciples: annals of Nevendaar</h2>
                 <GameComp />
-                <div>
-                    <p>
-                        To move Camera use keyboard arrows;
-                        <br/>
-                    </p>
-                </div>
             </div>
         </div>
     );

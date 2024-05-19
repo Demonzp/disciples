@@ -66,7 +66,7 @@ export default class LoaderScene extends Scene {
     this.load.spritesheet('portret-units-one-empire', './assets/imgs/portret-units-one-empire.jpg', { frameWidth: 70, frameHeight: 85, endFrame: 17 });
     this.load.spritesheet('seal-btns', './assets/imgs/seal-btns.png', { frameWidth: 46, frameHeight: 89, endFrame: 4 });
     this.load.spritesheet('seal-arrows', './assets/imgs/seal-arrows.png', { frameWidth: 26, frameHeight: 26, endFrame: 3 });
-    //this.load.spritesheet('portret-units-one-empire', './assets/imgs/portret-units-one-empire.png', { frameWidth: 70, frameHeight: 85, endFrame: 10 });
+    this.load.spritesheet('cursor-wait', './assets/imgs/cursor-wait.png', { frameWidth: 61, frameHeight: 58, endFrame: 15 });
     
     this.load.spritesheet('portret-units-two', './assets/imgs/portret-units-two.jpg', { frameWidth: 150, frameHeight: 85, endFrame: 6 });
     this.load.spritesheet('grass-water', './assets/imgs/isometric-grass-and-water-64x64.png', { frameWidth: 64, frameHeight: 64, endFrame: 24 });
