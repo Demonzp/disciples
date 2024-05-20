@@ -72,6 +72,7 @@ export const baseUnits: IBaseUnit[] = [
         movePoints: 20,
         discription: '',
         armor: 40,
+        modifiers: [],
     },
     {
         id: '1',
@@ -96,6 +97,7 @@ export const baseUnits: IBaseUnit[] = [
         movePoints: 20,
         discription: '',
         armor: 0,
+        modifiers: [],
     },
     {
         id: '2',
@@ -119,7 +121,8 @@ export const baseUnits: IBaseUnit[] = [
         needExperience: 150,
         movePoints: 20,
         discription: '',
-        armor:5
+        armor:5,
+        modifiers: [],
     },
     {
         id: '3',
@@ -143,7 +146,8 @@ export const baseUnits: IBaseUnit[] = [
         needExperience: 75,
         movePoints: 20,
         discription: '',
-        armor:0
+        armor:0,
+        modifiers: [],
     },
     {
         id: '4',
@@ -167,7 +171,8 @@ export const baseUnits: IBaseUnit[] = [
         needExperience: 70,
         movePoints: 20,
         discription: '',
-        armor:0
+        armor:0,
+        modifiers: [],
     },
     {
         id: '5',
@@ -191,7 +196,8 @@ export const baseUnits: IBaseUnit[] = [
         needExperience: 70,
         movePoints: 20,
         discription: '',
-        armor:0
+        armor:0,
+        modifiers: [],
     },
     {
         id: '6',
@@ -215,7 +221,8 @@ export const baseUnits: IBaseUnit[] = [
         needExperience: 70,
         movePoints: 20,
         discription: '',
-        armor:0
+        armor:0,
+        modifiers: [],
     },
     {
         id: '7',
@@ -239,7 +246,8 @@ export const baseUnits: IBaseUnit[] = [
         needExperience: 400,
         movePoints: 20,
         discription: '',
-        armor:0
+        armor:0,
+        modifiers: [],
     },
     {
         id: '8',
@@ -263,7 +271,8 @@ export const baseUnits: IBaseUnit[] = [
         needExperience: 400,
         movePoints: 20,
         discription: '',
-        armor:20
+        armor:20,
+        modifiers: [],
     }
 ];
 
@@ -318,6 +327,11 @@ export type TParty = {
     side: TPartySide;
 }
 
+export type TModifier = {
+    id: string;
+    type: 'heroSkills';
+}
+
 export interface IBaseUnit {
     id: string;
     level: number;
@@ -340,6 +354,7 @@ export interface IBaseUnit {
     needExperience: number;
     movePoints: number;
     discription: string;
+    modifiers: TModifier[];
     armor: number;
 }
 

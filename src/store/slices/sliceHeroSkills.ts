@@ -1,8 +1,6 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { THeroSkill } from './sliceMultiArena';
 
-
-
 type InitState = {
     heroSkills: THeroSkill[],
     maxNumber: number,

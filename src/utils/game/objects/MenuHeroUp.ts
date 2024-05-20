@@ -42,8 +42,14 @@ export default class MenuHeroUp {
         const { heroSkills, units } = store.getState().multiArena;
         console.log('heroSkills = ', heroSkills);
         this.hero = units.find(u => u.isHero);
-        this.heroSkills = heroSkills.filter(skill => skill.level <= (this.hero.level-this.hero.levelsUp+1));
-        
+        this.heroSkills = heroSkills
+            .filter(skill => skill.level <= (this.hero.level-this.hero.levelsUp+1))
+            .filter(skill=>{
+                if(this.hero.modifiers.find(m=>m.id===skill.id&&m.type==='heroSkills')){
+                    return false;
+                }
+                return true;
+            });
         this.idx = this.defaultIdx;
         this.container = this.scene.add.container(this.scene.halfWidth, this.scene.halfHeight);
         this.fon = this.scene.add.sprite('parchment-hero-up');
