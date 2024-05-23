@@ -8,6 +8,7 @@ import ArenaHireHero from "./ArenaHireHero";
 import MenuHeroUp from "./MenuHeroUp";
 import ArenaHeroProfile from "./ArenaHeroProfile";
 import MenuWait from "./MenuWait";
+import MenuUnitInfo from "./MenuUnitInfo";
 
 export default class ArenaManagerMenu extends BaseMainGameMenu{
     private mainSprite: Sprite;
@@ -18,6 +19,7 @@ export default class ArenaManagerMenu extends BaseMainGameMenu{
     public menuUpHero: MenuHeroUp;
     public arenaHeroProfile: ArenaHeroProfile;
     public menuWait = new MenuWait(this.scene);
+    public menuUnitInfo = new MenuUnitInfo(this.scene);
     constructor(scene: Scene){
         super(scene);
     }

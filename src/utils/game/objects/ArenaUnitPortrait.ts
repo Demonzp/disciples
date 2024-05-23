@@ -8,7 +8,7 @@ import Sprite from "utils/gameLib/Sprite";
 import Text from "utils/gameLib/Text";
 import { coordinats } from "./ArenaParty";
 import store from "store/store";
-import { setIsUpUnit } from "store/slices/sliceMultiArena";
+import { openInfoUnit, setIsUpUnit } from "store/slices/sliceMultiArena";
 import IcoLvlUpHero from "./IcoLvlUpHero";
 
 export default class ArenaUnitPortrait{
@@ -52,8 +52,11 @@ export default class ArenaUnitPortrait{
         }
         this.container.on('pointerdown', (pointer)=>{
             //console.log('pointer = ', pointer.event.button);
-            const {isShowHeroUp, isShowHireHero, isLoad, isUpUnit} = store.getState().multiArena;
-            if (isShowHireHero||isShowHeroUp||isLoad||isUpUnit||(pointer.event.pointerType==='mouse'&&pointer.event.button!==0)) {
+            if(pointer.event.pointerType==='mouse'&&pointer.event.button===2){
+                store.dispatch(openInfoUnit(this.unit.uid));
+            }
+            const {isShowHeroUp, isShowHireHero, isLoad, isUpUnit, isInfoUnitOpen} = store.getState().multiArena;
+            if (isShowHireHero||isShowHeroUp||isLoad||isUpUnit||isInfoUnitOpen||(pointer.event.pointerType==='mouse'&&pointer.event.button!==0)) {
                 return;
             }
             

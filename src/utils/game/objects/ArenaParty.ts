@@ -5,7 +5,7 @@ import ArenaUnitPortrait from "./ArenaUnitPortrait";
 import Container from "utils/gameLib/Container";
 import { TPoint } from "utils/gameLib/Game";
 import { TPointer } from "utils/gameLib/InputEvent";
-import { setIsShowHireHero, setIsUpUnit } from "store/slices/sliceMultiArena";
+import { closeInfoUnit, setIsShowHireHero, setIsUpUnit } from "store/slices/sliceMultiArena";
 import { unitToCell, unitToUnit } from "store/actions/actionArena";
 
 export const coordinats = (key: string): TPoint => {
@@ -86,8 +86,13 @@ export default class ArenaParty {
     }
 
     pointerUp(pointer: TPointer) {
-        const {isShowHeroUp, isShowHireHero, isLoad} = store.getState().multiArena;
-        if (isShowHireHero||isShowHeroUp||isLoad) {
+        console.log('button = ',pointer.event.button);
+        if(pointer.event.pointerType==='mouse'&&pointer.event.button===2){
+            store.dispatch(closeInfoUnit());
+        }
+
+        const {isShowHeroUp, isShowHireHero, isLoad, isInfoUnitOpen} = store.getState().multiArena;
+        if (isShowHireHero||isShowHeroUp||isLoad||isInfoUnitOpen) {
             return;
         }
         console.log('pointerUp-----');

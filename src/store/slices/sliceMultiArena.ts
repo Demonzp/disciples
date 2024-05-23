@@ -52,7 +52,7 @@ type InitState = {
     isHasHero: boolean,
     isLoad: boolean,
     selectCell: TPosition,
-    infoUnitId: string,
+    infoUnitUid: string,
     isInfoUnitOpen: boolean,
     heroSkills: THeroSkill[],
 }
@@ -78,7 +78,7 @@ const initialState: InitState = {
     isHasHero: false,
     isInfoUnitOpen: false,
     selectCell: [0, 0],
-    infoUnitId: '',
+    infoUnitUid: '',
     heroSkills: [],
 };
 
@@ -140,7 +140,7 @@ const sliceMultiArena = createSlice({
         },
         
         openInfoUnit(state, action: PayloadAction<string>){
-            state.infoUnitId = action.payload;
+            state.infoUnitUid = action.payload;
             state.isInfoUnitOpen = true;
         },
 
