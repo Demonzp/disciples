@@ -56,9 +56,19 @@ export default class ArenaUnitPortrait{
                 store.dispatch(openInfoUnit(this.unit.uid));
             }
             const {isShowHeroUp, isShowHireHero, isLoad, isUpUnit, isInfoUnitOpen} = store.getState().multiArena;
-            if (isShowHireHero||isShowHeroUp||isLoad||isUpUnit||isInfoUnitOpen||(pointer.event.pointerType==='mouse'&&pointer.event.button!==0)) {
+            if (
+                isShowHireHero||
+                isShowHeroUp||
+                isLoad||
+                isUpUnit||
+                isInfoUnitOpen||
+                (pointer.event.pointerType==='mouse'&&pointer.event.button!==0)
+            ) {
                 return;
             }
+            // else if(pointer.event.pointerType==='mouse'&&pointer.event.button===2){
+            //     store.dispatch(openInfoUnit(this.unit.uid));
+            // }
             
             // const isUnitUp = store.getState().multiArena.isUpUnit;
             // if(isUnitUp){

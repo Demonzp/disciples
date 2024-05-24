@@ -135,7 +135,7 @@ export default class ArenaParty {
             }
             
         }
-        if (cell) {
+        if (cell&&!this.units.find(u=>u.isHero)) {
             //console.log('show select hero');
             store.dispatch(setIsShowHireHero(cell.data));
             //console.log('select hero');

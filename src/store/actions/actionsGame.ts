@@ -88,6 +88,7 @@ const getCapitalGuard = (race: TCapitalRace): IUnit => {
         capitalId: null,
         isLeader: false,
         race,
+        experience: 0,
         position: [1, 0],
         battlesWon: 0,
         isLevelUp: false,
@@ -112,6 +113,7 @@ const createUnit = (id: string): IUnit => {
     position: [0, 0],
     battlesWon: 0,
     isLevelUp: false,
+    experience: 0,
     levelsUp: 0,
   }
 }

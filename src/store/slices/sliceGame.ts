@@ -371,6 +371,7 @@ export interface IUnit extends IBaseUnit {
     race: TCapitalRace;
     battlesWon: number;
     isLevelUp: boolean;
+    experience: number;
     levelsUp: number;
 }
 
