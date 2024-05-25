@@ -73,6 +73,7 @@ export const baseUnits: IBaseUnit[] = [
         discription: '',
         armor: 40,
         modifiers: [],
+        modifiersDefalut: [],
     },
     {
         id: '1',
@@ -98,6 +99,7 @@ export const baseUnits: IBaseUnit[] = [
         discription: '',
         armor: 0,
         modifiers: [],
+        modifiersDefalut: [],
     },
     {
         id: '2',
@@ -123,6 +125,7 @@ export const baseUnits: IBaseUnit[] = [
         discription: '',
         armor:5,
         modifiers: [],
+        modifiersDefalut: [],
     },
     {
         id: '3',
@@ -148,6 +151,7 @@ export const baseUnits: IBaseUnit[] = [
         discription: '',
         armor:0,
         modifiers: [],
+        modifiersDefalut: [],
     },
     {
         id: '4',
@@ -173,6 +177,7 @@ export const baseUnits: IBaseUnit[] = [
         discription: '',
         armor:0,
         modifiers: [],
+        modifiersDefalut: [],
     },
     {
         id: '5',
@@ -198,6 +203,7 @@ export const baseUnits: IBaseUnit[] = [
         discription: '',
         armor:0,
         modifiers: [],
+        modifiersDefalut: [],
     },
     {
         id: '6',
@@ -223,6 +229,7 @@ export const baseUnits: IBaseUnit[] = [
         discription: '',
         armor:0,
         modifiers: [],
+        modifiersDefalut: [],
     },
     {
         id: '7',
@@ -248,6 +255,7 @@ export const baseUnits: IBaseUnit[] = [
         discription: '',
         armor:0,
         modifiers: [],
+        modifiersDefalut: [],
     },
     {
         id: '8',
@@ -273,6 +281,7 @@ export const baseUnits: IBaseUnit[] = [
         discription: '',
         armor:20,
         modifiers: [],
+        modifiersDefalut: [],
     }
 ];
 
@@ -355,6 +364,7 @@ export interface IBaseUnit {
     movePoints: number;
     discription: string;
     modifiers: TModifier[];
+    modifiersDefalut: TModifier[];
     armor: number;
 }
 
