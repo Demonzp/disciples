@@ -62,7 +62,7 @@ export const baseUnits: IBaseUnit[] = [
         hitPoints: 1200,
         defaultHp: 1200,
         damageName: ['Holy Wrath'],
-        chancesHit: 80,
+        chancesHit: [80],
         damage: 250,
         heal:0,
         sourceDamage: 'life',
@@ -90,7 +90,7 @@ export const baseUnits: IBaseUnit[] = [
         hitPoints: 65,
         defaultHp: 65,
         damageName: ['Lightning'],
-        chancesHit: 70,
+        chancesHit: [70],
         damage: 16,
         heal:0,
         sourceDamage: 'air',
@@ -118,7 +118,7 @@ export const baseUnits: IBaseUnit[] = [
         hitPoints: 150,
         defaultHp: 150,
         damageName: ['Long Sword'],
-        chancesHit: 80,
+        chancesHit: [80],
         damage: 23,
         heal:0,
         sourceDamage: 'weapon',
@@ -146,7 +146,7 @@ export const baseUnits: IBaseUnit[] = [
         hitPoints: 110,
         defaultHp: 110,
         damageName: ['Sword'],
-        chancesHit: 80,
+        chancesHit: [80],
         damage: 25,
         heal:0,
         sourceDamage: 'weapon',
@@ -174,7 +174,7 @@ export const baseUnits: IBaseUnit[] = [
         hitPoints: 50,
         defaultHp: 50,
         damageName: ['Arrow'],
-        chancesHit: 70,
+        chancesHit: [70],
         damage: 25,
         heal:0,
         sourceDamage: 'weapon',
@@ -202,7 +202,7 @@ export const baseUnits: IBaseUnit[] = [
         hitPoints: 50,
         defaultHp: 50,
         damageName: ['Lightning'],
-        chancesHit: 70,
+        chancesHit: [70],
         damage: 15,
         heal:0,
         sourceDamage: 'air',
@@ -230,7 +230,7 @@ export const baseUnits: IBaseUnit[] = [
         hitPoints: 50,
         defaultHp: 50,
         damageName: ['Healing'],
-        chancesHit: 100,
+        chancesHit: [100],
         damage: 0,
         heal: 22,
         sourceDamage: 'life',
@@ -258,7 +258,7 @@ export const baseUnits: IBaseUnit[] = [
         hitPoints: 250,
         defaultHp: 250,
         damageName: ['Smash'],
-        chancesHit: 80,
+        chancesHit: [80],
         damage: 55,
         heal: 0,
         sourceDamage: 'weapon',
@@ -286,7 +286,7 @@ export const baseUnits: IBaseUnit[] = [
         hitPoints: 90,
         defaultHp: 90,
         damageName: ['Rock Shards'],
-        chancesHit: 80,
+        chancesHit: [80],
         damage: 40,
         heal: 0,
         sourceDamage: 'earth',
@@ -371,7 +371,7 @@ export interface IBaseUnit {
     numCells: number;
     hitPoints: number;
     defaultHp: number;
-    chancesHit: number;
+    chancesHit: number[];
     damageName: string[];
     damage: number;
     heal: number;

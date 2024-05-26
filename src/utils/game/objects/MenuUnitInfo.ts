@@ -37,6 +37,10 @@ const labelRows: TLabelRows[] = [
     {
         label: 'Attack',
         key: 'damageName'
+    },
+    {
+        label: 'Chances to hit',
+        key: 'chancesHit'
     }
 ];
 
@@ -63,8 +67,8 @@ export default class MenuUnitInfo {
         this.labelName.x = this.fon.x - this.fon.halfWidth + this.fon.halfWidth / 2 - this.labelName.halfWidth;
         this.labelName.y = this.portrait.y + this.portrait.halfHeight + 40;
         this.isOpen = true;
-        const xLabel = this.fon.x - 40;
-        const xValue = this.fon.x + 28;
+        const xLabel = this.fon.x - 44;
+        const xValue = this.fon.x + 38;
         let y = 64;
         const stepY = 26;
         let label: Text;
@@ -177,8 +181,8 @@ export default class MenuUnitInfo {
                         const ward = `${value.charAt(0).toUpperCase() + value.slice(1) + zapyatay}`;
 
                         const labelVal = this.scene.add.text(ward);
-                        if(statsModifier.useWards.find(el=>el===value)){
-                            labelVal.color='red';
+                        if (statsModifier.useWards.find(el => el === value)) {
+                            labelVal.color = 'red';
                         }
                         summWardsW += labelVal.width;
                         if (summWardsW > 180) {
@@ -204,12 +208,12 @@ export default class MenuUnitInfo {
                         const ward = `${prefixWards + value.charAt(0).toUpperCase() + value.slice(1) + zapyatay}`;
 
                         const labelVal = this.scene.add.text(ward);
-                        if(statsModifier.useWards.find(el=>el===value)){
+                        if (statsModifier.useWards.find(el => el === value)) {
                             labelVal.color = 'red';
-                        }else{
+                        } else {
                             labelVal.color = 'green';
                         }
-                        
+
                         summWardsW += labelVal.width;
                         if (summWardsW > 180) {
                             xWards = xValue;
@@ -223,16 +227,113 @@ export default class MenuUnitInfo {
                         this.labels.push(labelVal);
                     }
                     break;
-                case 'Attack':
-                    let xAttack = xValue;
-                    labelValue = this.scene.add.text(`${unit.damageName.join('/')}`);
-                    labelValue.x = xAttack;
-                    const newAttacks = statsModifier.damageName.slice(unit.damageName.length-1);
-                    if(newAttacks.length>0){
-                        const labelAttack = this.scene.add.text(`${newAttacks.join('/')}`);
-                        labelAttack.color = 'green';
-                    }
+                case 'Chances to hit':
 
+                    let xChans = xValue;
+                    let yChans = y;
+                    let summChansW = 0;
+                    for (let i = 0; i < unit.chancesHit.length; i++) {
+                        let zapyatay = '';
+                        if (i < unit.chancesHit.length - 1) {
+                            zapyatay = ' / ';
+                        }
+                        const value = unit.chancesHit[i];
+                        //const attack = `${value.charAt(0).toUpperCase() + value.slice(1) + zapyatay}`;
+
+                        const labelVal = this.scene.add.text(value + zapyatay);
+                        summChansW += labelVal.width;
+                        if (summChansW > 180) {
+                            xChans = xValue;
+                            summChansW = 0;
+                            yChans += labelVal.height + 2;
+                        }
+                        labelVal.x = xChans;
+                        labelVal.y = yChans;
+                        xChans += labelVal.width;
+                        this.labels.push(labelVal);
+                    }
+                    let prefixChans = '';
+                    if (unit.damageName.length > 0) {
+                        prefixChans = '/';
+                    }
+                    const newChans = statsModifier.chancesHit.slice(unit.chancesHit.length);
+                    for (let i = 0; i < newChans.length; i++) {
+                        let zapyatay = '';
+                        if (i < newChans.length - 1) {
+                            zapyatay = ' / ';
+                        }
+                        const value = newChans[i];
+                        const ward = `${prefixChans + value + zapyatay}`;
+
+                        const labelVal = this.scene.add.text(ward);
+                        labelVal.color = 'green';
+
+                        summChansW += labelVal.width;
+                        if (summChansW > 180) {
+                            xChans = xValue;
+                            summChansW = 0;
+                            yChans += labelVal.height + 2;
+                        }
+                        labelVal.x = xChans;
+                        labelVal.y = yChans;
+                        xChans += labelVal.width;
+                        prefixChans = '';
+                        this.labels.push(labelVal);
+                    }
+                    break;
+                case 'Attack':
+
+                    let xAttack = xValue;
+                    let yAttack = y;
+                    let summAttackW = 0;
+                    for (let i = 0; i < unit.damageName.length; i++) {
+                        let zapyatay = '';
+                        if (i < unit.damageName.length - 1) {
+                            zapyatay = ' / ';
+                        }
+                        const value = unit.damageName[i];
+                        //const attack = `${value.charAt(0).toUpperCase() + value.slice(1) + zapyatay}`;
+
+                        const labelVal = this.scene.add.text(value + zapyatay);
+                        summAttackW += labelVal.width;
+                        if (summAttackW > 180) {
+                            xAttack = xValue;
+                            summAttackW = 0;
+                            yAttack += labelVal.height + 2;
+                        }
+                        labelVal.x = xAttack;
+                        labelVal.y = yAttack;
+                        xAttack += labelVal.width;
+                        this.labels.push(labelVal);
+                    }
+                    let prefixAttack = '';
+                    if (unit.damageName.length > 0) {
+                        prefixAttack = ' / ';
+                    }
+                    const newAttacks = statsModifier.damageName.slice(unit.damageName.length);
+                    for (let i = 0; i < newAttacks.length; i++) {
+                        let zapyatay = '';
+                        if (i < newAttacks.length - 1) {
+                            zapyatay = ' / ';
+                        }
+                        const value = newAttacks[i];
+                        const ward = `${prefixAttack + value + zapyatay}`;
+
+                        const labelVal = this.scene.add.text(ward);
+                        labelVal.color = 'green';
+
+                        summAttackW += labelVal.width;
+                        if (summAttackW > 180) {
+                            xAttack = xValue;
+                            summAttackW = 0;
+                            yAttack += labelVal.height + 2;
+                        }
+                        labelVal.x = xAttack;
+                        labelVal.y = yAttack;
+                        xAttack += labelVal.width;
+                        prefixWards = '';
+                        this.labels.push(labelVal);
+                    }
                     break;
                 default:
                     // label = this.scene.add.text(labelRowData.label);
