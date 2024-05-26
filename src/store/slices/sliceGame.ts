@@ -61,7 +61,7 @@ export const baseUnits: IBaseUnit[] = [
         numCells: 1,
         hitPoints: 1200,
         defaultHp: 1200,
-        damageName: 'Holy Wrath',
+        damageName: ['Holy Wrath'],
         chancesHit: 80,
         damage: 250,
         heal:0,
@@ -74,6 +74,8 @@ export const baseUnits: IBaseUnit[] = [
         armor: 40,
         modifiers: [],
         modifiersDefalut: [],
+        immunities: [],
+        wards: [],
     },
     {
         id: '1',
@@ -87,7 +89,7 @@ export const baseUnits: IBaseUnit[] = [
         numCells: 1,
         hitPoints: 65,
         defaultHp: 65,
-        damageName: 'Lightning',
+        damageName: ['Lightning'],
         chancesHit: 70,
         damage: 16,
         heal:0,
@@ -100,6 +102,8 @@ export const baseUnits: IBaseUnit[] = [
         armor: 0,
         modifiers: [],
         modifiersDefalut: [],
+        immunities: [],
+        wards: [],
     },
     {
         id: '2',
@@ -113,7 +117,7 @@ export const baseUnits: IBaseUnit[] = [
         numCells: 1,
         hitPoints: 150,
         defaultHp: 150,
-        damageName: 'Long Sword',
+        damageName: ['Long Sword'],
         chancesHit: 80,
         damage: 23,
         heal:0,
@@ -126,6 +130,8 @@ export const baseUnits: IBaseUnit[] = [
         armor:5,
         modifiers: [],
         modifiersDefalut: [],
+        immunities: [],
+        wards: [],
     },
     {
         id: '3',
@@ -139,7 +145,7 @@ export const baseUnits: IBaseUnit[] = [
         numCells: 1,
         hitPoints: 110,
         defaultHp: 110,
-        damageName: 'Sword',
+        damageName: ['Sword'],
         chancesHit: 80,
         damage: 25,
         heal:0,
@@ -152,6 +158,8 @@ export const baseUnits: IBaseUnit[] = [
         armor:0,
         modifiers: [],
         modifiersDefalut: [],
+        immunities: [],
+        wards: [],
     },
     {
         id: '4',
@@ -165,7 +173,7 @@ export const baseUnits: IBaseUnit[] = [
         numCells: 1,
         hitPoints: 50,
         defaultHp: 50,
-        damageName: 'Arrow',
+        damageName: ['Arrow'],
         chancesHit: 70,
         damage: 25,
         heal:0,
@@ -178,6 +186,8 @@ export const baseUnits: IBaseUnit[] = [
         armor:0,
         modifiers: [],
         modifiersDefalut: [],
+        immunities: [],
+        wards: [],
     },
     {
         id: '5',
@@ -191,7 +201,7 @@ export const baseUnits: IBaseUnit[] = [
         numCells: 1,
         hitPoints: 50,
         defaultHp: 50,
-        damageName: 'Lightning',
+        damageName: ['Lightning'],
         chancesHit: 70,
         damage: 15,
         heal:0,
@@ -204,6 +214,8 @@ export const baseUnits: IBaseUnit[] = [
         armor:0,
         modifiers: [],
         modifiersDefalut: [],
+        immunities: [],
+        wards: [],
     },
     {
         id: '6',
@@ -217,7 +229,7 @@ export const baseUnits: IBaseUnit[] = [
         numCells: 1,
         hitPoints: 50,
         defaultHp: 50,
-        damageName: 'Healing',
+        damageName: ['Healing'],
         chancesHit: 100,
         damage: 0,
         heal: 22,
@@ -230,6 +242,8 @@ export const baseUnits: IBaseUnit[] = [
         armor:0,
         modifiers: [],
         modifiersDefalut: [],
+        immunities: [],
+        wards: [],
     },
     {
         id: '7',
@@ -243,7 +257,7 @@ export const baseUnits: IBaseUnit[] = [
         numCells: 2,
         hitPoints: 250,
         defaultHp: 250,
-        damageName: 'Smash',
+        damageName: ['Smash'],
         chancesHit: 80,
         damage: 55,
         heal: 0,
@@ -256,6 +270,8 @@ export const baseUnits: IBaseUnit[] = [
         armor:0,
         modifiers: [],
         modifiersDefalut: [],
+        immunities: [],
+        wards: [],
     },
     {
         id: '8',
@@ -269,7 +285,7 @@ export const baseUnits: IBaseUnit[] = [
         numCells: 2,
         hitPoints: 90,
         defaultHp: 90,
-        damageName: 'Rock Shards',
+        damageName: ['Rock Shards'],
         chancesHit: 80,
         damage: 40,
         heal: 0,
@@ -282,6 +298,8 @@ export const baseUnits: IBaseUnit[] = [
         armor:20,
         modifiers: [],
         modifiersDefalut: [],
+        immunities: [],
+        wards: [],
     }
 ];
 
@@ -291,7 +309,7 @@ export const capitalGuards = {
     empire: 'Myzrael'
 };
 
-export type TSourceDamage = 'weapon' | 'air' | 'life' | 'death' | 'fire' | 'water' | 'earth';
+export type TSourceDamage = 'weapon' | 'air' | 'life' | 'death' | 'fire' | 'water' | 'earth' | 'mind';
 
 export type TFraction = 'empire' | 'legions';
 export type TRace = 'empire' | 'legions' | 'clans' | 'elves' | 'undead' | 'dragons' | 'greenskins';
@@ -354,7 +372,7 @@ export interface IBaseUnit {
     hitPoints: number;
     defaultHp: number;
     chancesHit: number;
-    damageName: string;
+    damageName: string[];
     damage: number;
     heal: number;
     sourceDamage: TSourceDamage;
@@ -365,6 +383,8 @@ export interface IBaseUnit {
     discription: string;
     modifiers: TModifier[];
     modifiersDefalut: TModifier[];
+    immunities: TSourceDamage[];
+    wards: TSourceDamage[];
     armor: number;
 }
 

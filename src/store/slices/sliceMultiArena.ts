@@ -1,8 +1,8 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { IUnit, TLordType, TPosition, TRace, TSourceDamage } from './sliceGame';
-import { actionHeroUpSkill, pickHero, updateUnitsRes, updateUnitsStatsRes } from 'store/actions/actionArena';
+import { actionHeroUpSkill, pickHero, TUpdateUnitsStats, updateUnitsRes, updateUnitsStatsRes } from 'store/actions/actionArena';
 
-export type TModifier = 'heroSkills'|'Artifacts';
+export type TModifier = 'heroSkills' | 'Artifacts';
 
 export type THeroSkill = {
     id: string,
@@ -33,9 +33,12 @@ export type TStatsModifire = {
     damage: number[],
     damageName: string[],
     sourceDamage: TSourceDamage[],
-    heal:number,
+    heal: number,
     initiative: number,
     movePoints: number,
+    immunities: TSourceDamage[],
+    wards: TSourceDamage[],
+    useWards: TSourceDamage[],
     armor: number
 };
 
@@ -126,16 +129,16 @@ const sliceMultiArena = createSlice({
             state.units = action.payload.units;
             state.heroSkills = action.payload.heroSkills;
             state.unitsStatsModifier = action.payload.unitsStatsModifier;
-            if(action.payload.units.find(u=>u.isHero)){
+            if (action.payload.units.find(u => u.isHero)) {
                 state.isHasHero = true;
-            }else{
+            } else {
                 state.isHasHero = false;
             }
         },
         setIsUpUnit(state, action: PayloadAction<boolean>) {
             state.isUpUnit = action.payload;
         },
-        setIsShowHireHero(state, action: PayloadAction<TPosition|undefined>) {
+        setIsShowHireHero(state, action: PayloadAction<TPosition | undefined>) {
             if (action.payload) {
                 state.isShowHireHero = true;
                 state.selectCell = action.payload;
@@ -145,25 +148,26 @@ const sliceMultiArena = createSlice({
 
         },
 
-        setIsMenuUpHero(state, action: PayloadAction<boolean>){
+        setIsMenuUpHero(state, action: PayloadAction<boolean>) {
             state.isShowHeroUp = action.payload;
         },
 
-        heroUpSkill(state, action: PayloadAction<IUnit[]>){
+        heroUpSkill(state, action: PayloadAction<TUpdateUnitsStats>) {
             state.isLoad = false;
-            const hero = action.payload.find(u=>u.isHero);
-            if(hero.levelsUp>0){
+            const hero = action.payload.units.find(u => u.isHero);
+            if (hero.levelsUp > 0) {
                 state.isShowHeroUp = true;
             }
-            state.units = action.payload;
+            state.unitsStatsModifier = action.payload.unitsStatsModifier;
+            state.units = action.payload.units;
         },
-        
-        openInfoUnit(state, action: PayloadAction<string>){
+
+        openInfoUnit(state, action: PayloadAction<string>) {
             state.infoUnitUid = action.payload;
             state.isInfoUnitOpen = true;
         },
 
-        closeInfoUnit(state){
+        closeInfoUnit(state) {
             //state.infoUnitId = action.payload;
             state.isInfoUnitOpen = false;
         }
@@ -181,9 +185,9 @@ const sliceMultiArena = createSlice({
         builder.addCase(updateUnitsStatsRes.fulfilled, (state, { payload }) => {
             state.units = payload.units;
             state.unitsStatsModifier = payload.unitsStatsModifier;
-            if(payload.units.find(u=>u.isHero)){
+            if (payload.units.find(u => u.isHero)) {
                 state.isHasHero = true;
-            }else{
+            } else {
                 state.isHasHero = false;
             }
         });
@@ -194,9 +198,9 @@ const sliceMultiArena = createSlice({
 
         builder.addCase(updateUnitsRes.fulfilled, (state, { payload }) => {
             state.units = payload;
-            if(payload.find(u=>u.isHero)){
+            if (payload.find(u => u.isHero)) {
                 state.isHasHero = true;
-            }else{
+            } else {
                 state.isHasHero = false;
             }
         });

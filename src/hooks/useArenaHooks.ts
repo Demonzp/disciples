@@ -183,7 +183,7 @@ const useArenaHooks = ({ game }: TProps) => {
 
         socketInst.on('hero-up-skill', (data:TUpdateUnitsStats) => {
             console.log('hero-up-skill', data);
-            dispatch(updateUnitsStatsRes(data));
+            dispatch(heroUpSkill(data));
             //dispatch(updateUnitsRes(data));
         });
 
