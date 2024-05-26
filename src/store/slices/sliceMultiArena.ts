@@ -1,6 +1,6 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { IUnit, TLordType, TPosition, TRace } from './sliceGame';
-import { actionHeroUpSkill, pickHero, updateUnitsRes } from 'store/actions/actionArena';
+import { IUnit, TLordType, TPosition, TRace, TSourceDamage } from './sliceGame';
+import { actionHeroUpSkill, pickHero, updateUnitsRes, updateUnitsStatsRes } from 'store/actions/actionArena';
 
 export type TModifier = 'heroSkills'|'Artifacts';
 
@@ -24,10 +24,26 @@ export type TServerInfo = {
     version: string,
 }
 
+export type TStatsModifire = {
+    uid: string,
+    level: number,
+    hitPoints: number,
+    regenerate: number,
+    chancesHit: number[],
+    damage: number[],
+    damageName: string[],
+    sourceDamage: TSourceDamage[],
+    heal:number,
+    initiative: number,
+    movePoints: number,
+    armor: number
+};
+
 export type TInitState = {
     playerRace: TRace;
     units: IUnit[];
     heroes: IUnit[];
+    unitsStatsModifier: TStatsModifire[];
     enemyRace: TRace;
     heroSkills: THeroSkill[];
 }
@@ -55,6 +71,7 @@ type InitState = {
     infoUnitUid: string,
     isInfoUnitOpen: boolean,
     heroSkills: THeroSkill[],
+    unitsStatsModifier: TStatsModifire[];
 }
 
 const initialState: InitState = {
@@ -80,6 +97,7 @@ const initialState: InitState = {
     selectCell: [0, 0],
     infoUnitUid: '',
     heroSkills: [],
+    unitsStatsModifier: [],
 };
 
 const sliceMultiArena = createSlice({
@@ -107,6 +125,7 @@ const sliceMultiArena = createSlice({
             state.enemyRace = action.payload.enemyRace;
             state.units = action.payload.units;
             state.heroSkills = action.payload.heroSkills;
+            state.unitsStatsModifier = action.payload.unitsStatsModifier;
             if(action.payload.units.find(u=>u.isHero)){
                 state.isHasHero = true;
             }else{
@@ -157,6 +176,16 @@ const sliceMultiArena = createSlice({
 
         builder.addCase(pickHero.pending, (state) => {
             state.isShowHireHero = false;
+        });
+
+        builder.addCase(updateUnitsStatsRes.fulfilled, (state, { payload }) => {
+            state.units = payload.units;
+            state.unitsStatsModifier = payload.unitsStatsModifier;
+            if(payload.units.find(u=>u.isHero)){
+                state.isHasHero = true;
+            }else{
+                state.isHasHero = false;
+            }
         });
 
         builder.addCase(updateUnitsRes.pending, (state) => {

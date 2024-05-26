@@ -1,9 +1,9 @@
 import { useEffect } from "react";
-import { updateUnitsRes } from "store/actions/actionArena";
+import { TUpdateUnitsStats, updateUnitsRes, updateUnitsStatsRes } from "store/actions/actionArena";
 import { useAppDispatch, useAppSelector } from "store/hooks";
 import { IUnit } from "store/slices/sliceGame";
 import { setMenuType } from "store/slices/sliceMenuGame";
-import { TOnlineInfo, TServerInfo, heroUpSkill, initState, setIsConnect, setOnlineInfo, setServerInfo } from "store/slices/sliceMultiArena";
+import { TOnlineInfo, TServerInfo, TStatsModifire, heroUpSkill, initState, setIsConnect, setOnlineInfo, setServerInfo } from "store/slices/sliceMultiArena";
 import MainGameMenuScene from "utils/game/scenes/mainGameMenuScene";
 import Game from "utils/gameLib/Game";
 import socketInst from "utils/socket";
@@ -142,6 +142,7 @@ const useArenaHooks = ({ game }: TProps) => {
                 playerRace: data.player.race,
                 units: data.player.units,
                 heroes: data.player.heroes,
+                unitsStatsModifier: data.player.unitsStatsModifier,
                 enemyRace: data.enemy.race,
                 heroSkills: data.player.heroSkills
             }));
@@ -157,6 +158,7 @@ const useArenaHooks = ({ game }: TProps) => {
                 units: data.player.units,
                 heroes: data.player.heroes,
                 enemyRace: data.enemy.race,
+                unitsStatsModifier: data.player.unitsStatsModifier,
                 heroSkills: data.player.heroSkills
             }));
             dispatch(setMenuType('arena-manager-menu'));
@@ -169,9 +171,9 @@ const useArenaHooks = ({ game }: TProps) => {
             dispatch(updateUnitsRes(data));
         });
 
-        socketInst.on('pick-hero', (data:IUnit[]) => {
+        socketInst.on('pick-hero', (data:TUpdateUnitsStats) => {
             console.log('pick-hero', data);
-            dispatch(updateUnitsRes(data));
+            dispatch(updateUnitsStatsRes(data));
         });
 
         socketInst.on('unit-to-cell', (data:IUnit[]) => {
@@ -179,9 +181,9 @@ const useArenaHooks = ({ game }: TProps) => {
             dispatch(updateUnitsRes(data));
         });
 
-        socketInst.on('hero-up-skill', (data:IUnit[]) => {
+        socketInst.on('hero-up-skill', (data:TUpdateUnitsStats) => {
             console.log('hero-up-skill', data);
-            dispatch(heroUpSkill(data));
+            dispatch(updateUnitsStatsRes(data));
             //dispatch(updateUnitsRes(data));
         });
 

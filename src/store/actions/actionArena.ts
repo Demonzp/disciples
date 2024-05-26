@@ -1,5 +1,6 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import { IUnit, TPosition } from "store/slices/sliceGame";
+import { TStatsModifire } from "store/slices/sliceMultiArena";
 import { AppState } from "store/store";
 import socketInst from "utils/socket";
 
@@ -14,6 +15,24 @@ export const unitToUnit = createAsyncThunk<undefined, TUnitToUnitData, { state: 
     try {
 
       socketInst.emit('unit-to-unit', data);
+    } catch (error) {
+      console.error('error = ', (error as Error).message);
+      return rejectWithValue({ message: (error as Error).message, field: 'nameTable' });
+    }
+  }
+);
+
+export type TUpdateUnitsStats = {
+  units: IUnit[],
+  unitsStatsModifier: TStatsModifire[],
+};
+
+export const updateUnitsStatsRes = createAsyncThunk<TUpdateUnitsStats, TUpdateUnitsStats, { state: AppState, rejectWithValue: any }>(
+  'multiArena/updateUnitsStatsRes',
+  async (data, { rejectWithValue }) => {
+    try {
+      return data;
+      //socketInst.emit('unit-to-unit', data);
     } catch (error) {
       console.error('error = ', (error as Error).message);
       return rejectWithValue({ message: (error as Error).message, field: 'nameTable' });
