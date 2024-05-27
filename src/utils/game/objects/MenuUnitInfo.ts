@@ -41,6 +41,10 @@ const labelRows: TLabelRows[] = [
     {
         label: 'Chances to hit',
         key: 'chancesHit'
+    },
+    {
+        label: 'Damage',
+        key: 'damage'
     }
 ];
 
@@ -317,9 +321,9 @@ export default class MenuUnitInfo {
                             zapyatay = ' / ';
                         }
                         const value = newAttacks[i];
-                        const ward = `${prefixAttack + value + zapyatay}`;
+                        const attack = `${prefixAttack + value + zapyatay}`;
 
-                        const labelVal = this.scene.add.text(ward);
+                        const labelVal = this.scene.add.text(attack);
                         labelVal.color = 'green';
 
                         summAttackW += labelVal.width;
@@ -334,6 +338,32 @@ export default class MenuUnitInfo {
                         prefixWards = '';
                         this.labels.push(labelVal);
                     }
+                    break;
+                case 'Damage':
+                    //let dmgStr = '';
+                    const arrDmg = unit.damage.map((d,i)=>{
+                        if(typeof d==='number'){
+                            return `${d-statsModifier.damage[i]} +${statsModifier.damage[i]}`;
+                        }else{
+                            return String(unit.damage[0]*Number(`0.${d}`));
+                        }
+                    });
+                    
+                    const dmgStr = arrDmg.join(' / ');
+                    const newDmg = statsModifier.damage
+                        .slice(unit.damage.length)
+                        .map((d)=>{
+                            if(typeof d==='number'){
+                                return String(d);
+                            }else{
+                                return String(unit.damage[0]*Number(`0.${d}`));
+                            }
+                        })
+                        .join(' / ');
+                    labelValue = this.scene.add.text(dmgStr+`${newDmg.length>0?' / ':''}`+newDmg);
+                    labelValue.x = xValue;
+                    labelValue.y = y;
+                    this.labels.push(labelValue);
                     break;
                 default:
                     // label = this.scene.add.text(labelRowData.label);
