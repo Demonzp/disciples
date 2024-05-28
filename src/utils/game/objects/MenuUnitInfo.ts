@@ -343,9 +343,10 @@ export default class MenuUnitInfo {
                     //let dmgStr = '';
                     const arrDmg = unit.damage.map((d,i)=>{
                         if(typeof d==='number'){
-                            return `${d-statsModifier.damage[i]} +${statsModifier.damage[i]}`;
+                            const upDmg = statsModifier.damage[i]>0?`+${statsModifier.damage[i]}`:'';
+                            return `${d-statsModifier.damage[i]}${upDmg}`;
                         }else{
-                            return String(unit.damage[0]*Number(`0.${d}`));
+                            return String(Math.trunc(unit.damage[0]*Number(`0.${d}`)));
                         }
                     });
                     
@@ -356,7 +357,7 @@ export default class MenuUnitInfo {
                             if(typeof d==='number'){
                                 return String(d);
                             }else{
-                                return String(unit.damage[0]*Number(`0.${d}`));
+                                return String(Math.trunc(unit.damage[0]*Number(`0.${d}`)));
                             }
                         })
                         .join(' / ');
