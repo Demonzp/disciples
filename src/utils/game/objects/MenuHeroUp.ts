@@ -51,6 +51,7 @@ export default class MenuHeroUp {
                 return true;
             });
         this.idx = this.defaultIdx;
+        this.selectIdx = -1;
         this.container = this.scene.add.container(this.scene.halfWidth, this.scene.halfHeight);
         this.fon = this.scene.add.sprite('parchment-hero-up');
         this.textDiscription = this.scene.add.text('');
@@ -106,7 +107,7 @@ export default class MenuHeroUp {
         ]);
 
         this.renderSkills();
-        this.calcSelectSkill();
+        //this.calcSelectSkill();
         this.isShowed = true;
     }
 

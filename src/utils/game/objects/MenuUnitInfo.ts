@@ -342,7 +342,8 @@ export default class MenuUnitInfo {
                 case 'Damage':
                     //let dmgStr = '';
                     const arrDmg = unit.damage.map((d,i)=>{
-                        if(typeof d==='number'){
+                        console.log('Damage = ', d);
+                        if(unit.damageName[i]!=='Critical Hit'){
                             const upDmg = statsModifier.damage[i]>0?`+${statsModifier.damage[i]}`:'';
                             return `${d-statsModifier.damage[i]}${upDmg}`;
                         }else{
@@ -353,8 +354,8 @@ export default class MenuUnitInfo {
                     const dmgStr = arrDmg.join(' / ');
                     const newDmg = statsModifier.damage
                         .slice(unit.damage.length)
-                        .map((d)=>{
-                            if(typeof d==='number'){
+                        .map((d,i)=>{
+                            if(statsModifier.damageName[i]!=='Critical Hit'){
                                 return String(d);
                             }else{
                                 return String(Math.trunc(unit.damage[0]*Number(`0.${d}`)));
