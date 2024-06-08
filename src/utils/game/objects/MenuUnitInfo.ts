@@ -238,51 +238,67 @@ export default class MenuUnitInfo {
                     let summChansW = 0;
                     for (let i = 0; i < unit.chancesHit.length; i++) {
                         let zapyatay = '';
-                        if (i < unit.chancesHit.length - 1) {
+                        if (i>0 && i < unit.chancesHit.length) {
                             zapyatay = ' / ';
                         }
-                        const value = unit.chancesHit[i];
-                        //const attack = `${value.charAt(0).toUpperCase() + value.slice(1) + zapyatay}`;
+                        const value = Math.trunc(unit.chancesHit[i] - statsModifier.chancesHit[i]);
+                        if (value !== 0) {
+                            let upVal = '';
+                            if (statsModifier.chancesHit[i] > 0) {
+                                upVal = ' +' + String(statsModifier.chancesHit[i]) + zapyatay;
+                            }
+                            //const attack = `${value.charAt(0).toUpperCase() + value.slice(1) + zapyatay}`;
 
-                        const labelVal = this.scene.add.text(value + zapyatay);
-                        summChansW += labelVal.width;
-                        if (summChansW > 180) {
-                            xChans = xValue;
-                            summChansW = 0;
-                            yChans += labelVal.height + 2;
+                            const labelVal = this.scene.add.text(value + (upVal!==''?'':zapyatay));
+                            const labelUpVal = this.scene.add.text(upVal);
+                            labelUpVal.color = 'green';
+                            summChansW += labelVal.width + labelUpVal.width;
+                            if (summChansW > 180) {
+                                xChans = xValue;
+                                summChansW = 0;
+                                yChans += labelVal.height + 2;
+                            }
+                            labelVal.x = xChans;
+                            labelUpVal.x = labelVal.x + labelVal.width;
+                            labelVal.y = yChans;
+                            labelUpVal.y = yChans;
+                            xChans += labelVal.width + labelUpVal.width;
+                            this.labels.push(labelVal, labelUpVal);
                         }
-                        labelVal.x = xChans;
-                        labelVal.y = yChans;
-                        xChans += labelVal.width;
-                        this.labels.push(labelVal);
+
                     }
                     let prefixChans = '';
-                    if (unit.damageName.length > 0) {
-                        prefixChans = '/';
+                    if (unit.chancesHit.length > 0) {
+                        prefixChans = ' / ';
                     }
-                    const newChans = statsModifier.chancesHit.slice(unit.chancesHit.length);
-                    for (let i = 0; i < newChans.length; i++) {
-                        let zapyatay = '';
-                        if (i < newChans.length - 1) {
-                            zapyatay = ' / ';
-                        }
-                        const value = newChans[i];
-                        const ward = `${prefixChans + value + zapyatay}`;
+                    //const newChanc = statsModifier.chancesHit.slice(unit.chancesHit.length);
+                    for (let i = 0; i < statsModifier.chancesHit.length; i++) {
+                        const newChance = statsModifier.chancesHit[i];
+                        console.log('newChance = ', newChance);
+                        if (unit.chancesHit[i] <= newChance) {
+                            console.log('render newChance = ', newChance);
+                            let zapyatay = '';
+                            if (i < statsModifier.chancesHit.length - 1) {
+                                zapyatay = ' / ';
+                            }
+                            const value = newChance;
+                            const ward = `${prefixChans + value + zapyatay}`;
 
-                        const labelVal = this.scene.add.text(ward);
-                        labelVal.color = 'green';
+                            const labelVal = this.scene.add.text(ward);
+                            labelVal.color = 'green';
 
-                        summChansW += labelVal.width;
-                        if (summChansW > 180) {
-                            xChans = xValue;
-                            summChansW = 0;
-                            yChans += labelVal.height + 2;
+                            summChansW += labelVal.width;
+                            if (summChansW > 180) {
+                                xChans = xValue;
+                                summChansW = 0;
+                                yChans += labelVal.height + 2;
+                            }
+                            labelVal.x = xChans;
+                            labelVal.y = yChans;
+                            xChans += labelVal.width;
+                            prefixChans = '';
+                            this.labels.push(labelVal);
                         }
-                        labelVal.x = xChans;
-                        labelVal.y = yChans;
-                        xChans += labelVal.width;
-                        prefixChans = '';
-                        this.labels.push(labelVal);
                     }
                     break;
                 case 'Attack':
@@ -341,31 +357,71 @@ export default class MenuUnitInfo {
                     break;
                 case 'Damage':
                     //let dmgStr = '';
-                    const arrDmg = unit.damage.map((d,i)=>{
-                        console.log('Damage = ', d);
-                        if(unit.damageName[i]!=='Critical Hit'){
-                            const upDmg = statsModifier.damage[i]>0?`+${statsModifier.damage[i]}`:'';
-                            return `${d-statsModifier.damage[i]}${upDmg}`;
-                        }else{
-                            return String(Math.trunc(unit.damage[0]*Number(`0.${d}`)));
+                    let xDamage = xValue;
+                    let yDamage = y;
+                    let summDamageW = 0;
+                    for (let i = 0; i < unit.damage.length; i++) {
+                        const val = unit.damage[i];
+                        let textLabelValue = '';
+                        let separChar = '';
+                        if (i < unit.damage.length - 1) {
+                            separChar = ' / ';
                         }
-                    });
-                    
-                    const dmgStr = arrDmg.join(' / ');
-                    const newDmg = statsModifier.damage
-                        .slice(unit.damage.length)
-                        .map((d,i)=>{
-                            if(statsModifier.damageName[i]!=='Critical Hit'){
-                                return String(d);
-                            }else{
-                                return String(Math.trunc(unit.damage[0]*Number(`0.${d}`)));
+                        if (unit.damageName[i] !== 'Critical Hit') {
+                            textLabelValue = String(Math.trunc(val - statsModifier.damage[i]));
+                        } else {
+                            textLabelValue = String(Math.trunc(unit.damage[0] * Number(`0.${val - statsModifier.damage[i]}`)));
+                        }
+                        let upVal = '';
+                        if (statsModifier.damage[i] > 0) {
+                            if (unit.damageName[i] !== 'Critical Hit') {
+                                upVal = ' +' + String(statsModifier.damage[i]) + separChar;
+                            } else {
+                                upVal = ' +' + String(Math.trunc(unit.damage[0] * Number(`0.${statsModifier.damage[i]}`))) + separChar;
                             }
-                        })
-                        .join(' / ');
-                    labelValue = this.scene.add.text(dmgStr+`${newDmg.length>0?' / ':''}`+newDmg);
-                    labelValue.x = xValue;
-                    labelValue.y = y;
-                    this.labels.push(labelValue);
+
+                        }
+                        const labelVal = this.scene.add.text(textLabelValue);
+                        const labelUpVal = this.scene.add.text(upVal);
+                        labelUpVal.color = 'green';
+                        summDamageW += labelVal.width + labelUpVal.width;
+                        if (summDamageW > 180) {
+                            xDamage = xValue;
+                            summDamageW = 0;
+                            yDamage += labelVal.height + 2;
+                        }
+                        labelVal.x = xDamage;
+                        labelUpVal.x = labelVal.x + labelVal.width;
+                        labelVal.y = yDamage;
+                        labelUpVal.y = yDamage;
+                        xDamage += labelVal.width + labelUpVal.width;
+                        this.labels.push(labelVal, labelUpVal);
+                    }
+                    // const arrDmg = unit.damage.map((d, i) => {
+                    //     console.log('Damage = ', d);
+                    //     if (unit.damageName[i] !== 'Critical Hit') {
+                    //         const upDmg = statsModifier.damage[i] > 0 ? `+${statsModifier.damage[i]}` : '';
+                    //         return `${d - statsModifier.damage[i]}${upDmg}`;
+                    //     } else {
+                    //         return String(Math.trunc(unit.damage[0] * Number(`0.${d}`)));
+                    //     }
+                    // });
+
+                    // const dmgStr = arrDmg.join(' / ');
+                    // const newDmg = statsModifier.damage
+                    //     .slice(unit.damage.length)
+                    //     .map((d, i) => {
+                    //         if (statsModifier.damageName[i] !== 'Critical Hit') {
+                    //             return String(d);
+                    //         } else {
+                    //             return String(Math.trunc(unit.damage[0] * Number(`0.${d}`)));
+                    //         }
+                    //     })
+                    //     .join(' / ');
+                    // labelValue = this.scene.add.text(dmgStr + `${newDmg.length > 0 ? ' / ' : ''}` + newDmg);
+                    // labelValue.x = xValue;
+                    // labelValue.y = y;
+                    // this.labels.push(labelValue);
                     break;
                 default:
                     // label = this.scene.add.text(labelRowData.label);
