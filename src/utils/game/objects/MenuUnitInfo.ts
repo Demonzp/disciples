@@ -238,7 +238,7 @@ export default class MenuUnitInfo {
                     let summChansW = 0;
                     for (let i = 0; i < unit.chancesHit.length; i++) {
                         let zapyatay = '';
-                        if (i>0 && i < unit.chancesHit.length) {
+                        if (i < unit.chancesHit.length - 1) {
                             zapyatay = ' / ';
                         }
                         const value = Math.trunc(unit.chancesHit[i] - statsModifier.chancesHit[i]);
@@ -249,7 +249,7 @@ export default class MenuUnitInfo {
                             }
                             //const attack = `${value.charAt(0).toUpperCase() + value.slice(1) + zapyatay}`;
 
-                            const labelVal = this.scene.add.text(value + (upVal!==''?'':zapyatay));
+                            const labelVal = this.scene.add.text(value + (upVal !== '' ? '' : zapyatay));
                             const labelUpVal = this.scene.add.text(upVal);
                             labelUpVal.color = 'green';
                             summChansW += labelVal.width + labelUpVal.width;
@@ -268,9 +268,9 @@ export default class MenuUnitInfo {
 
                     }
                     let prefixChans = '';
-                    if (unit.chancesHit.length > 0) {
-                        prefixChans = ' / ';
-                    }
+                    // if (unit.chancesHit.length > 0) {
+                    //     prefixChans = ' / ';
+                    // }
                     //const newChanc = statsModifier.chancesHit.slice(unit.chancesHit.length);
                     for (let i = 0; i < statsModifier.chancesHit.length; i++) {
                         const newChance = statsModifier.chancesHit[i];
@@ -362,40 +362,74 @@ export default class MenuUnitInfo {
                     let summDamageW = 0;
                     for (let i = 0; i < unit.damage.length; i++) {
                         const val = unit.damage[i];
-                        let textLabelValue = '';
+                        if (val > statsModifier.damage[i]) {
+                            let textLabelValue = '';
+                            let separChar = '';
+                            if (i < unit.damage.length - 1) {
+                                separChar = ' / ';
+                            }
+                            if (unit.damageName[i] !== 'Critical Hit') {
+                                textLabelValue = String(Math.trunc(val - statsModifier.damage[i]));
+                            } else {
+                                textLabelValue = String(Math.trunc(unit.damage[0] * Number(`0.${val - statsModifier.damage[i]}`)));
+                            }
+                            let upVal = '';
+                            if (statsModifier.damage[i] > 0) {
+                                if (unit.damageName[i] !== 'Critical Hit') {
+                                    upVal = ' +' + String(statsModifier.damage[i]) + separChar;
+                                } else {
+                                    upVal = ' +' + String(Math.trunc(statsModifier.damage[i]*unit.damage[0]/100)) + separChar;
+                                }
+
+                            }
+                            const labelVal = this.scene.add.text(textLabelValue + (upVal !== '' ? '' : separChar));
+                            const labelUpVal = this.scene.add.text(upVal);
+                            labelUpVal.color = 'green';
+                            summDamageW += labelVal.width + labelUpVal.width;
+                            if (summDamageW > 180) {
+                                xDamage = xValue;
+                                summDamageW = 0;
+                                yDamage += labelVal.height + 2;
+                            }
+                            labelVal.x = xDamage;
+                            labelUpVal.x = labelVal.x + labelVal.width;
+                            labelVal.y = yDamage;
+                            labelUpVal.y = yDamage;
+                            xDamage += labelVal.width + labelUpVal.width;
+                            this.labels.push(labelVal, labelUpVal);
+                        }
+
+                    }
+
+                    for (let i = 0; i < statsModifier.damage.length; i++) {
+                        const val = statsModifier.damage[i];
+                        
+                        if (i===0||val === 0) {
+                            continue;
+                        }
+                        console.log('statsModifier.damage = ', val);
+                        let textLabelVal = '';
                         let separChar = '';
-                        if (i < unit.damage.length - 1) {
+                        if (i < statsModifier.damage.length - 1) {
                             separChar = ' / ';
                         }
-                        if (unit.damageName[i] !== 'Critical Hit') {
-                            textLabelValue = String(Math.trunc(val - statsModifier.damage[i]));
+                        if (statsModifier.damageName[i] !== 'Critical Hit') {
+                            textLabelVal = String(statsModifier.damage[i]);
                         } else {
-                            textLabelValue = String(Math.trunc(unit.damage[0] * Number(`0.${val - statsModifier.damage[i]}`)));
+                            textLabelVal = String(Math.trunc(statsModifier.damage[i]*unit.damage[0]/100));
                         }
-                        let upVal = '';
-                        if (statsModifier.damage[i] > 0) {
-                            if (unit.damageName[i] !== 'Critical Hit') {
-                                upVal = ' +' + String(statsModifier.damage[i]) + separChar;
-                            } else {
-                                upVal = ' +' + String(Math.trunc(unit.damage[0] * Number(`0.${statsModifier.damage[i]}`))) + separChar;
-                            }
-
-                        }
-                        const labelVal = this.scene.add.text(textLabelValue);
-                        const labelUpVal = this.scene.add.text(upVal);
-                        labelUpVal.color = 'green';
-                        summDamageW += labelVal.width + labelUpVal.width;
+                        const labelVal = this.scene.add.text(textLabelVal+separChar);
+                        labelVal.color = 'green';
+                        summDamageW += labelVal.width;
                         if (summDamageW > 180) {
                             xDamage = xValue;
                             summDamageW = 0;
                             yDamage += labelVal.height + 2;
                         }
                         labelVal.x = xDamage;
-                        labelUpVal.x = labelVal.x + labelVal.width;
                         labelVal.y = yDamage;
-                        labelUpVal.y = yDamage;
-                        xDamage += labelVal.width + labelUpVal.width;
-                        this.labels.push(labelVal, labelUpVal);
+                        xDamage += labelVal.width;
+                        this.labels.push(labelVal);
                     }
                     // const arrDmg = unit.damage.map((d, i) => {
                     //     console.log('Damage = ', d);
