@@ -52,10 +52,19 @@ export default class ArenaUnitPortrait{
         }
         this.container.on('pointerdown', (pointer)=>{
             //console.log('pointer = ', pointer.event.button);
-            if(pointer.event.pointerType==='mouse'&&pointer.event.button===2){
+            
+            const {isShowHeroUp, isShowHireHero, isLoad, isUpUnit, isInfoUnitOpen} = store.getState().multiArena;
+            //console.log();
+            if(
+                (!isShowHireHero&&
+                !isShowHeroUp&&
+                !isLoad&&
+                !isUpUnit&&
+                !isInfoUnitOpen)&&
+                (pointer.event.pointerType==='mouse'&&pointer.event.button===2)
+            ){
                 store.dispatch(openInfoUnit(this.unit.uid));
             }
-            const {isShowHeroUp, isShowHireHero, isLoad, isUpUnit, isInfoUnitOpen} = store.getState().multiArena;
             if (
                 isShowHireHero||
                 isShowHeroUp||
@@ -66,6 +75,7 @@ export default class ArenaUnitPortrait{
             ) {
                 return;
             }
+            
             // else if(pointer.event.pointerType==='mouse'&&pointer.event.button===2){
             //     store.dispatch(openInfoUnit(this.unit.uid));
             // }

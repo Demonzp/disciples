@@ -6,7 +6,6 @@ const App = () => {
     return (
         <div className="app">
             <div className={styles.content}>
-                <h2>Disciples: annals of Nevendaar</h2>
                 <GameComp />
             </div>
         </div>

@@ -1,4 +1,5 @@
 import { IUnit, portretPartyOneData } from "store/slices/sliceGame";
+import store from "store/store";
 import Container from "utils/gameLib/Container";
 import Graphics from "utils/gameLib/Graphics";
 import Scene from "utils/gameLib/Scene";
@@ -18,6 +19,7 @@ export default class ArenaHeroHireIco{
     public isSelect = false;
 
     constructor(private scene:Scene, public unitHero:IUnit){
+        console.log('constructor ArenaHeroHireIco');
         this.create();
     }
 
@@ -55,7 +57,23 @@ export default class ArenaHeroHireIco{
             this.labelLeadership,
             this.labelLeadershipValue,
         ]);
-
+        this.cont.on('pointerdown', (pointer)=>{
+            //console.log('pointer = ', pointer.event.button);
+            
+            const {isShowHeroUp, isLoad, isUpUnit, isInfoUnitOpen} = store.getState().multiArena;
+            //console.log();
+            if(
+                (
+                !isShowHeroUp&&
+                !isLoad&&
+                !isUpUnit&&
+                !isInfoUnitOpen)&&
+                (pointer.event.pointerType==='mouse'&&pointer.event.button===2)
+            ){
+                console.log('right on Hero!!!');
+                //store.dispatch(openInfoUnit(this.unit.uid));
+            }
+        });
         //this.cont.on('pointerup', );
     }
 
