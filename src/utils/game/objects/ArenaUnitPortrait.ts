@@ -63,7 +63,7 @@ export default class ArenaUnitPortrait{
                 !isInfoUnitOpen)&&
                 (pointer.event.pointerType==='mouse'&&pointer.event.button===2)
             ){
-                store.dispatch(openInfoUnit(this.unit.uid));
+                store.dispatch(openInfoUnit(this.unit));
             }
             if (
                 isShowHireHero||

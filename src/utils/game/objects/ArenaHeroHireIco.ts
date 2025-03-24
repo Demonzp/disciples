@@ -1,4 +1,5 @@
 import { IUnit, portretPartyOneData } from "store/slices/sliceGame";
+import { openInfoUnit } from "store/slices/sliceMultiArena";
 import store from "store/store";
 import Container from "utils/gameLib/Container";
 import Graphics from "utils/gameLib/Graphics";
@@ -71,7 +72,7 @@ export default class ArenaHeroHireIco{
                 (pointer.event.pointerType==='mouse'&&pointer.event.button===2)
             ){
                 console.log('right on Hero!!!');
-                //store.dispatch(openInfoUnit(this.unit.uid));
+                store.dispatch(openInfoUnit(this.unitHero));
             }
         });
         //this.cont.on('pointerup', );

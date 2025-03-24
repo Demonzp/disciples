@@ -65,7 +65,7 @@ export const baseUnits: IBaseUnit[] = [
         chancesHit: [80],
         damage: [250],
         heal:0,
-        sourceDamage: 'life',
+        sourceDamage: ['life'],
         iniative: 80,
         leadership: 3,
         needExperience: 9000,
@@ -93,7 +93,7 @@ export const baseUnits: IBaseUnit[] = [
         chancesHit: [70],
         damage: [16],
         heal:0,
-        sourceDamage: 'air',
+        sourceDamage: ['air'],
         iniative: 30,
         leadership: 3,
         needExperience: 150,
@@ -121,7 +121,7 @@ export const baseUnits: IBaseUnit[] = [
         chancesHit: [80],
         damage: [23],
         heal:0,
-        sourceDamage: 'weapon',
+        sourceDamage: ['weapon'],
         iniative: 40,
         leadership: 3,
         needExperience: 150,
@@ -149,7 +149,7 @@ export const baseUnits: IBaseUnit[] = [
         chancesHit: [80],
         damage: [25],
         heal:0,
-        sourceDamage: 'weapon',
+        sourceDamage: ['weapon'],
         iniative: 40,
         leadership: 2,
         needExperience: 75,
@@ -177,7 +177,7 @@ export const baseUnits: IBaseUnit[] = [
         chancesHit: [70],
         damage: [25],
         heal:0,
-        sourceDamage: 'weapon',
+        sourceDamage: ['weapon'],
         iniative: 50,
         leadership: 2,
         needExperience: 70,
@@ -205,7 +205,7 @@ export const baseUnits: IBaseUnit[] = [
         chancesHit: [70],
         damage: [15],
         heal:0,
-        sourceDamage: 'air',
+        sourceDamage: ['air'],
         iniative: 30,
         leadership: 2,
         needExperience: 70,
@@ -233,7 +233,7 @@ export const baseUnits: IBaseUnit[] = [
         chancesHit: [100],
         damage: [0],
         heal: 22,
-        sourceDamage: 'life',
+        sourceDamage: ['life'],
         iniative: 10,
         leadership: 2,
         needExperience: 70,
@@ -261,7 +261,7 @@ export const baseUnits: IBaseUnit[] = [
         chancesHit: [80],
         damage: [55],
         heal: 0,
-        sourceDamage: 'weapon',
+        sourceDamage: ['weapon'],
         iniative: 40,
         leadership: 2,
         needExperience: 400,
@@ -289,7 +289,7 @@ export const baseUnits: IBaseUnit[] = [
         chancesHit: [80],
         damage: [40],
         heal: 0,
-        sourceDamage: 'earth',
+        sourceDamage: ['earth'],
         iniative: 55,
         leadership: 2,
         needExperience: 400,
@@ -375,7 +375,7 @@ export interface IBaseUnit {
     damageName: string[];
     damage: number[];
     heal: number;
-    sourceDamage: TSourceDamage;
+    sourceDamage: TSourceDamage[];
     iniative: number;
     leadership: number;
     needExperience: number;

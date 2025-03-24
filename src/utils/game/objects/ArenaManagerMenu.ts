@@ -8,7 +8,7 @@ import ArenaHireHero from "./ArenaHireHero";
 import MenuHeroUp from "./MenuHeroUp";
 import ArenaHeroProfile from "./ArenaHeroProfile";
 import MenuWait from "./MenuWait";
-import MenuUnitInfo from "./MenuUnitInfo";
+import MenuUnitInfo from "./MenuUnitInfo2";
 
 export default class ArenaManagerMenu extends BaseMainGameMenu{
     private mainSprite: Sprite;

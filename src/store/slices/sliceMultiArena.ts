@@ -54,6 +54,7 @@ export type TInitState = {
 type InitState = {
     online: number,
     units: IUnit[],
+    selectUnit: IUnit|undefined,
     heroes: IUnit[];
     queue: number,
     version: string,
@@ -80,6 +81,7 @@ type InitState = {
 const initialState: InitState = {
     online: 0,
     units: [],
+    selectUnit: undefined,
     heroes: [],
     queue: 0,
     version: '',
@@ -162,8 +164,8 @@ const sliceMultiArena = createSlice({
             state.units = action.payload.units;
         },
 
-        openInfoUnit(state, action: PayloadAction<string>) {
-            state.infoUnitUid = action.payload;
+        openInfoUnit(state, action: PayloadAction<IUnit>) {
+            state.selectUnit = action.payload;
             state.isInfoUnitOpen = true;
         },
 
