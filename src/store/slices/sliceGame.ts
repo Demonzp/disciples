@@ -61,11 +61,12 @@ export const baseUnits: IBaseUnit[] = [
         numCells: 1,
         hitPoints: 1200,
         defaultHp: 1200,
-        damageName: ['Holy Wrath'],
-        chancesHit: [80],
-        damage: [250],
+        damageName: 'Holy Wrath',
+        chancesHit: 80,
+        damage: 250,
         heal:0,
-        sourceDamage: ['life'],
+        sourceDamage: 'life',
+        extraDamage: [],
         iniative: 80,
         leadership: 3,
         needExperience: 9000,
@@ -89,11 +90,12 @@ export const baseUnits: IBaseUnit[] = [
         numCells: 1,
         hitPoints: 65,
         defaultHp: 65,
-        damageName: ['Lightning'],
-        chancesHit: [70],
-        damage: [16],
+        damageName: 'Lightning',
+        chancesHit: 70,
+        damage: 16,
         heal:0,
-        sourceDamage: ['air'],
+        sourceDamage: 'air',
+        extraDamage: [],
         iniative: 30,
         leadership: 3,
         needExperience: 150,
@@ -117,11 +119,12 @@ export const baseUnits: IBaseUnit[] = [
         numCells: 1,
         hitPoints: 150,
         defaultHp: 150,
-        damageName: ['Long Sword'],
-        chancesHit: [80],
-        damage: [23],
+        damageName: 'Long Sword',
+        chancesHit: 80,
+        damage: 23,
         heal:0,
-        sourceDamage: ['weapon'],
+        sourceDamage: 'weapon',
+        extraDamage: [],
         iniative: 40,
         leadership: 3,
         needExperience: 150,
@@ -145,11 +148,12 @@ export const baseUnits: IBaseUnit[] = [
         numCells: 1,
         hitPoints: 110,
         defaultHp: 110,
-        damageName: ['Sword'],
-        chancesHit: [80],
-        damage: [25],
+        damageName: 'Sword',
+        chancesHit: 80,
+        damage: 25,
         heal:0,
-        sourceDamage: ['weapon'],
+        sourceDamage: 'weapon',
+        extraDamage: [],
         iniative: 40,
         leadership: 2,
         needExperience: 75,
@@ -173,11 +177,12 @@ export const baseUnits: IBaseUnit[] = [
         numCells: 1,
         hitPoints: 50,
         defaultHp: 50,
-        damageName: ['Arrow'],
-        chancesHit: [70],
-        damage: [25],
+        damageName: 'Arrow',
+        chancesHit: 70,
+        damage: 25,
         heal:0,
-        sourceDamage: ['weapon'],
+        sourceDamage: 'weapon',
+        extraDamage: [],
         iniative: 50,
         leadership: 2,
         needExperience: 70,
@@ -201,11 +206,12 @@ export const baseUnits: IBaseUnit[] = [
         numCells: 1,
         hitPoints: 50,
         defaultHp: 50,
-        damageName: ['Lightning'],
-        chancesHit: [70],
-        damage: [15],
+        damageName: 'Lightning',
+        chancesHit: 70,
+        damage: 15,
         heal:0,
-        sourceDamage: ['air'],
+        sourceDamage: 'air',
+        extraDamage: [],
         iniative: 30,
         leadership: 2,
         needExperience: 70,
@@ -229,11 +235,12 @@ export const baseUnits: IBaseUnit[] = [
         numCells: 1,
         hitPoints: 50,
         defaultHp: 50,
-        damageName: ['Healing'],
-        chancesHit: [100],
-        damage: [0],
+        damageName: 'Healing',
+        chancesHit: 100,
+        damage: 0,
         heal: 22,
-        sourceDamage: ['life'],
+        sourceDamage: 'life',
+        extraDamage: [],
         iniative: 10,
         leadership: 2,
         needExperience: 70,
@@ -257,11 +264,12 @@ export const baseUnits: IBaseUnit[] = [
         numCells: 2,
         hitPoints: 250,
         defaultHp: 250,
-        damageName: ['Smash'],
-        chancesHit: [80],
-        damage: [55],
+        damageName: 'Smash',
+        chancesHit: 80,
+        damage: 55,
         heal: 0,
-        sourceDamage: ['weapon'],
+        sourceDamage: 'weapon',
+        extraDamage: [],
         iniative: 40,
         leadership: 2,
         needExperience: 400,
@@ -285,11 +293,12 @@ export const baseUnits: IBaseUnit[] = [
         numCells: 2,
         hitPoints: 90,
         defaultHp: 90,
-        damageName: ['Rock Shards'],
-        chancesHit: [80],
-        damage: [40],
+        damageName: 'Rock Shards',
+        chancesHit: 80,
+        damage: 40,
         heal: 0,
-        sourceDamage: ['earth'],
+        sourceDamage: 'earth',
+        extraDamage: [],
         iniative: 55,
         leadership: 2,
         needExperience: 400,
@@ -359,6 +368,17 @@ export type TModifier = {
     type: 'heroSkills';
 }
 
+export type TDuration = 'instantaneous' | 'short' | 'long';
+
+export type TExtraDamage = {
+    damage: number;
+    percent: number;
+    chancesHit: number;
+    damageName: string;
+    sourceDamage: TSourceDamage;
+    duration: TDuration;
+}
+
 export interface IBaseUnit {
     id: string;
     level: number;
@@ -371,11 +391,12 @@ export interface IBaseUnit {
     numCells: number;
     hitPoints: number;
     defaultHp: number;
-    chancesHit: number[];
-    damageName: string[];
-    damage: number[];
+    chancesHit: number;
+    damageName: string;
+    damage: number;
+    extraDamage: [];
     heal: number;
-    sourceDamage: TSourceDamage[];
+    sourceDamage: TSourceDamage;
     iniative: number;
     leadership: number;
     needExperience: number;

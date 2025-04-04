@@ -66,10 +66,10 @@ export default class MenuUnitInfo {
             level: unit.level,
             hitPoints: 0,
             regenerate: 0,
-            chancesHit: unit.chancesHit.map(el=>0),
-	        damage: unit.damage.map(el=>0),
-	        damageName: [...unit.damageName],
-	        sourceDamage: unit.sourceDamage.map(el=>el),
+            chancesHit: 0,
+	        damage: 0,
+	        damageName: unit.damageName,
+	        sourceDamage: unit.sourceDamage,
             // chancesHit: [],
             // damage: [],
             // damageName: [],
@@ -334,57 +334,82 @@ export default class MenuUnitInfo {
                     }
                     break;
                 case 'Attack':
-
                     let xAttack = xValue;
                     let yAttack = y;
                     let summAttackW = 0;
                     for (let i = 0; i < unit.damageName.length; i++) {
-                        let zapyatay = '';
-                        if (i < unit.damageName.length - 1) {
-                            zapyatay = ' / ';
+                        // let zapyatay = '';
+                        // if (i < unit.damageName.length - 1) {
+                        //     zapyatay = ' / ';
+                        // }
+                        const splitLabel = this.scene.add.text('');
+                        if (i>0) {
+                            console.log('add Split Attack!!!!!!!!!!!!!!')
+                            splitLabel.text = ' / ';
+
                         }
                         const value = unit.damageName[i];
                         //const attack = `${value.charAt(0).toUpperCase() + value.slice(1) + zapyatay}`;
 
-                        const labelVal = this.scene.add.text(value + zapyatay);
-                        summAttackW += labelVal.width;
-                        if (summAttackW > 180) {
+                        const labelVal = this.scene.add.text(value);
+                        summAttackW += splitLabel.width + labelVal.width;
+                        if (summAttackW > 400) {
                             xAttack = xValue;
                             summAttackW = 0;
                             yAttack += labelVal.height + 2;
                         }
-                        labelVal.x = xAttack;
+                        splitLabel.x = xAttack;
+                        splitLabel.y = yAttack;
+                        labelVal.x = splitLabel.x + splitLabel.width;
                         labelVal.y = yAttack;
-                        xAttack += labelVal.width;
-                        this.labels.push(labelVal);
+                        xAttack += splitLabel.width + labelVal.width;
+                        this.labels.push(splitLabel, labelVal);
                     }
-                    let prefixAttack = '';
-                    if (unit.damageName.length > 0) {
-                        prefixAttack = ' / ';
+                    // let prefixAttack = '';
+                    // if (unit.damageName.length > 0) {
+                    //     prefixAttack = ' / ';
+                    // }
+                    if(statsModifier.damageName.length>0){
+                        const splitLabel = this.scene.add.text(' / ');
+                        splitLabel.x = xAttack;
+                        splitLabel.y = yAttack;
+                        xAttack+=splitLabel.width;
+                        summAttackW += splitLabel.width;
+                        this.labels.push(splitLabel);
+                        //summChansW += splitLabel.width;
                     }
                     const newAttacks = statsModifier.damageName.slice(unit.damageName.length);
                     for (let i = 0; i < newAttacks.length; i++) {
-                        let zapyatay = '';
-                        if (i < newAttacks.length - 1) {
-                            zapyatay = ' / ';
+                        // let zapyatay = '';
+                        // if (i < newAttacks.length - 1) {
+                        //     zapyatay = ' / ';
+                        // }
+                        const splitLabel = this.scene.add.text('');
+                        if (i>0) {
+                            console.log('add Split Attack!!!!!!!!!!!!!!')
+                            splitLabel.text = ' / ';
+
                         }
+
                         const value = newAttacks[i];
-                        const attack = `${prefixAttack + value + zapyatay}`;
+                        const attack = value.toString();
 
                         const labelVal = this.scene.add.text(attack);
                         labelVal.color = 'green';
 
-                        summAttackW += labelVal.width;
-                        if (summAttackW > 180) {
+                        summAttackW += splitLabel.width + labelVal.width;
+                        if (summAttackW > 400) {
                             xAttack = xValue;
                             summAttackW = 0;
                             yAttack += labelVal.height + 2;
                         }
-                        labelVal.x = xAttack;
+                        splitLabel.x =xAttack;
+                        splitLabel.y = yAttack;
+                        labelVal.x = splitLabel.x + splitLabel.width;
                         labelVal.y = yAttack;
-                        xAttack += labelVal.width;
+                        xAttack += splitLabel.width + labelVal.width;
                         prefixWards = '';
-                        this.labels.push(labelVal);
+                        this.labels.push(splitLabel, labelVal);
                     }
                     break;
                 case 'Damage':
