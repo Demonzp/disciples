@@ -67,7 +67,7 @@ export const baseUnits: IBaseUnit[] = [
         heal:0,
         sourceDamage: 'life',
         extraDamage: [],
-        iniative: 80,
+        initiative: 80,
         leadership: 3,
         needExperience: 9000,
         movePoints: 20,
@@ -77,6 +77,9 @@ export const baseUnits: IBaseUnit[] = [
         modifiersDefalut: [],
         immunities: [],
         wards: [],
+        numTargets: 6,
+        numAttaks: 1,
+        priorityColumn: 3,
     },
     {
         id: '1',
@@ -96,7 +99,7 @@ export const baseUnits: IBaseUnit[] = [
         heal:0,
         sourceDamage: 'air',
         extraDamage: [],
-        iniative: 30,
+        initiative: 30,
         leadership: 3,
         needExperience: 150,
         movePoints: 20,
@@ -106,6 +109,9 @@ export const baseUnits: IBaseUnit[] = [
         modifiersDefalut: [],
         immunities: [],
         wards: [],
+        numTargets: 6,
+        numAttaks: 1,
+        priorityColumn: 3
     },
     {
         id: '2',
@@ -125,7 +131,7 @@ export const baseUnits: IBaseUnit[] = [
         heal:0,
         sourceDamage: 'weapon',
         extraDamage: [],
-        iniative: 40,
+        initiative: 40,
         leadership: 3,
         needExperience: 150,
         movePoints: 20,
@@ -135,6 +141,9 @@ export const baseUnits: IBaseUnit[] = [
         modifiersDefalut: [],
         immunities: [],
         wards: [],
+        numTargets: 1,
+        numAttaks: 1,
+        priorityColumn: 1,
     },
     {
         id: '3',
@@ -154,7 +163,7 @@ export const baseUnits: IBaseUnit[] = [
         heal:0,
         sourceDamage: 'weapon',
         extraDamage: [],
-        iniative: 40,
+        initiative: 40,
         leadership: 2,
         needExperience: 75,
         movePoints: 20,
@@ -164,6 +173,9 @@ export const baseUnits: IBaseUnit[] = [
         modifiersDefalut: [],
         immunities: [],
         wards: [],
+        numTargets: 1,
+        numAttaks: 1,
+        priorityColumn: 1
     },
     {
         id: '4',
@@ -183,7 +195,7 @@ export const baseUnits: IBaseUnit[] = [
         heal:0,
         sourceDamage: 'weapon',
         extraDamage: [],
-        iniative: 50,
+        initiative: 50,
         leadership: 2,
         needExperience: 70,
         movePoints: 20,
@@ -193,6 +205,9 @@ export const baseUnits: IBaseUnit[] = [
         modifiersDefalut: [],
         immunities: [],
         wards: [],
+        numTargets: 1,
+        numAttaks: 1,
+        priorityColumn: 1
     },
     {
         id: '5',
@@ -212,7 +227,7 @@ export const baseUnits: IBaseUnit[] = [
         heal:0,
         sourceDamage: 'air',
         extraDamage: [],
-        iniative: 30,
+        initiative: 30,
         leadership: 2,
         needExperience: 70,
         movePoints: 20,
@@ -222,6 +237,9 @@ export const baseUnits: IBaseUnit[] = [
         modifiersDefalut: [],
         immunities: [],
         wards: [],
+        numTargets: 6,
+        numAttaks: 1,
+        priorityColumn: 3
     },
     {
         id: '6',
@@ -241,7 +259,7 @@ export const baseUnits: IBaseUnit[] = [
         heal: 22,
         sourceDamage: 'life',
         extraDamage: [],
-        iniative: 10,
+        initiative: 10,
         leadership: 2,
         needExperience: 70,
         movePoints: 20,
@@ -251,6 +269,9 @@ export const baseUnits: IBaseUnit[] = [
         modifiersDefalut: [],
         immunities: [],
         wards: [],
+        numTargets: 6,
+        numAttaks: 1,
+        priorityColumn: 3
     },
     {
         id: '7',
@@ -270,7 +291,7 @@ export const baseUnits: IBaseUnit[] = [
         heal: 0,
         sourceDamage: 'weapon',
         extraDamage: [],
-        iniative: 40,
+        initiative: 40,
         leadership: 2,
         needExperience: 400,
         movePoints: 20,
@@ -280,6 +301,9 @@ export const baseUnits: IBaseUnit[] = [
         modifiersDefalut: [],
         immunities: [],
         wards: [],
+        numTargets: 1,
+        numAttaks: 1,
+        priorityColumn: 1
     },
     {
         id: '8',
@@ -299,7 +323,7 @@ export const baseUnits: IBaseUnit[] = [
         heal: 0,
         sourceDamage: 'earth',
         extraDamage: [],
-        iniative: 55,
+        initiative: 55,
         leadership: 2,
         needExperience: 400,
         movePoints: 20,
@@ -309,6 +333,41 @@ export const baseUnits: IBaseUnit[] = [
         modifiersDefalut: [],
         immunities: [],
         wards: [],
+        numTargets: 1,
+        numAttaks: 1,
+        priorityColumn: 1
+    },
+    {
+        id: '28',
+        level: 1,
+        defaultName: 'Duke',
+        isCapitalGuard: false,
+        isCanLeader: true,
+        isHero: true,
+        fraction: 'legions',
+        icon: 'duke',
+        numCells: 1,
+        hitPoints: 150,
+        defaultHp: 150,
+        damageName: 'Infernal Sword',
+        chancesHit: 80,
+        damage: 18,
+        extraDamage: [],
+        modifiers: [],
+        modifiersDefalut: [],
+        heal: 0,
+        sourceDamage: 'weapon',
+        initiative: 40,
+        leadership: 3,
+        needExperience: 150,
+        movePoints: 20,
+        discription: '',
+        numTargets: 1,
+        numAttaks:2,
+        priorityColumn:1,
+        immunities: ['fire'],
+        wards: ['water','earth','mind'],
+        armor:0
     }
 ];
 
@@ -377,7 +436,7 @@ export type TExtraDamage = {
     damageName: string;
     sourceDamage: TSourceDamage;
     duration: TDuration;
-}
+};
 
 export interface IBaseUnit {
     id: string;
@@ -394,10 +453,10 @@ export interface IBaseUnit {
     chancesHit: number;
     damageName: string;
     damage: number;
-    extraDamage: [];
+    extraDamage: TExtraDamage[];
     heal: number;
     sourceDamage: TSourceDamage;
-    iniative: number;
+    initiative: number;
     leadership: number;
     needExperience: number;
     movePoints: number;
@@ -405,6 +464,9 @@ export interface IBaseUnit {
     modifiers: TModifier[];
     modifiersDefalut: TModifier[];
     immunities: TSourceDamage[];
+    numTargets: number;
+    numAttaks: number; 
+    priorityColumn: number;
     wards: TSourceDamage[];
     armor: number;
 }
