@@ -66,7 +66,9 @@ export const baseUnits: IBaseUnit[] = [
         damage: 250,
         heal:0,
         sourceDamage: 'life',
-        extraDamage: [],
+        duration: 'instantaneous',
+        effect: 'damage',
+        extraEffect: [],
         initiative: 80,
         leadership: 3,
         needExperience: 9000,
@@ -98,7 +100,9 @@ export const baseUnits: IBaseUnit[] = [
         damage: 16,
         heal:0,
         sourceDamage: 'air',
-        extraDamage: [],
+        duration: 'instantaneous',
+        effect: 'damage',
+        extraEffect: [],
         initiative: 30,
         leadership: 3,
         needExperience: 150,
@@ -128,9 +132,11 @@ export const baseUnits: IBaseUnit[] = [
         damageName: 'Long Sword',
         chancesHit: 80,
         damage: 23,
+        duration: 'instantaneous',
         heal:0,
         sourceDamage: 'weapon',
-        extraDamage: [],
+        effect: 'damage',
+        extraEffect: [],
         initiative: 40,
         leadership: 3,
         needExperience: 150,
@@ -161,8 +167,10 @@ export const baseUnits: IBaseUnit[] = [
         chancesHit: 80,
         damage: 25,
         heal:0,
+        duration: 'instantaneous',
         sourceDamage: 'weapon',
-        extraDamage: [],
+        effect: 'damage',
+        extraEffect: [],
         initiative: 40,
         leadership: 2,
         needExperience: 75,
@@ -194,7 +202,9 @@ export const baseUnits: IBaseUnit[] = [
         damage: 25,
         heal:0,
         sourceDamage: 'weapon',
-        extraDamage: [],
+        duration: 'instantaneous',
+        effect: 'damage',
+        extraEffect: [],
         initiative: 50,
         leadership: 2,
         needExperience: 70,
@@ -226,7 +236,9 @@ export const baseUnits: IBaseUnit[] = [
         damage: 15,
         heal:0,
         sourceDamage: 'air',
-        extraDamage: [],
+        duration: 'instantaneous',
+        effect: 'damage',
+        extraEffect: [],
         initiative: 30,
         leadership: 2,
         needExperience: 70,
@@ -258,7 +270,9 @@ export const baseUnits: IBaseUnit[] = [
         damage: 0,
         heal: 22,
         sourceDamage: 'life',
-        extraDamage: [],
+        duration: 'instantaneous',
+        effect: 'damage',
+        extraEffect: [],
         initiative: 10,
         leadership: 2,
         needExperience: 70,
@@ -290,7 +304,9 @@ export const baseUnits: IBaseUnit[] = [
         damage: 55,
         heal: 0,
         sourceDamage: 'weapon',
-        extraDamage: [],
+        duration: 'instantaneous',
+        effect: 'damage',
+        extraEffect: [],
         initiative: 40,
         leadership: 2,
         needExperience: 400,
@@ -322,7 +338,9 @@ export const baseUnits: IBaseUnit[] = [
         damage: 40,
         heal: 0,
         sourceDamage: 'earth',
-        extraDamage: [],
+        duration: 'instantaneous',
+        effect: 'damage',
+        extraEffect: [],
         initiative: 55,
         leadership: 2,
         needExperience: 400,
@@ -350,9 +368,11 @@ export const baseUnits: IBaseUnit[] = [
         hitPoints: 150,
         defaultHp: 150,
         damageName: 'Infernal Sword',
+        duration: 'instantaneous',
         chancesHit: 80,
         damage: 18,
-        extraDamage: [],
+        effect: 'damage',
+        extraEffect: [],
         modifiers: [],
         modifiersDefalut: [],
         heal: 0,
@@ -420,21 +440,24 @@ export type TPartySide = 'left'|'right';
 export type TParty = {
     id: string;
     side: TPartySide;
-}
+};
 
 export type TModifier = {
     id: string;
     type: 'heroSkills';
-}
+};
 
 export type TDuration = 'instantaneous' | 'short' | 'long';
 
-export type TExtraDamage = {
+export type TEffect = 'damage'|'paralyze'|'tick'|'heal'|'polymorph';
+
+export type TExtraEffect = {
     damage: number;
     percent: number;
     chancesHit: number;
     damageName: string;
     sourceDamage: TSourceDamage;
+    effect: TEffect;
     duration: TDuration;
 };
 
@@ -453,9 +476,11 @@ export interface IBaseUnit {
     chancesHit: number;
     damageName: string;
     damage: number;
-    extraDamage: TExtraDamage[];
+    effect: TEffect;
+    extraEffect: TExtraEffect[];
     heal: number;
     sourceDamage: TSourceDamage;
+    duration: TDuration;
     initiative: number;
     leadership: number;
     needExperience: number;
@@ -469,7 +494,7 @@ export interface IBaseUnit {
     priorityColumn: number;
     wards: TSourceDamage[];
     armor: number;
-}
+};
 
 export type TPosition = [number,number];
 
@@ -486,13 +511,13 @@ export interface IUnit extends IBaseUnit {
     isLevelUp: boolean;
     experience: number;
     levelsUp: number;
-}
+};
 
 export type TSelectObj = {
     id: string;
     type: TObject;
     idx: number;
-}
+};
 
 export interface IBaseGameObj {
     matrixPoint: TPointMatrix;
@@ -504,7 +529,7 @@ export interface IBaseGameObj {
     //squadIn: string[];
     isUp: boolean;
     isCanPut: boolean;
-}
+};
 
 export interface ICapitalCity extends IBaseGameObj {
     race: TCapitalRace;
@@ -518,14 +543,14 @@ export interface ICapitalCity extends IBaseGameObj {
     manaRune: number;
     manaForest: number;
     gold: number;
-}
+};
 
 export interface ICity extends IBaseGameObj {
     cityName: string;
     owner: TTerrain;
     squadOut: string|null;
     lvl: number;
-}
+};
 
 export type TRectangle = {
     x0: number,
@@ -540,7 +565,7 @@ export type TRectangle = {
     height: number,
     halfWidth: number,
     halfHeight: number,
-}
+};
 
 export const defaultRect = (): TRectangle => {
     return {
@@ -558,7 +583,7 @@ export const defaultRect = (): TRectangle => {
         halfHeight: 0,
     }
 
-}
+};
 
 type TSceneStatus = 'notReady'|'ready';
 
@@ -580,7 +605,7 @@ export interface IStateGame {
     editorMod: TEditorMod;
     units: IUnit[];
     parties: TParty[];
-}
+};
 
 const initialState: IStateGame = {
     errors: [],

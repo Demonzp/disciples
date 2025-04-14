@@ -256,6 +256,7 @@ export default class MenuUnitInfo {
                     let xChans = xValue;
                     let yChans = y;
                     let summChansW = 0;
+                    
                     for (let i = 0; i < unit.chancesHit.length; i++) {
                         //let zapyatay = '';
                         const splitLabel = this.scene.add.text('');
